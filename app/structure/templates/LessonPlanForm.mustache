@@ -1,0 +1,506 @@
+
+<form name="form1" method="post" action="">
+
+  <input type="hidden" name="_id" value="{{_id}}">
+  <input type="hidden" name="_rev" value="{{_rev}}">
+  <input type="hidden" name="kind" value="LessonPlan">
+  <input type="hidden" name="prepared_By" value="{{prepared_By}}">
+
+  
+  <table width="107%">
+    <tr>
+      <td width="100"><b>Date of Execution</b></td>
+      <td width="299"><span id="sprytextfield1">
+
+
+        <input type="text" name="dateExec" id="dateExec" value="{{ dateExec }}" style="width:50%">
+
+
+      <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+      <td width="216"><b>Class </b>:          <span id="spryselect1">
+      
+
+      <select name="class" id="class" data-attribute-selected="{{ class }}" >
+        <option value="KG">KG</option>
+        <option value="P1">P1</option>
+        <option value="P2">P2</option>
+        <option value="P3">P3</option>
+        <option value="P4">P4</option>
+        <option value="P5">P5</option>
+        <option value="P6">P6</option>
+      </select>
+
+
+      <span class="selectRequiredMsg">Please select an item.</span></span></td>
+    </tr>
+    <tr>
+      <td><b>Subject</b></td>
+      <td colspan="2"><span id="sprytextfield2">
+        
+
+        <input type="text" name="subject" id="subject" value="{{ subject }}">
+
+
+      <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td><b>References</b></td>
+      <td colspan="2"><span id="sprytextarea1">
+
+
+        <textarea name="reference" id="reference" cols="45" rows="3" style="height:60px;width:70%;">{{ reference }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td><b>Time</b></td>
+      <td colspan="2"><span id="sprytextfield3">
+
+
+        <input type="text" name="time" id="time" style="width:30%" value="{{ time }}">
+
+
+      <span class="textfieldRequiredMsg">A value is required.</span></span> hh:mm:ss eg 8:00:00</td>
+    </tr>
+    <tr>
+      <td><b>Duration</b></td>
+      <td colspan="2"><span id="sprytextfield4">
+
+
+        <input type="text" name="duration" id="duration" value="{{ duration }}">
+
+
+      <span class="textfieldRequiredMsg">A value is required.</span></span> eg.. 2 hrs / 1hr 30min</td>
+    </tr>
+    <tr>
+      <td><b>Aspect / Topic</b></td>
+      <td colspan="2"><span id="sprytextfield5">
+
+
+        <input type="text" name="topic" id="topic" value="{{ topic }}">
+
+
+      <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td><b>Objective(s)</b></td>
+      <td colspan="2"><span id="sprytextarea2">
+
+
+        <textarea name="objectives" id="objectives" cols="45" rows="5" style="height:60px;width:70%;" >{{ objectives }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td><b>RPK</b></td>
+      <td colspan="2"><span id="sprytextarea3">
+
+
+        <textarea name="rpk" id="rpk" cols="45" rows="5" style="height:60px;width:70%;" >{{ rpk }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>T &amp; L resources selcted from BeLL</b></td>
+    </tr>
+    <tr>
+      <td align="right"><b>1</b></td>
+      <td colspan="2">
+
+
+        <select name='bell_resource_1' id='bell_resource_1' data-attribute-selected='{{ bell_resource_1 }}'>
+          {{{ ResourcesAsOptions }}}
+        </select>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>2</b></td>
+      <td colspan="2">
+      
+
+        <select name="bell_resource_2" id="bell_resource_2" data-attribute-selected="{{ bell_resource_2 }}">
+          {{{ ResourcesAsOptions }}}
+        </select>
+
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>3</b></td>
+      <td colspan="2">
+      
+
+        <select name="bell_resource_3" id="bell_resource_3" data-attribute-selected="{{ bell_resource_3 }}">
+          {{{ ResourcesAsOptions }}}
+        </select>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>4</b></td>
+      <td colspan="2">
+      
+
+        <select name="bell_resource_4" id="bell_resource_4" data-attribute-selected="{{ bell_resource_4 }}">
+          {{{ ResourcesAsOptions }}}
+        </select>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>5</b></td>
+      <td colspan="2">
+      
+      
+        <select name="bell_resource_5" id="bell_resource_5" data-attribute-selected="{{ bell_resource_5 }}">
+          {{{ ResourcesAsOptions }}}
+        </select>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="center">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>T &amp; L resources selcted from outside the BeLL</b></td>
+    </tr>
+    <tr>
+      <td align="right"><b>1</b></td>
+      <td colspan="2">
+
+
+        <input type="text" name="BellSelR1" id="BellSelR1" value="{{ BellSelR1 }}">
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>2</b></td>
+      <td colspan="2">
+
+
+        <input type="text" name="BellSelR2" id="BellSelR2" value="{{ BellSelR2 }}" >
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>3</b></td>
+      <td colspan="2">
+
+
+        <input type="text" name="BellSelR3" id="BellSelR3" value="{{ BellSelR3 }}">
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="center">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Proposed Technology tools to be used in the lesson</b></td>
+    </tr>
+    <tr>
+      <td align="right"><b>1</b></td>
+      <td colspan="2">
+
+
+        <select name="bellTech1" id="bellTech1" data-attribute-selected="{{ bellTech1 }}">
+          <option value="none" selected>none</option>
+          <option value="Tablets">Tablets</option>
+          <option value="Laptop &amp; Speakers">Laptop &amp; Speakers</option>
+          <option value="Projector">Projector</option>
+          <option value="Camera">Camera</option>
+          <option value="Server">Server</option>
+          <option value="TV">TV</option>
+          <option value="Radio">Radio</option>
+        </select>
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>2</b></td>
+      <td colspan="2">
+
+
+        <select name="bellTech2" id="bellTech2" data-attribute-selected="{{ bellTech2 }}">
+          <option value="none" selected>none</option>
+          <option value="Tablets">Tablets</option>
+          <option value="Laptop &amp; Speakers">Laptop &amp; Speakers</option>
+          <option value="Projector">Projector</option>
+          <option value="Camera">Camera</option>
+          <option value="Server">Server</option>
+          <option value="TV">TV</option>
+          <option value="Radio">Radio</option>
+        </select>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>3</b></td>
+      <td colspan="2">
+
+
+        <select name="bellTech3" id="bellTech3" data-attribute-selected="{{ bellTech3 }}">
+          <option value="none" >none</option>
+          <option value="Tablets">Tablets</option>
+          <option value="Laptop &amp; Speakers">Laptop &amp; Speakers</option>
+          <option value="Projector">Projector</option>
+          <option value="Camera">Camera</option>
+          <option value="Server">Server</option>
+          <option value="TV">TV</option>
+          <option value="Radio">Radio</option>
+        </select>
+
+
+    </td>
+    </tr>
+    <tr>
+      <td align="center">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="left"><b>Core Points / Literacy Skill to be developed</b></td>
+      <td colspan="2"><span id="sprytextarea4">
+
+
+        <textarea name="corPoints" id="corPoints" cols="45" rows="5" style="height:60px;width:70%;">{{ corPoints }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="left"><b style="color:#666;">Teaching and Learning Activities (include 1) how RPK will be used 2) how technology selected will be used 3) 21st century skills that would be used in the teaching to make it fun, participatory and self- discovery)</b></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Introduction</b></td>
+      <td colspan="2"><span id="sprytextarea5">
+
+
+        <textarea name="intro" id="intro" cols="45" rows="5" style="height:60px;width:70%;">{{ intro }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Pre –Writing stage</b></td>
+      <td colspan="2"><span id="sprytextarea6">
+
+
+        <textarea name="PrewStage" id="PrewStage" cols="45" rows="5" style="height:60px;width:70%;">{{ PrewStage }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Writing Stage</b></td>
+      <td colspan="2"><span id="sprytextarea7">
+
+
+        <textarea name="wStage" id="wStage" cols="45" rows="5" style="height:60px;width:70%;" >{{ wStage }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Post – Writing Stage</b></td>
+      <td colspan="2"><span id="sprytextarea8">
+
+
+        <textarea name="PostWStage" id="PostWStage" cols="45" rows="5" style="height:60px;width:70%;">{{ PostWStage }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Conclusion</b></td>
+      <td colspan="2"><span id="sprytextarea13">
+
+
+        <textarea name="conclusion" id="conclusion" cols="45" rows="5" style="height:60px;width:70%;">{{ conclusion }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="left">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3" align="left"><b style="color:#666;">Evaluation Exercises</b></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="left"><b>Low Order Thinking Questions</b></td>
+    </tr>
+    <tr>
+      <td align="right"><b>1</b></td>
+      <td colspan="2"><span id="sprytextarea9">
+
+
+        <textarea name="LowQ1" id="LowQ1" cols="45" rows="5" style="height:50px;width:70%;" >{{ LowQ1 }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="right"><b>2</b></td>
+      <td colspan="2"><span id="sprytextarea10">
+
+
+        <textarea name="LowQ2" id="LowQ2" cols="45" rows="5"  style="height:50px;width:70%;" >{{ LowQ2 }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="right"><b>3</b></td>
+      <td colspan="2">
+
+
+        <textarea name="LowQ3" id="LowQ3" cols="45" rows="5"  style="height:50px;width:70%;" >{{ LowQ3 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>4</b></td>
+      <td colspan="2">
+
+
+        <textarea name="LowQ4" id="LowQ4" cols="45" rows="5" style="height:50px;width:70%;" >{{ LowQ4 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>5</b></td>
+      <td colspan="2">
+
+
+        <textarea name="LowQ5" id="LowQ5" cols="45" rows="5"  style="height:50px;width:70%;"  >{{ LowQ5 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" align="left"><b>High Order Thinking Questions</b></td>
+    </tr>
+    <tr>
+      <td align="right"><b>1</b></td>
+      <td colspan="2"><span id="sprytextarea11">
+
+
+        <textarea name="HighQ1" id="HighQ1" cols="45" rows="5"  style="height:50px;width:70%;" >{{ HighQ1 }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="right"><b>2</b></td>
+      <td colspan="2"><span id="sprytextarea12">
+
+
+        <textarea name="HighQ2" id="HighQ2" cols="45" rows="5"  style="height:50px;width:70%;" >{{ HighQ2 }}</textarea>
+
+
+      <span class="textareaRequiredMsg">A value is required.</span></span></td>
+    </tr>
+    <tr>
+      <td align="right"><b>3</b></td>
+      <td colspan="2">
+
+
+        <textarea name="HighQ3" id="HighQ3" cols="45" rows="5"  style="height:50px;width:70%;" >{{ HighQ3 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>4</b></td>
+      <td colspan="2">
+
+
+        <textarea name="HighQ4" id="HighQ4" cols="45" rows="5" style="height:50px;width:70%;">{{ HighQ4 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><b>5</b></td>
+      <td colspan="2">
+
+
+        <textarea name="HighQ5" id="HighQ5" cols="45" rows="5" style="height:50px;width:70%;" >{{ HighQ5 }}</textarea>
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3" align="left"><b>Remarks on the teaching done / observed by the following</b></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Teacher</b></td>
+      <td colspan="2"><span id="sprytextarea14">
+
+
+        <textarea name="teacherRem" id="teacherRem" cols="45" rows="5" style="height:50px;width:70%;">{{ teacherRem }}</textarea>
+
+
+      </span></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Head</b></td>
+      <td colspan="2">
+
+
+        <input name="HeadRemk" type="text" id="HeadRemk" value="{{ HeadRemk }}">
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="left"><b>Coach</b></td>
+      <td colspan="2">
+
+
+        <input name="CoachRmk" type="text" id="CoachRmk" value="{{ CoachRmk }}">
+
+
+      </td>
+    </tr>
+    <tr>
+      <td align="left">&nbsp;</td>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td colspan="2"><input type="submit" class="button" value="Submit">
+
+
+        <input type="reset" class="button" value="Reset">
+        <input type="hidden" name="systemDateForm" id="systemDateForm"></td>
+
+
+    </tr>
+  </table>
+</form>
