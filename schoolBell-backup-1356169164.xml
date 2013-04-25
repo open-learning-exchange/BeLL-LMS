@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="schoolBell">
+	<table name="LessonPlan">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="1" not_null="1" numeric="1" primary_key="1" table="LessonPlan" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="class" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="DateOfEx" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="date" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Subject" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Ref" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Time" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="time" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Duration" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Topic" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Objective" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="RPK" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="BeLL_Resource_1" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="BeLL_Resource_2" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="BeLL_Resource_3" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="BeLL_Resource_4" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="BeLL_Resource_5" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Other_Resource_1" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Other_Resource_2" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Other_Resource_3" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Tech_Used_1" blob="0" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Tech_Used_2" blob="0" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Tech_Used_3" blob="0" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Core_Points" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Introduction" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Pre_Writing" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Writing" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Post_Writing" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Conclusion" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Low_Order_Thinking_1" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Low_Order_Thinking_2" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Low_Order_Thinking_3" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Low_Order_Thinking_4" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Low_Order_Thinking_5" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="High_Order_Thinking_1" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="High_Order_Thinking_2" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="High_Order_Thinking_3" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="High_Order_Thinking_4" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="High_Order_Thinking_5" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Teacher_Remark" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Head_Remark" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Coach_Remark" blob="1" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="LessonPlan" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="DateUpdated" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="1" primary_key="0" table="LessonPlan" type="timestamp" default="" unique_key="0" unsigned="1" zerofill="1" />
+			<column name="prepared_By" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="LessonPlan" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+		</columns>
+		<records>
+			<record>
+				<colNum>1</colNum>
+				<class></class>
+				<DateOfEx>2012-12-11</DateOfEx>
+				<Subject>subj</Subject>
+				<Ref>refrence</Ref>
+				<Time>12:00:00</Time>
+				<Duration>duration</Duration>
+				<Topic>topic</Topic>
+				<Objective>obj</Objective>
+				<RPK>rpk</RPK>
+				<BeLL_Resource_1>belR1</BeLL_Resource_1>
+				<BeLL_Resource_2>belR2</BeLL_Resource_2>
+				<BeLL_Resource_3>belR3</BeLL_Resource_3>
+				<BeLL_Resource_4>belR4</BeLL_Resource_4>
+				<BeLL_Resource_5>belR5</BeLL_Resource_5>
+				<Other_Resource_1>OR1</Other_Resource_1>
+				<Other_Resource_2>OR2</Other_Resource_2>
+				<Other_Resource_3>OR3</Other_Resource_3>
+				<Tech_Used_1>TU1</Tech_Used_1>
+				<Tech_Used_2>TU2</Tech_Used_2>
+				<Tech_Used_3>TU3</Tech_Used_3>
+				<Core_Points>CorePoint</Core_Points>
+				<Introduction>Intro</Introduction>
+				<Pre_Writing>pre</Pre_Writing>
+				<Writing>writ</Writing>
+				<Post_Writing>post</Post_Writing>
+				<Conclusion>conclu</Conclusion>
+				<Low_Order_Thinking_1>LowT1</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>LowT2</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3>LowT3</Low_Order_Thinking_3>
+				<Low_Order_Thinking_4>LowT4</Low_Order_Thinking_4>
+				<Low_Order_Thinking_5>LowT5</Low_Order_Thinking_5>
+				<High_Order_Thinking_1>HighT1</High_Order_Thinking_1>
+				<High_Order_Thinking_2>HighT2</High_Order_Thinking_2>
+				<High_Order_Thinking_3>HighT3</High_Order_Thinking_3>
+				<High_Order_Thinking_4>HighT4</High_Order_Thinking_4>
+				<High_Order_Thinking_5>HighT5</High_Order_Thinking_5>
+				<Teacher_Remark>TechRem</Teacher_Remark>
+				<Head_Remark>HeadRem</Head_Remark>
+				<Coach_Remark>CoachRem</Coach_Remark>
+				<DateUpdated>2012-12-06 07:19:36</DateUpdated>
+				<prepared_By></prepared_By>
+			</record>
+			<record>
+				<colNum>5</colNum>
+				<class>P2</class>
+				<DateOfEx>2013-05-24</DateOfEx>
+				<Subject>xzz</Subject>
+				<Ref>zxw</Ref>
+				<Time>00:00:02</Time>
+				<Duration>32</Duration>
+				<Topic>sd</Topic>
+				<Objective>cx</Objective>
+				<RPK>sd</RPK>
+				<BeLL_Resource_1>461216</BeLL_Resource_1>
+				<BeLL_Resource_2>none</BeLL_Resource_2>
+				<BeLL_Resource_3>none</BeLL_Resource_3>
+				<BeLL_Resource_4>none</BeLL_Resource_4>
+				<BeLL_Resource_5>none</BeLL_Resource_5>
+				<Other_Resource_1>ew</Other_Resource_1>
+				<Other_Resource_2></Other_Resource_2>
+				<Other_Resource_3></Other_Resource_3>
+				<Tech_Used_1>Laptop &amp; Speakers</Tech_Used_1>
+				<Tech_Used_2>Projector</Tech_Used_2>
+				<Tech_Used_3>none</Tech_Used_3>
+				<Core_Points>we</Core_Points>
+				<Introduction>we</Introduction>
+				<Pre_Writing>we</Pre_Writing>
+				<Writing>we</Writing>
+				<Post_Writing>we</Post_Writing>
+				<Conclusion>we</Conclusion>
+				<Low_Order_Thinking_1>th</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>th</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3>th</Low_Order_Thinking_3>
+				<Low_Order_Thinking_4>th</Low_Order_Thinking_4>
+				<Low_Order_Thinking_5>th</Low_Order_Thinking_5>
+				<High_Order_Thinking_1>yn</High_Order_Thinking_1>
+				<High_Order_Thinking_2></High_Order_Thinking_2>
+				<High_Order_Thinking_3></High_Order_Thinking_3>
+				<High_Order_Thinking_4></High_Order_Thinking_4>
+				<High_Order_Thinking_5></High_Order_Thinking_5>
+				<Teacher_Remark>tescb</Teacher_Remark>
+				<Head_Remark></Head_Remark>
+				<Coach_Remark></Coach_Remark>
+				<DateUpdated>2012-12-07 16:38:50</DateUpdated>
+				<prepared_By></prepared_By>
+			</record>
+			<record>
+				<colNum>4</colNum>
+				<class>P6</class>
+				<DateOfEx>2012-12-21</DateOfEx>
+				<Subject>sas</Subject>
+				<Ref>ds2            </Ref>
+				<Time>00:00:21</Time>
+				<Duration>2</Duration>
+				<Topic>t</Topic>
+				<Objective>sds</Objective>
+				<RPK>d</RPK>
+				<BeLL_Resource_1>461216</BeLL_Resource_1>
+				<BeLL_Resource_2>461216</BeLL_Resource_2>
+				<BeLL_Resource_3>none</BeLL_Resource_3>
+				<BeLL_Resource_4>none</BeLL_Resource_4>
+				<BeLL_Resource_5>none</BeLL_Resource_5>
+				<Other_Resource_1>sdsd</Other_Resource_1>
+				<Other_Resource_2></Other_Resource_2>
+				<Other_Resource_3></Other_Resource_3>
+				<Tech_Used_1>none</Tech_Used_1>
+				<Tech_Used_2>none</Tech_Used_2>
+				<Tech_Used_3>none</Tech_Used_3>
+				<Core_Points>ds</Core_Points>
+				<Introduction>sd</Introduction>
+				<Pre_Writing>fdf</Pre_Writing>
+				<Writing>sd</Writing>
+				<Post_Writing>post-writing</Post_Writing>
+				<Conclusion>sd</Conclusion>
+				<Low_Order_Thinking_1>sd</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>sd</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3>sd</Low_Order_Thinking_3>
+				<Low_Order_Thinking_4>sd</Low_Order_Thinking_4>
+				<Low_Order_Thinking_5>sd</Low_Order_Thinking_5>
+				<High_Order_Thinking_1>sd</High_Order_Thinking_1>
+				<High_Order_Thinking_2>high Q2</High_Order_Thinking_2>
+				<High_Order_Thinking_3></High_Order_Thinking_3>
+				<High_Order_Thinking_4></High_Order_Thinking_4>
+				<High_Order_Thinking_5></High_Order_Thinking_5>
+				<Teacher_Remark>Very good lesson</Teacher_Remark>
+				<Head_Remark></Head_Remark>
+				<Coach_Remark></Coach_Remark>
+				<DateUpdated>2012-12-12 08:41:50</DateUpdated>
+				<prepared_By>Kojo Mens</prepared_By>
+			</record>
+			<record>
+				<colNum>6</colNum>
+				<class>KG</class>
+				<DateOfEx>2012-12-13</DateOfEx>
+				<Subject>New Subject</Subject>
+				<Ref>nice</Ref>
+				<Time>02:00:00</Time>
+				<Duration>3 hours</Duration>
+				<Topic>Multiplication</Topic>
+				<Objective>objectives</Objective>
+				<RPK>kk</RPK>
+				<BeLL_Resource_1>recid</BeLL_Resource_1>
+				<BeLL_Resource_2>461216</BeLL_Resource_2>
+				<BeLL_Resource_3>4353</BeLL_Resource_3>
+				<BeLL_Resource_4>none</BeLL_Resource_4>
+				<BeLL_Resource_5>none</BeLL_Resource_5>
+				<Other_Resource_1></Other_Resource_1>
+				<Other_Resource_2></Other_Resource_2>
+				<Other_Resource_3></Other_Resource_3>
+				<Tech_Used_1>Tablets</Tech_Used_1>
+				<Tech_Used_2>Laptop &amp; Speakers</Tech_Used_2>
+				<Tech_Used_3>Server</Tech_Used_3>
+				<Core_Points>points</Core_Points>
+				<Introduction>intro</Introduction>
+				<Pre_Writing>pre</Pre_Writing>
+				<Writing>writu</Writing>
+				<Post_Writing>post</Post_Writing>
+				<Conclusion>concl</Conclusion>
+				<Low_Order_Thinking_1>l1</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>l2</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3></Low_Order_Thinking_3>
+				<Low_Order_Thinking_4></Low_Order_Thinking_4>
+				<Low_Order_Thinking_5></Low_Order_Thinking_5>
+				<High_Order_Thinking_1>h1</High_Order_Thinking_1>
+				<High_Order_Thinking_2>h2</High_Order_Thinking_2>
+				<High_Order_Thinking_3></High_Order_Thinking_3>
+				<High_Order_Thinking_4></High_Order_Thinking_4>
+				<High_Order_Thinking_5></High_Order_Thinking_5>
+				<Teacher_Remark>nice class</Teacher_Remark>
+				<Head_Remark></Head_Remark>
+				<Coach_Remark></Coach_Remark>
+				<DateUpdated>2012-12-10 23:55:34</DateUpdated>
+				<prepared_By></prepared_By>
+			</record>
+			<record>
+				<colNum>8</colNum>
+				<class>KG</class>
+				<DateOfEx>2012-12-05</DateOfEx>
+				<Subject>Reading</Subject>
+				<Ref>Macmillan</Ref>
+				<Time>02:00:00</Time>
+				<Duration>45min</Duration>
+				<Topic>Reading</Topic>
+				<Objective>obj</Objective>
+				<RPK>rk</RPK>
+				<BeLL_Resource_1>4353</BeLL_Resource_1>
+				<BeLL_Resource_2>4353</BeLL_Resource_2>
+				<BeLL_Resource_3>461216</BeLL_Resource_3>
+				<BeLL_Resource_4>none</BeLL_Resource_4>
+				<BeLL_Resource_5>none</BeLL_Resource_5>
+				<Other_Resource_1></Other_Resource_1>
+				<Other_Resource_2></Other_Resource_2>
+				<Other_Resource_3></Other_Resource_3>
+				<Tech_Used_1>Tablets</Tech_Used_1>
+				<Tech_Used_2>none</Tech_Used_2>
+				<Tech_Used_3>Laptop &amp; Speakers</Tech_Used_3>
+				<Core_Points>ds</Core_Points>
+				<Introduction>ff</Introduction>
+				<Pre_Writing>f</Pre_Writing>
+				<Writing>ds</Writing>
+				<Post_Writing>f</Post_Writing>
+				<Conclusion>ds</Conclusion>
+				<Low_Order_Thinking_1>ds</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>s</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3>sd</Low_Order_Thinking_3>
+				<Low_Order_Thinking_4>sd</Low_Order_Thinking_4>
+				<Low_Order_Thinking_5>ds</Low_Order_Thinking_5>
+				<High_Order_Thinking_1>ds</High_Order_Thinking_1>
+				<High_Order_Thinking_2>sd</High_Order_Thinking_2>
+				<High_Order_Thinking_3>sd</High_Order_Thinking_3>
+				<High_Order_Thinking_4>sd</High_Order_Thinking_4>
+				<High_Order_Thinking_5>ds</High_Order_Thinking_5>
+				<Teacher_Remark>nece</Teacher_Remark>
+				<Head_Remark></Head_Remark>
+				<Coach_Remark></Coach_Remark>
+				<DateUpdated>2012-12-19 11:43:35</DateUpdated>
+				<prepared_By></prepared_By>
+			</record>
+			<record>
+				<colNum>9</colNum>
+				<class>KG</class>
+				<DateOfEx>2012-12-05</DateOfEx>
+				<Subject>Reading</Subject>
+				<Ref>Macmillan</Ref>
+				<Time>02:00:00</Time>
+				<Duration>45min</Duration>
+				<Topic>Reading</Topic>
+				<Objective>obj</Objective>
+				<RPK>rk</RPK>
+				<BeLL_Resource_1>4353</BeLL_Resource_1>
+				<BeLL_Resource_2>4353</BeLL_Resource_2>
+				<BeLL_Resource_3>461216</BeLL_Resource_3>
+				<BeLL_Resource_4>none</BeLL_Resource_4>
+				<BeLL_Resource_5>none</BeLL_Resource_5>
+				<Other_Resource_1></Other_Resource_1>
+				<Other_Resource_2></Other_Resource_2>
+				<Other_Resource_3></Other_Resource_3>
+				<Tech_Used_1>Tablets</Tech_Used_1>
+				<Tech_Used_2>none</Tech_Used_2>
+				<Tech_Used_3>Laptop &amp; Speakers</Tech_Used_3>
+				<Core_Points>ds</Core_Points>
+				<Introduction>ff</Introduction>
+				<Pre_Writing>f</Pre_Writing>
+				<Writing>ds</Writing>
+				<Post_Writing>f</Post_Writing>
+				<Conclusion>ds</Conclusion>
+				<Low_Order_Thinking_1>ds</Low_Order_Thinking_1>
+				<Low_Order_Thinking_2>s</Low_Order_Thinking_2>
+				<Low_Order_Thinking_3>sd</Low_Order_Thinking_3>
+				<Low_Order_Thinking_4>sd</Low_Order_Thinking_4>
+				<Low_Order_Thinking_5>ds</Low_Order_Thinking_5>
+				<High_Order_Thinking_1>ds</High_Order_Thinking_1>
+				<High_Order_Thinking_2>sd</High_Order_Thinking_2>
+				<High_Order_Thinking_3>sd</High_Order_Thinking_3>
+				<High_Order_Thinking_4>sd</High_Order_Thinking_4>
+				<High_Order_Thinking_5>ds</High_Order_Thinking_5>
+				<Teacher_Remark>nece</Teacher_Remark>
+				<Head_Remark></Head_Remark>
+				<Coach_Remark></Coach_Remark>
+				<DateUpdated>2012-12-19 11:57:46</DateUpdated>
+				<prepared_By></prepared_By>
+			</record>
+		</records>
+	</table>
+	<table name="resources">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="1" not_null="1" numeric="1" primary_key="0" table="resources" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="resrcID" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="1" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="subject" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="title" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="description" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="type" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="url" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="dateAdded" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="1" primary_key="0" table="resources" type="timestamp" default="" unique_key="0" unsigned="1" zerofill="1" />
+			<column name="KG" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P1" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P2" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P3" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P4" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P5" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="P6" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Community" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="TLR" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="resources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+		</columns>
+		<records>
+			<record>
+				<colNum>1</colNum>
+				<resrcID>recid</resrcID>
+				<subject>subj</subject>
+				<title>title</title>
+				<description>descp</description>
+				<type>type</type>
+				<url>url</url>
+				<dateAdded>2012-12-05 08:36:15</dateAdded>
+				<KG>NO</KG>
+				<P1>NO</P1>
+				<P2>NO</P2>
+				<P3>NO</P3>
+				<P4>NO</P4>
+				<P5>NO</P5>
+				<P6>NO</P6>
+				<Community>NO</Community>
+				<TLR>YES</TLR>
+			</record>
+			<record>
+				<colNum>2</colNum>
+				<resrcID>4353</resrcID>
+				<subject>subj</subject>
+				<title>title</title>
+				<description>descp</description>
+				<type>type</type>
+				<url>url</url>
+				<dateAdded>2012-12-05 08:36:44</dateAdded>
+				<KG>kg</KG>
+				<P1>p1</P1>
+				<P2>p2</P2>
+				<P3>p3</P3>
+				<P4>p4</P4>
+				<P5>p5</P5>
+				<P6>YES</P6>
+				<Community>com</Community>
+				<TLR>tlr</TLR>
+			</record>
+			<record>
+				<colNum>3</colNum>
+				<resrcID>461216</resrcID>
+				<subject>Maths</subject>
+				<title>Music for kids</title>
+				<description>Nice vido for Kids</description>
+				<type>mp3</type>
+				<url>Resources/461216.mp3</url>
+				<dateAdded>2012-12-05 09:21:19</dateAdded>
+				<KG></KG>
+				<P1></P1>
+				<P2></P2>
+				<P3></P3>
+				<P4></P4>
+				<P5></P5>
+				<P6></P6>
+				<Community></Community>
+				<TLR>YES</TLR>
+			</record>
+		</records>
+	</table>
+	<table name="schoolDetails">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="1" primary_key="1" table="schoolDetails" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="schoolName" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="schoolDetails" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="schoolType" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="schoolDetails" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="dateOfEnrolment" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="schoolDetails" type="date" default="" unique_key="0" unsigned="0" zerofill="0" />
+		</columns>
+		<records>
+		</records>
+	</table>
+	<table name="students">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="1" not_null="1" numeric="1" primary_key="0" table="students" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="stuCode" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="students" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="stuName" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="students" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="stuClass" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="students" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="stuDOB" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="students" type="date" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="stuGender" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="students" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="DateRegistered" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="1" primary_key="0" table="students" type="timestamp" default="" unique_key="0" unsigned="1" zerofill="1" />
+		</columns>
+		<records>
+			<record>
+				<colNum>2</colNum>
+				<stuCode>0000</stuCode>
+				<stuName>Kofi Mensah</stuName>
+				<stuClass>P1</stuClass>
+				<stuDOB>2008-12-01</stuDOB>
+				<stuGender>Male</stuGender>
+				<DateRegistered>2012-12-09 00:00:00</DateRegistered>
+			</record>
+			<record>
+				<colNum>3</colNum>
+				<stuCode>0908</stuCode>
+				<stuName>Maxi</stuName>
+				<stuClass>P3</stuClass>
+				<stuDOB>2008-09-10</stuDOB>
+				<stuGender>Male</stuGender>
+				<DateRegistered>2012-12-09 00:00:00</DateRegistered>
+			</record>
+			<record>
+				<colNum>4</colNum>
+				<stuCode>5523</stuCode>
+				<stuName>Mensah Hoho</stuName>
+				<stuClass>P1</stuClass>
+				<stuDOB>2005-12-22</stuDOB>
+				<stuGender>Male</stuGender>
+				<DateRegistered>2012-12-09 15:05:54</DateRegistered>
+			</record>
+		</records>
+	</table>
+	<table name="teacherClass">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="1" not_null="1" numeric="1" primary_key="0" table="teacherClass" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Name" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="teacherClass" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Contact" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="teacherClass" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="loginId" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="1" table="teacherClass" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="pswd" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="teacherClass" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="classAssign" blob="0" maxlength="" multiple_key="0" not_null="0" numeric="0" primary_key="0" table="teacherClass" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="Role" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="teacherClass" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+		</columns>
+		<records>
+			<record>
+				<colNum>2</colNum>
+				<Name>Leonard Mensah</Name>
+				<Contact>0266663807</Contact>
+				<loginId>schoolbell</loginId>
+				<pswd>bfe20ca83cf931d29a95a28e308e80d7</pswd>
+				<classAssign></classAssign>
+				<Role>Admin</Role>
+			</record>
+			<record>
+				<colNum>4</colNum>
+				<Name>Kojo Mens</Name>
+				<Contact>0266663807</Contact>
+				<loginId>teacher1</loginId>
+				<pswd>5f4dcc3b5aa765d61d8327deb882cf99</pswd>
+				<classAssign>P4</classAssign>
+				<Role>Teacher</Role>
+			</record>
+		</records>
+	</table>
+	<table name="usedResources">
+		<columns>
+			<column name="colNum" blob="0" maxlength="" multiple_key="1" not_null="1" numeric="1" primary_key="1" table="usedResources" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="resrcID" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="subject" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="title" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="description" blob="1" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="blob" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="type" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="usedby" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="dateUsed" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="date" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="class" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="0" primary_key="0" table="usedResources" type="string" default="" unique_key="0" unsigned="0" zerofill="0" />
+			<column name="rating" blob="0" maxlength="" multiple_key="0" not_null="1" numeric="1" primary_key="0" table="usedResources" type="int" default="" unique_key="0" unsigned="0" zerofill="0" />
+		</columns>
+		<records>
+			<record>
+				<colNum>5</colNum>
+				<resrcID>4353</resrcID>
+				<subject>subj</subject>
+				<title>title</title>
+				<description>descp</description>
+				<type>type</type>
+				<usedby>Leonard Mensah</usedby>
+				<dateUsed>2012-12-05</dateUsed>
+				<class>KG</class>
+				<rating>0</rating>
+			</record>
+			<record>
+				<colNum>6</colNum>
+				<resrcID>4353</resrcID>
+				<subject>subj</subject>
+				<title>title</title>
+				<description>descp</description>
+				<type>type</type>
+				<usedby>Leonard Mensah</usedby>
+				<dateUsed>2012-12-05</dateUsed>
+				<class>KG</class>
+				<rating>0</rating>
+			</record>
+			<record>
+				<colNum>7</colNum>
+				<resrcID>461216</resrcID>
+				<subject>Maths</subject>
+				<title>Music for kids</title>
+				<description>Nice vido for Kids</description>
+				<type>mp3</type>
+				<usedby>Leonard Mensah</usedby>
+				<dateUsed>2012-12-05</dateUsed>
+				<class>KG</class>
+				<rating>0</rating>
+			</record>
+		</records>
+	</table>
+</database>

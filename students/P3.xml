@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P3.xml
+    Created on : September 17, 2012, 11:53 AM
+    Author     : leonard
+    Description:
+        Purpose of the document follows.
+-->
+<allstudent>
+<student>
+<name>Maxi</name>
+<bcode>0908</bcode>
+</student>
+<student>
+<name>Vero Mensah</name>
+<bcode>0000</bcode>
+</student>
+</allstudent>

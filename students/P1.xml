@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P1.xml
+    Created on : September 17, 2012, 11:53 AM
+    Author     : leonard
+    Description:
+        Purpose of the document follows.
+-->
+<allstudent>
+<student>
+<name>Kofi Mensah</name>
+<bcode>0000</bcode>
+</student>
+<student>
+<name>Mensah Hoho</name>
+<bcode>5523</bcode>
+</student>
+</allstudent>
