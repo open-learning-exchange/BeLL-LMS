@@ -1,8 +1,8 @@
 <?php
 
 $server ="localhost";
-$username ="root";
-$password ="";
+$username ="schoolbell";
+$password ="oleole";
 
 $dbhandle= mysql_connect($server,$username,$password) or die(mysql_error());
 $selected = mysql_select_db("schoolbell",$dbhandle) or die (mysql_error());

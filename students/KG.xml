@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Document   : KG.xml
-    Created on : September 17, 2012, 11:53 AM
     Author     : leonard
-    Description:
-        Purpose of the document follows.
 -->
 <allstudent>
+<student>
+<name>Agnes Okuma</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Eva Oppong</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Nana Asamoah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Ohene Joseph</name>
+<bcode>002</bcode>
+</student>
 </allstudent>

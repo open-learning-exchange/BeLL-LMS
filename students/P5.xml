@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Document   : P5.xml
-    Created on : September 17, 2012, 11:53 AM
     Author     : leonard
-    Description:
-        Purpose of the document follows.
 -->
 <allstudent>
+<student>
+<name>Adomaa Hannah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Agyei yeboah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Dorve Noah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Dzotsi Wisdom</name>
+<bcode>002</bcode>
+</student>
 </allstudent>

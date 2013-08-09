@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Document   : P4.xml
-    Created on : September 17, 2012, 11:53 AM
     Author     : leonard
-    Description:
-        Purpose of the document follows.
 -->
 <allstudent>
+<student>
+<name>Asumadu collins</name>
+<bcode>002</bcode>
+</student>
+<student>
+<name>Mavis Ofosu</name>
+<bcode>002</bcode>
+</student>
+<student>
+<name>Opata Joshua</name>
+<bcode>001</bcode>
+</student>
 </allstudent>

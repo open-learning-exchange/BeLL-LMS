@@ -1,4 +1,4 @@
-<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(1);include "talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(1);include "secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -103,7 +103,11 @@ body {
 </style>
 <body>
 <div id="header">
-  <div class="inHeaderLogin"><div style="width:300px;height:50px; padding-top:10px; float:right; text-align:right"><b><!--<a href="TM/oms/">TM OMS</a> </b>&nbsp;&nbsp;&nbsp;&nbsp;|| &nbsp;&nbsp;&nbsp;&nbsp;<b><a href="TM/games/">TM STUDENT&nbsp;</a>--></b>&nbsp;&nbsp;&nbsp;</div></div>
+  <div class="inHeaderLogin">
+    <div style="width: 200px; height: 50px; padding-top: 10px; float: right; text-align: left; color: #3C429A;"><b><!--<a href="TM/oms/">TM OMS</a> </b>&nbsp;&nbsp;&nbsp;&nbsp;|| &nbsp;&nbsp;&nbsp;&nbsp;<b><a href="TM/games/">TM STUDENT&nbsp;</a>--></b><span style="text-align: left">Learning Management System<br>
+  Language : English<br>
+  Version 1.01</span></div>
+  </div>
 </div>
 
 <div id="loginForm">

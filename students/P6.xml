@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Document   : P6.xml
-    Created on : September 17, 2012, 11:53 AM
     Author     : leonard
-    Description:
-        Purpose of the document follows.
 -->
 <allstudent>
+<student>
+<name>Antwi Kwaawo Oteng</name>
+<bcode>002</bcode>
+</student>
+<student>
+<name>Mery Amponsah</name>
+<bcode>001</bcode>
+</student>
 </allstudent>

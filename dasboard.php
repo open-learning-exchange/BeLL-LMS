@@ -80,39 +80,45 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 	<div id="rightContent">
 	<h3>Teacher</h3>
 	<div class="shortcutHome"></div>
-		<div class="shortcutHome"></div>
-        <div class="shortcutHome"> <a href="registerStudent.php" target="DashScreen"><img src="images/halaman.png" alt="">		<br>
-      Register New Student </a> </div>
-		<div class="shortcutHome">
-		<a href="Stories4week.php" target="DashScreen"><img src="images/creatTask.png"><br>
-		 Compile Story for Week</a>
+    <div class="shortcutHome"> <a href="pages/registerStudent.php"  target="DashScreen"><img src="images/students.png" alt="" width="52" height="52"><br>
+      Register New Student
+      </a> </div>
+	<div class="shortcutHome">
+	  <a href="pages/Stories4week.php" target="DashScreen"><img src="images/creatTask.png" width="52" height="52"><br>
+		 Story for Next Week</a>
+      </div>
+      <div class="shortcutHome">
+	  <!--<a href="pages/Stories4week.php" target="DashScreen"><img src="images/photo.png"><br>
+		Assign Task (V-Book ect)</a>-->
+        <a href="pages/assign_task.php" target="DashScreen"><img src="images/photo.png" width="52" height="52"><br>
+		Assign Task (V-Book ect)</a>
       </div>
       
          <div class="shortcutHome">
-         <a href="Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
-View Teacher Resources</a>
+         <a href="pages/Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt="" width="52" height="52"><br>
+Teacher Resources</a>
 		 </div>
 		<div class="shortcutHome">
-		<a href="lessonPlan.php" target="DashScreen"><img src="images/assignTask.png"><br>
+		<a href="pages/lessonPlan.php" target="DashScreen"><img src="images/assignTask.png" width="52" height="52"><br>
 		New Lesson Plan</a>
 		</div>
         <div class="shortcutHome">
-		<a href="edit_lessonPlan.php" target="DashScreen"><img src="images/editLesson_plane.png"><br>
+		<a href="pages/edit_lessonPlan.php" target="DashScreen"><img src="images/editLesson_plane.png" width="52" height="52"><br>
 		Edit Lesson Plan</a>
 	  </div>
        <div class="shortcutHome">
-		<a href="rateResourses.php" target="DashScreen"><img src="images/editPlane.jpg"><br>
-		Rate My Used Resources</a>
+		<a href="pages/rateResourses.php" target="DashScreen"><img src="images/editPlane.jpg" width="52" height="52"><br>
+		Rate Used Resources</a>
 	  </div>
-      <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>
-      View Available Resources
+      <div class="shortcutHome"> <a href="pages/all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt="" width="52" height="52"><br>
+      Available Resources
       </a> </div>
 		
 		<div class="clear"></div>
 		
 		<div id="smallRight">
 		  <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
-			<tr><td colspan="2" style="border: none;padding: 4px;"><iframe height="570" frameborder="0" width="640" src="registerStudent.php" name="DashScreen"></iframe>&nbsp;</td></tr>
+			<tr><td colspan="2" style="border: none;padding: 4px;"><iframe height="570" frameborder="0" width="640" src="pages/registerStudent.php" name="DashScreen"></iframe>&nbsp;</td></tr>
 		  </table>
 		</div>
 	</div>

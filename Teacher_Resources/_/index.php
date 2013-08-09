@@ -63,7 +63,7 @@
   foreach( $files as $file ){
     // Comment the next line out if you wish see hidden files while browsing
     if(preg_match("/^\./", $file) || $file == $script): continue; endif; // This line will hide all invisible files. 
-    echo '<li><a href="' . basename($file) . '" target="_blank">' . $file . '</a></li>';
+    echo '<li><a href="'.$directory.'/' . basename($file) . '" target="_blank">' . $file . '</a></li>';
   }
   echo "</ul>";
 ?>
