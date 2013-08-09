@@ -18,7 +18,7 @@
 	window.onload = function(){
 		new JsDatePick({
 			useMode:2,
-			target:"dateExec",
+			target:"#",
 			dateFormat:"%Y-%m-%d"
 		});
 	};
@@ -378,19 +378,19 @@ else if(isset($_GET['editdate']))
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Pre –Writing stage</b></td>
+          <td align="left"><b>Pre –Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea6">
             <textarea name="PrewStage" cols="45" rows="5" readonly id="PrewStage" style="height:60px;width:70%;"><?php echo $PreWrite;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Writing Stage</b></td>
+          <td align="left"><b>Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea7">
             <textarea name="wStage" cols="45" rows="5" readonly id="wStage" style="height:60px;width:70%;"><?php echo $Writing;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Post – Writing Stage</b></td>
+          <td align="left"><b>Post – Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea8">
             <textarea name="PostWStage" id="PostWStage" cols="45" rows="5" style="height:60px;width:70%;"><?php echo $Post_Writing;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>

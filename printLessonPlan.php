@@ -315,15 +315,15 @@ if(isset($_GET['prepaedBy']))
     <td colspan="2" valign="top" class="content"><?php echo $Intro;?></td>
 </tr>
   <tr>
-    <td align="left" valign="top"><span class="prntTitle"><b>Pre –Writing stage</b></span></td>
+    <td align="left" valign="top"><span class="prntTitle"><b>Pre –Writing / Reading stage</b></span></td>
     <td colspan="2" valign="top" class="content"><?php echo $PreWrite;?></td>
 </tr>
   <tr>
-    <td align="left" valign="top"><span class="prntTitle"><b>Writing Stage</b></span></td>
+    <td align="left" valign="top"><span class="prntTitle"><b>Writing / Reading Stage</b></span></td>
     <td colspan="2" valign="top" class="content"><?php echo $Writing;?></td>
 </tr>
   <tr>
-    <td align="left" valign="top"><span class="prntTitle"><b>Post – Writing Stage</b></span></td>
+    <td align="left" valign="top"><span class="prntTitle"><b>Post – Writing / Reading Stage</b></span></td>
     <td colspan="2" valign="top" class="content"><?php echo $Post_Writing;?></td>
 </tr>
   <tr>

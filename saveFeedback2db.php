@@ -60,12 +60,12 @@ if ($handle = opendir('feedbacks/')) {
      }
     }
     closedir($handle);
-	 
+	 recordAction($_SESSION['name'],"Saved tablet usage feedback into db");
 } else
 {
 	 echo "System folder acces error";
 }
-recordActionDate($_SESSION['name'],"Saved tablet usage feedback into db",$_GET['systemDateForm']);
+
 			  //echo $entry->fbdate;
 //			  echo $entry->fbresourceTitle;
 //			  echo $entry->fbresourceID;

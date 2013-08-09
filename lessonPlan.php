@@ -6,11 +6,10 @@ var now = new Date()
 var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
 </script>
 <?php
-if($_SESSION['name']== null){
+/*?>if($_SESSION['name']== null){
 	$mystring = "index.php?sesEnded=true&systemDateForm='+fmat";
 	die('<script type="text/javascript">window.parent.location.href= "'.$mystring.'";</script>');
-}
-?>
+}<?php */?>
 <title>Open Learning Exchange - Ghana</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="stylesheet/img/devil-icon.png">
@@ -43,7 +42,7 @@ function saveRes2DB($ResID)
 			  $query = mysql_query("SELECT * FROM `resources` where resrcID = '".$ResID."'") or die(mysql_error());
 			   while($data = mysql_fetch_array($query))
 			   {
-				   mysql_query("INSERT INTO `usedResources` (`colNum`, `resrcID`, `subject`, `title`, `description`, `type`, `usedby`, `dateUsed`,`class`,`rating`) VALUES (NULL, '".$data['resrcID']."', '".$data['subject']."', '".$data['title']."', '".$data['description']."', '".$data['type']."', '".$_SESSION['name']."', '".$_POST['dateExec']."','".$_POST['class']."',0)") or die(mysql_error());
+				   mysql_query("INSERT INTO `usedResources` (`colNum`, `resrcID`, `subject`, `title`, `description`, `type`, `usedby`, `dateUsed`,`class`,`rating`) VALUES (NULL, '".$data['resrcID']."', '".$data['subject']."', '".$data['title']."', '".$data['description']."', '".$data['type']."', '".$_POST['preparedBy']."', '".$_POST['dateExec']."','".$_POST['class']."',0)") or die(mysql_error());
 				   
 			   }
   	  }
@@ -51,7 +50,7 @@ function saveRes2DB($ResID)
 if(isset($_POST['subject']))
 {
 	//////addslashes ( )
-  $dataQuery = mysql_query("INSERT INTO `LessonPlan` (`colNum`,`DateOfEx`,`class`,`Subject`, `Ref`, `Time`, `Duration`, `Topic`, `Objective`, `RPK`, `BeLL_Resource_1`, `BeLL_Resource_2`, `BeLL_Resource_3`, `BeLL_Resource_4`, `BeLL_Resource_5`, `Other_Resource_1`, `Other_Resource_2`, `Other_Resource_3`, `Tech_Used_1`, `Tech_Used_2`, `Tech_Used_3`, `Core_Points`, `Introduction`, `Pre_Writing`, `Writing`, `Post_Writing`, `Conclusion`, `Low_Order_Thinking_1`, `Low_Order_Thinking_2`, `Low_Order_Thinking_3`, `Low_Order_Thinking_4`, `Low_Order_Thinking_5`, `High_Order_Thinking_1`, `High_Order_Thinking_2`, `High_Order_Thinking_3`, `High_Order_Thinking_4`, `High_Order_Thinking_5`, `Teacher_Remark`, `Head_Remark`, `Coach_Remark`, `DateUpdated`, `prepared_By` ) VALUES (NULL, '".$_POST['dateExec']."','".$_POST['class']."', '".addslashes($_POST['subject'])."', '".addslashes ($_POST['refrence'])."', '".addslashes($_POST['txtTime'])."', '".addslashes($_POST['duration'])."', '".addslashes($_POST['topic'])."', '".addslashes ($_POST['objectives'])."', '".addslashes($_POST['rpk'])."', '".addslashes($_POST['bellRes1'])."', '".addslashes($_POST['bellRes2'])."', '".addslashes ($_POST['bellRes3'])."', '".addslashes($_POST['bellRes4'])."', '".addslashes($_POST['bellRes5'])."', '".addslashes($_POST['BellSelR1'])."', '".addslashes($_POST['BellSelR2'])."', '".addslashes($_POST['BellSelR3'])."', '".addslashes($_POST['bellTech1'])."', '".addslashes($_POST['bellTech2'])."', '".addslashes($_POST['bellTech3'])."', '".addslashes($_POST['corPoints'])."', '".addslashes($_POST['intro'])."', '".addslashes($_POST['PrewStage'])."', '".addslashes($_POST['wStage'])."', '".addslashes($_POST['PostWStage'])."', '".addslashes($_POST['conclussion'])."', '".addslashes($_POST['LowQ1'])."', '".addslashes($_POST['LowQ2'])."', '".addslashes($_POST['LowQ3'])."', '".addslashes($_POST['LowQ4'])."', '".addslashes($_POST['LowQ5'])."', '".addslashes($_POST['HighQ1'])."', '".addslashes($_POST['HighQ2'])."', '".addslashes($_POST['HighQ3'])."', '".addslashes($_POST['HighQ4'])."', '".addslashes($_POST['HighQ5'])."', '".addslashes($_POST['teacherRem'])."', '".addslashes($_POST['HeadRemk'])."', '".addslashes($_POST['CoachRmk'])."', '".$_POST['systemDateForm']."', '".addslashes( $_SESSION['name'])."')") or die(mysql_error());
+  $dataQuery = mysql_query("INSERT INTO `LessonPlan` (`colNum`,`DateOfEx`,`class`,`Subject`, `Ref`, `Time`, `Duration`, `Topic`, `Objective`, `RPK`, `BeLL_Resource_1`, `BeLL_Resource_2`, `BeLL_Resource_3`, `BeLL_Resource_4`, `BeLL_Resource_5`, `Other_Resource_1`, `Other_Resource_2`, `Other_Resource_3`, `Tech_Used_1`, `Tech_Used_2`, `Tech_Used_3`, `Core_Points`, `Introduction`, `Pre_Writing`, `Writing`, `Post_Writing`, `Conclusion`, `Low_Order_Thinking_1`, `Low_Order_Thinking_2`, `Low_Order_Thinking_3`, `Low_Order_Thinking_4`, `Low_Order_Thinking_5`, `High_Order_Thinking_1`, `High_Order_Thinking_2`, `High_Order_Thinking_3`, `High_Order_Thinking_4`, `High_Order_Thinking_5`, `Teacher_Remark`, `Head_Remark`, `Coach_Remark`, `DateUpdated`, `prepared_By` ) VALUES (NULL, '".$_POST['dateExec']."','".$_POST['class']."', '".addslashes($_POST['subject'])."', '".addslashes ($_POST['refrence'])."', '".addslashes($_POST['txtTime'])."', '".addslashes($_POST['duration'])."', '".addslashes($_POST['topic'])."', '".addslashes ($_POST['objectives'])."', '".addslashes($_POST['rpk'])."', '".addslashes($_POST['bellRes1'])."', '".addslashes($_POST['bellRes2'])."', '".addslashes ($_POST['bellRes3'])."', '".addslashes($_POST['bellRes4'])."', '".addslashes($_POST['bellRes5'])."', '".addslashes($_POST['BellSelR1'])."', '".addslashes($_POST['BellSelR2'])."', '".addslashes($_POST['BellSelR3'])."', '".addslashes($_POST['bellTech1'])."', '".addslashes($_POST['bellTech2'])."', '".addslashes($_POST['bellTech3'])."', '".addslashes($_POST['corPoints'])."', '".addslashes($_POST['intro'])."', '".addslashes($_POST['PrewStage'])."', '".addslashes($_POST['wStage'])."', '".addslashes($_POST['PostWStage'])."', '".addslashes($_POST['conclussion'])."', '".addslashes($_POST['LowQ1'])."', '".addslashes($_POST['LowQ2'])."', '".addslashes($_POST['LowQ3'])."', '".addslashes($_POST['LowQ4'])."', '".addslashes($_POST['LowQ5'])."', '".addslashes($_POST['HighQ1'])."', '".addslashes($_POST['HighQ2'])."', '".addslashes($_POST['HighQ3'])."', '".addslashes($_POST['HighQ4'])."', '".addslashes($_POST['HighQ5'])."', '".addslashes($_POST['teacherRem'])."', '".addslashes($_POST['HeadRemk'])."', '".addslashes($_POST['CoachRmk'])."', '".$_POST['systemDateForm']."', '".addslashes($_POST['preparedBy'])."')") or die(mysql_error());
   
   saveRes2DB($_POST['bellRes1']);
   saveRes2DB($_POST['bellRes2']);
@@ -59,7 +58,7 @@ if(isset($_POST['subject']))
   saveRes2DB($_POST['bellRes4']);
   saveRes2DB($_POST['bellRes5']);
   saveRes2DB($_POST['bellRes6']);
-  recordActionDate($_SESSION['name'],"Created Lesson Plan",$_POST['systemDateForm']);
+  recordActionDate($_POST['preparedBy'],"Created Lesson Plan",$_POST['systemDateForm']);
   
   echo '<script type="text/javascript">alert("Lesson plan successfully saved for '.$_POST['dateExec'].'");</script>';
   $mystring = "printLessonPlan.php?printDate=".$_POST['dateExec']."";
@@ -344,19 +343,19 @@ $query = mysql_query("SELECT * FROM `resources` where TLR='' order by KG,P1,P2,P
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Pre –Writing stage</b></td>
+          <td align="left"><b>Pre –Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea6">
             <textarea name="PrewStage" id="PrewStage" cols="45" rows="5" style="height:60px;width:70%;"></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Writing Stage</b></td>
+          <td align="left"><b>Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea7">
             <textarea name="wStage" id="wStage" cols="45" rows="5" style="height:60px;width:70%;"></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Post – Writing Stage</b></td>
+          <td align="left"><b>Post – Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea8">
             <textarea name="PostWStage" id="PostWStage" cols="45" rows="5" style="height:60px;width:70%;"></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
@@ -451,7 +450,7 @@ $query = mysql_query("SELECT * FROM `resources` where TLR='' order by KG,P1,P2,P
         </tr>
         <tr>
           <td align="left">&nbsp;</td>
-          <td colspan="2">&nbsp;</td>
+          <td colspan="2"><input type="hidden" name="preparedBy" id="preparedBy" value="<?php echo $_SESSION['name'];?>"></td>
         </tr>
         <tr>
           <td></td>

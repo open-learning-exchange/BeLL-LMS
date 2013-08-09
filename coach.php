@@ -60,16 +60,11 @@ else
 	die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
 }
 ?>
-<script type='text/javascript'>
-var now = new Date() 
-var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
-////document.getElementById('DashScreen').location.href=this.href+'?systemDateForm='+fmat;return false;
-</script>
 <body>
 <div id="header">
 	<div class="inHeader">
 	  <div class="mosAdmin">Hello,  <?php echo $_SESSION['name'];?><br>
-	    | <a href="index.php"  onClick="location.href=this.href+'?systemDateForm='+fmat;return false;">Sign Out</a> | <a href="#">Help</a> </div>
+	    | <a href="index.php">Sign Out</a> | <a href="index.php">Help</a> </div>
 	  <div class="clear"></div>
 	</div>
 </div>
@@ -81,19 +76,19 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
   <div id="rightContent">
     <h3>Coach</h3>
     <div class="shortcutHome"></div>
-    <div class="shortcutHome"> <a href="uploadRes.php" target="DashScreen" ><img src="images/upload.png" alt=""><br>
+    <div class="shortcutHome"> <a href="uploadRes.php" target="DashScreen"><img src="images/upload.png" alt=""><br>
       Upload Resources</a> </div>
-    <div class="shortcutHome"> <a href="view_LPlan.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/assignTask.png" alt=""><br>
+    <div class="shortcutHome"> <a href="view_LPlan.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
       Lesson Plan</a></div>
-      <div class="shortcutHome"> <a href="view_feedback.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/feedback.png" alt=""><br>
+      <div class="shortcutHome"> <a href="view_feedback.php"  target="DashScreen"><img src="images/feedback.png" alt=""><br>
       View Feedback
     </a> </div>
-      <div class="shortcutHome"> <a href="studentsList.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/students.png" alt=""><br>View all Students</a> </div>
-      <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/listRes.png" alt=""><br>
+      <div class="shortcutHome"> <a href="studentsList.php"  target="DashScreen"><img src="images/students.png" alt=""><br>View all Students</a> </div>
+      <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>
       Available Resources
       </a> </div>
       <div class="shortcutHome">
-         <a href="Teacher_resource.php" target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/teacher.png" alt=""><br>
+         <a href="Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
 View Teacher Resources</a>
 		 </div>
     <div class="clear"></div>

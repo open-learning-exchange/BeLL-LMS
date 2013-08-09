@@ -6,11 +6,7 @@
 <link rel="shortcut icon" href="stylesheet/img/devil-icon.png">
 <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-<script type='text/javascript'>
-var now = new Date() 
-var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
-////document.getElementById('DashScreen').location.href=this.href+'?systemDateForm='+fmat;return false;
-</script>
+
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color: #FFF; width: 600px;">
@@ -72,7 +68,6 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 				 }
 				$cnt++;
 			 }
-			 ////recordActionDate($_SESSION['name'],"Viewed student resources page",$_GET['systemDateForm']);
       ?>
 		</table>
 	</div><span style="color: #900; font-weight:bold; font-style:italic"></span>  
@@ -82,7 +77,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 <script type="text/javascript">
 function openRes(pNumber)
 {
-	window.open('viewResource.php?resid='+pNumber+'&systemDateForm='+fmat);
+	window.open('viewResource.php?resid='+pNumber);
 	///alert('Yes'); 
 }
 </script>

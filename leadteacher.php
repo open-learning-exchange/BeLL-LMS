@@ -69,7 +69,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 <div id="header">
 	<div class="inHeader">
 	  <div class="mosAdmin">Hello,  <?php echo $_SESSION['name'];?><br>
-	    | <a href="index.php"  onClick="location.href=this.href+'?systemDateForm='+fmat;return false;">Sign Out</a> | <a href="#">Help</a> </div>
+	    | <a href="index.php">Sign Out</a> | <a href="index.php">Help</a> </div>
 	  <div class="clear"></div>
 	</div>
 </div>
@@ -83,15 +83,15 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
     <div class="shortcutHome"></div>
     <div class="shortcutHome"> <a href="uploadRes.php" target="DashScreen"><img src="images/upload.png" alt=""><br>
       Upload Resources</a> </div>
-  <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/listRes.png" alt=""><br>Available Resources
+  <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>Available Resources
       </a> </div>
     <div class="shortcutHome">
-      <a href="Teacher_resource.php" target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/teacher.png" alt=""><br>
+      <a href="Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
  Teacher Resources</a>
 		 </div>
       <div class="shortcutHome"> <a href="ready2Sync.php" target="DashScreen" ><img src="images/sync.png" alt=""><br>Ready to Sync</a> </div>
-       <div class="shortcutHome"> <a href="saveFeedback2db.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/makefeedback.png" alt=""><br>Save Feedback</a> </div>
-       <div class="shortcutHome"> <a href="backup-SQL.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/backup.png" alt=""><br>Backup Database</a> </div>
+       <div class="shortcutHome"> <a href="saveFeedback2db.php"  target="DashScreen"><img src="images/makefeedback.png" alt=""><br>Save Feedback</a> </div>
+       <div class="shortcutHome"> <a href="backup-SQL.php?dat=<?php echo $_GET['dat']?>"  target="DashScreen" onClick=""><img src="images/backup.png" alt=""><br>Backup Database</a> </div>
     <div class="clear"></div>
     <div id="smallRight">
       <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">

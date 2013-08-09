@@ -25,7 +25,7 @@
      <!-- ///////////-->
  <?php
 	 $query = mysql_query("SELECT * FROM `students` where stuClass='KG' ORDER BY `stuName` ASC") or die(mysql_error());
-	  recordActionDate($_SESSION['name'],"Viewed list of students",$_GET['systemDateForm']);
+	  recordAction($_SESSION['name'],"Viewed list of students");
 	 $cnt = 1;
 	 while($data = mysql_fetch_array($query))
 	 {

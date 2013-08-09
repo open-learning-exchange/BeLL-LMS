@@ -63,7 +63,8 @@ function backup_tables($host,$user,$pass,$name,$tables = '*')
   ////
   $date = new DateTime();
   ////$justName = $schoolName.'-'.$date->format('Y-m-d H-i-s').'.zip';
-  $justName = $schoolName.'-'.$_GET['systemDateForm'].'.zip';
+  /////$_GET['dat']
+  $justName = $schoolName.'-'.$_GET['dat'].'.zip';
   $fullFileName = 'backup/'.$justName;
   $handle = fopen($fullFileName,'w+');
   fwrite($handle,$return);
@@ -93,6 +94,7 @@ function backup_tables($host,$user,$pass,$name,$tables = '*')
 backup_tables('localhost','schoolbell','oleole','schoolbell');
 
 ?>
+
 <!--<form action="force_download.php" method="post" name="downloadform">
   <input name="file_name" value="track1.mp3" type="hidden">
   <input type="submit" value="Download the MP3">

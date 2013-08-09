@@ -42,7 +42,6 @@
 				 }
 				$cnt++;
 			 }
-			 recordActionDate($_SESSION['name'],"Viewed Teacher Resources".$data['title'],$_GET['systemDateForm']);
       ?>
 		</table>
 	</div>

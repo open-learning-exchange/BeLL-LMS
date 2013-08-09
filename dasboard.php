@@ -89,7 +89,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
       </div>
       
          <div class="shortcutHome">
-         <a href="Teacher_resource.php" target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/teacher.png" alt=""><br>
+         <a href="Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
 View Teacher Resources</a>
 		 </div>
 		<div class="shortcutHome">
@@ -104,7 +104,7 @@ View Teacher Resources</a>
 		<a href="rateResourses.php" target="DashScreen"><img src="images/editPlane.jpg"><br>
 		Rate My Used Resources</a>
 	  </div>
-      <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen" onClick="top.frames['DashScreen'].location.href=this.href+'?systemDateForm='+fmat;return false;"><img src="images/listRes.png" alt=""><br>
+      <div class="shortcutHome"> <a href="all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>
       View Available Resources
       </a> </div>
 		

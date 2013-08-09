@@ -23,7 +23,7 @@
   // Check we are focused on a dir
   if (is_dir($path)) {
     chdir($path); // Focus on the dir
-	echo "heyeyeue<br>
+	echo "<br>
 <br>
 ";
    if ($handle = opendir('.')) {

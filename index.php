@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(1);include "talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(1);include "talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -12,7 +12,6 @@
 <link rel="shortcut icon" href="stylesheet/img/devil-icon.png"> 
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <?php
-
 $cntVal =0;
 $messageLog = "";
 if(isset($_POST['loginid']))
@@ -54,7 +53,7 @@ if(isset($_POST['loginid']))
 		}
 		else if ($_SESSION['role']=="Lead")
 		{
-			$mystring = "leadteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
+			$mystring = "leadteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."&dat=".$_POST['systemDateForm'];
 	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
 		}
 		else
@@ -80,13 +79,13 @@ else
 		session_destroy();
 	}
 }
-//if(isset($_GET['login'])){
-//	$messageLog = "Login Id & password mismatch. Try again ";
-//}
-//if(isset($_GET['sesEnded'])){
-//	recordActionDate("User login session ended ","Loged out",$_GET['systemDateForm']);
-//	$messageLog = "Your session is over. Please login";
-//}
+if(isset($_GET['login'])){
+	$messageLog = "Login Id & password mismatch. Try again ";
+}
+if(isset($_GET['sesEnded'])){
+	recordActionDate("User login session ended ","Loged out",$_GET['systemDateForm']);
+	$messageLog = "Your session is over. Please login";
+}
 
 ?>
 </head>

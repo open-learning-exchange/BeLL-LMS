@@ -7,11 +7,10 @@ var now = new Date()
 var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
 </script>
 <?php
-if($_SESSION['name']== null){
+/*?>if($_SESSION['name']== null){
 	$mystring = "index.php?sesEnded=true&systemDateForm='+fmat";
 	die('<script type="text/javascript">window.parent.location.href= "'.$mystring.'";</script>');
-}
-?>
+}<?php */?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="stylesheet/img/devil-icon.png">
 <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -87,7 +86,8 @@ else if(isset($_GET['editdate']))
 	   $HeadRem = "";
 	   $CoachRem = "";
 	   $UpdateDtate = "";
-	$query = mysql_query("SELECT * FROM  `LessonPlan` where `colNum` = '".$_GET['editdate']."' and prepared_By = '".$_SESSION['name']."'") or die(mysql_error());
+	   $PreparedBy ="";
+$query = mysql_query("SELECT * FROM  `LessonPlan` where `colNum` = '".$_GET['editdate']."' and prepared_By = '".$_GET['PreparedBy']."'") or die(mysql_error());
    while($data = mysql_fetch_array($query))
    {
 	   $ColNum = stripslashes($data['colNum']);
@@ -131,7 +131,7 @@ else if(isset($_GET['editdate']))
 	   $HeadRem  = stripslashes($data['Head_Remark']);
 	   $CoachRem  = stripslashes($data['Coach_Remark']);
 	   $UpdateDtate  = stripslashes($data['DateUpdated']);
-	   
+	   $PreparedBy = stripslashes($data['prepared_By']);
    }
 }
 ?>
@@ -139,10 +139,11 @@ else if(isset($_GET['editdate']))
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Edit Lesson Plan</span><br><br>
-  <table width="300" border="1" align="center">
+  <table width="337" border="1" align="center">
     <tr>
       <td width="145" valign="middle">Select Lesson Plan Date :</td>
-      <td width="139" valign="middle"><form name="form2" method="post" action="">
+      <td width="176" valign="middle">
+      <form name="form2" method="post" action="">
         <select name="editdate" id="editdate" onChange="loadUrl()">
         <option value="select">select</option>
           <?php
@@ -154,6 +155,7 @@ else if(isset($_GET['editdate']))
 			 }
           ?>
         </select>
+        <input name="PreparedBy" id="PreparedBy" type="hidden" value="<?php echo $_SESSION['name'];?>">
       </form></td>
     </tr>
   </table>
@@ -403,19 +405,19 @@ else if(isset($_GET['editdate']))
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Pre –Writing stage</b></td>
+          <td align="left"><b>Pre –Writing / Reading stage</b></td>
           <td colspan="2"><span id="sprytextarea6">
             <textarea name="PrewStage" id="PrewStage" cols="45" rows="5" style="height:60px;width:70%;"><?php echo $PreWrite;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Writing Stage</b></td>
+          <td align="left"><b>Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea7">
             <textarea name="wStage" id="wStage" cols="45" rows="5" style="height:60px;width:70%;"><?php echo $Writing;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
-          <td align="left"><b>Post – Writing Stage</b></td>
+          <td align="left"><b>Post – Writing / Reading Stage</b></td>
           <td colspan="2"><span id="sprytextarea8">
             <textarea name="PostWStage" id="PostWStage" cols="45" rows="5" style="height:60px;width:70%;"><?php echo $Post_Writing;?></textarea>
           <span class="textareaRequiredMsg">A value is required.</span></span></td>
@@ -549,7 +551,8 @@ var sprytextarea14 = new Spry.Widget.ValidationTextarea("sprytextarea14");
 function loadUrl()
 {
 		var Plan_date = document.getElementById("editdate").value;
-		window.open("edit_lessonPlan.php?editdate="+Plan_date+"","_self");
+		var prep_by = document.getElementById("PreparedBy").value;
+		window.open("edit_lessonPlan.php?editdate="+Plan_date+"&PreparedBy="+prep_by,"_self");
 }
 </script>
 <?php

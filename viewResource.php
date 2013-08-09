@@ -7,12 +7,11 @@
 <?php
 if(isset($_GET['resid']))
 {
-	$query = mysql_query("SELECT * FROM `resources` where colNum =".$_GET['resid']."") or die(mysql_error());
+	$query = mysql_query("SELECT url FROM `resources` where colNum =".$_GET['resid']."") or die(mysql_error());
 			 while($data = mysql_fetch_array($query))
 			 {
 				 $mystring = $data['url'];
-				 
-			recordActionDate($_SESSION['name'],"Viewed Resource with id : ".$data['title'],$_GET['systemDateForm']);
+			recordAction($_SESSION['name'],"Viewed Resource with id : ".$_GET['resid']);
 	   			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
 			 }
 }
