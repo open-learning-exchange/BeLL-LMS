@@ -19,13 +19,19 @@ if(isset($_POST['loginid']))
 	global $couchUrl;
 	$members = new couchClient($couchUrl, "members");
 	// Get member
-	global $facilityId; 
-	$viewResults = $members->key($facilityId . $login)->getView('api', 'facilityLogin');
+	global $facilityId;
+	$key = $facilityId . $_POST['loginid'];
+	print $key;
+	$viewResults = $members->include_docs(TRUE)->key($key)->getView('api', 'facilityLogin');
 	print_r($viewResults);
-	$member = $members->getDoc($viewResults['rows'][0]['value']);
-	print_r($member);
+	foreach($viewResults->rows as $row) {
+		print_r($row);
+	}
+	$member = $viewResults->rows[0]->doc;
+	
+
 	if($member->pass == $_POST['pass']) {
-		// yay
+		print "yay";
 	}
 	
 //  $query = mysql_query("SELECT * FROM `teacherClass` where loginId='".$_POST['loginid']."' and pswd= md5('".$_POST['password']."')") or die(mysql_error());

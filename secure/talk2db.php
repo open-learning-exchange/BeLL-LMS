@@ -39,5 +39,6 @@ $data = json_decode($json);
 global $facilityId;
 $facilityId = $data->facilityId;
 
+
 error_reporting(E_ALL ^ E_NOTICE);
 ?>
