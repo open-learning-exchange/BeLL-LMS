@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : KG.xml
+    Author     : Open Learning Exchange
+-->
+<allstudent>
+<student>
+<name>Agnes Okuma</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Eva Oppong</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Nana Asamoah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Ohene Joseph</name>
+<bcode>002</bcode>
+</student>
+</allstudent>

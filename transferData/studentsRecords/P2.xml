@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P2.xml
+    Author     : Open Learning Exchange
+-->
+<allstudent>
+<student>
+<name>Appau Stephen</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Owusu Frank</name>
+<bcode>002</bcode>
+</student>
+</allstudent>

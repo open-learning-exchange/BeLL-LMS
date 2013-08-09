@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P5.xml
+    Author     : Open Learning Exchange
+-->
+<allstudent>
+<student>
+<name>Adomaa Hannah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Agyei yeboah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Dorve Noah</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Dzotsi Wisdom</name>
+<bcode>002</bcode>
+</student>
+</allstudent>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P1.xml
+    Author     : Open Learning Exchange
+-->
+<allstudent>
+<student>
+<name>conrald kakraba Eshun</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Lydia Sarfo</name>
+<bcode>002</bcode>
+</student>
+<student>
+<name>Osei Joseph</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>sarfo comfort</name>
+<bcode>001</bcode>
+</student>
+</allstudent>

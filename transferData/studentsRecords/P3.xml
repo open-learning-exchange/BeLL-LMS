@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : P3.xml
+    Author     : Open Learning Exchange
+-->
+<allstudent>
+<student>
+<name>Amoateng Emmanuel</name>
+<bcode>001</bcode>
+</student>
+<student>
+<name>Faustina Agyemang</name>
+<bcode>002</bcode>
+</student>
+</allstudent>
