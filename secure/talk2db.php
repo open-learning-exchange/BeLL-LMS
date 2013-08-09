@@ -19,22 +19,25 @@ function recordActionDate($action_by,$save_data,$systemDateForm){
 	$save = mysql_query("INSERT INTO `action_log` (`colNum`, `person`, `action`, `dateTime`) VALUES (NULL, '".$action_by."', '".$save_data."','".$systemDateForm."')");
 }
 
-///
-// V 2
-///
-//global $mysqli;
-///$mysqli = new mysqli("localhost", "root", "raspberry", "schoolBell");
-///$mysqli = new mysqli("localhost", "root", "", "schoolBell");
+global $couchUrl;
+$couchUrl = 'http://127.0.0.1:5984';
 
 
-// CouchDB
 
-///$doc = new couchDocument($couchUrl);
-//echo "Me here";
+try{
+	include "lib/couch.php";
+	include "lib/couchClient.php";
+	include "lib/couchDocument.php";
+} catch(Exception $err){
+	include "../lib/couch.php";
+	include "../lib/couchClient.php";
+	include "../lib/couchDocument.php";
+}
 
-///$doc = new couchDocument($client);
-//$doc = couchDocument($couchUrl,"_design/checkUserLogin");
-//$views = $doc->views;
-//global $couchClient;
-////$couchClient = new couchClient($couchUrl);
+$json = file_get_contents($couchUrl . '/whoami/facility'); 
+$data = json_decode($json);
+global $facilityId;
+$facilityId = $data->facilityId;
+
+error_reporting(E_ALL ^ E_NOTICE);
 ?>

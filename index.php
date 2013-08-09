@@ -1,4 +1,4 @@
-<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(1);include "secure/talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(0);include "secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -16,76 +16,88 @@ $cntVal =0;
 $messageLog = "";
 if(isset($_POST['loginid']))
 {
-  $query = mysql_query("SELECT * FROM `teacherClass` where loginId='".$_POST['loginid']."' and pswd= md5('".$_POST['password']."')") or die(mysql_error());
-   while($data = mysql_fetch_array($query))
-   {
-	  $_SESSION['teacherid'] = $data['loginId'];
-	  $_SESSION['class-level'] = $data['loginId'];
-	  $_SESSION['role'] = $data['Role'];
-	  $_SESSION['logColmn'] = $data['colNum'];
-	  $_SESSION['name'] = $data['Name'];
-	  $_SESSION['classAsigned'] =$data['classAssign'];
-	  $cntVal++;
-   }
-   if($cntVal>0)
-   {
-	   recordActionDate($_SESSION['name'],"Loged in",$_POST['systemDateForm']);
-		if($_SESSION['role']=="Admin")
-		{
-			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		} else if ($_SESSION['role']=="Teacher")
-		{
-			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		} else if ($_SESSION['role']=="Coach")
-		{
-			$mystring = "coach.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		}else if ($_SESSION['role']=="Head")
-		{
-			$mystring = "headteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		}
-		else if ($_SESSION['role']=="Lead")
-		{
-			$mystring = "leadteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."&dat=".$_POST['systemDateForm'];
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-		}
-		else
-		{
-			$mystring = "index.php?login=invalid";
-			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-		}
-   }else
-	{
-			$mystring = "index.php?login=invalid";
-			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+	global $couchUrl;
+	$members = new couchClient($couchUrl, "members");
+	// Get member
+	global $facilityId; 
+	$viewResults = $members->key($facilityId . $login)->getView('api', 'facilityLogin');
+	print_r($viewResults);
+	$member = $members->getDoc($viewResults['rows'][0]['value']);
+	print_r($member);
+	if($member->pass == $_POST['pass']) {
+		// yay
 	}
+	
+//  $query = mysql_query("SELECT * FROM `teacherClass` where loginId='".$_POST['loginid']."' and pswd= md5('".$_POST['password']."')") or die(mysql_error());
+//   while($data = mysql_fetch_array($query))
+//   {
+//	  $_SESSION['teacherid'] = $data['loginId'];
+//	  $_SESSION['class-level'] = $data['loginId'];
+//	  $_SESSION['role'] = $data['Role'];
+//	  $_SESSION['logColmn'] = $data['colNum'];
+//	  $_SESSION['name'] = $data['Name'];
+//	  $_SESSION['classAsigned'] =$data['classAssign'];
+//	  $cntVal++;
+//   }
+//   if($cntVal>0)
+//   {
+//	   recordActionDate($_SESSION['name'],"Loged in",$_POST['systemDateForm']);
+//		if($_SESSION['role']=="Admin")
+//		{
+//			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
+//	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//			
+//		} else if ($_SESSION['role']=="Teacher")
+//		{
+//			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
+//	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//			
+//		} else if ($_SESSION['role']=="Coach")
+//		{
+//			$mystring = "coach.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
+//	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//			
+//		}else if ($_SESSION['role']=="Head")
+//		{
+//			$mystring = "headteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
+//	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//			
+//		}
+//		else if ($_SESSION['role']=="Lead")
+//		{
+//			$mystring = "leadteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."&dat=".$_POST['systemDateForm'];
+//	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//		}
+//		else
+//		{
+//			$mystring = "index.php?login=invalid";
+//			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//		}
+//   }else
+//	{
+//			$mystring = "index.php?login=invalid";
+//			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+//	}
 } 
-else
-{
-	if($_SESSION['name'])
-	{
-		recordActionDate($_SESSION['name'],"Loged out",$_GET['systemDateForm']);
-		session_destroy();
-	}
-	else
-	{
-		session_destroy();
-	}
-}
-if(isset($_GET['login'])){
-	$messageLog = "Login Id & password mismatch. Try again ";
-}
-if(isset($_GET['sesEnded'])){
-	recordActionDate("User login session ended ","Loged out",$_GET['systemDateForm']);
-	$messageLog = "Your session is over. Please login";
-}
+//else
+//{
+//	if($_SESSION['name'])
+//	{
+//		recordActionDate($_SESSION['name'],"Loged out",$_GET['systemDateForm']);
+//		session_destroy();
+//	}
+//	else
+//	{
+//		session_destroy();
+//	}
+//}
+//if(isset($_GET['login'])){
+//	$messageLog = "Login Id & password mismatch. Try again ";
+//}
+//if(isset($_GET['sesEnded'])){
+//	recordActionDate("User login session ended ","Loged out",$_GET['systemDateForm']);
+//	$messageLog = "Your session is over. Please login";
+//}
 
 ?>
 </head>
