@@ -17,70 +17,70 @@
 <script type="text/javascript" src="../js/jsDatePick.min.1.3.js"></script>
 
 <script type="text/javascript">
-	window.onload = function(){
-		new JsDatePick({
-			useMode:2,
-			target:"dateOfBirth",
-			dateFormat:"%Y-%m-%d"
-		});
-	};
+	//window.onload = function(){
+//		new JsDatePick({
+//			useMode:2,
+//			target:"dateOfBirth",
+//			dateFormat:"%Y-%m-%d"
+//		});
+//	};
 </script>
 </head>
 <?php
 include "../functions/saveImageToCouch.php";
 if(isset($_POST['firstName']))
 {
-	global $couchUrl;
-	global $facilityId;
-	$members = new couchClient($couchUrl, "members");
-	$doc = new stdClass();
-	
-	// let's add some other properties
-	
-	$doc->kind ="Member";
-	$doc->dateOfBirth = strtotime($_POST['dateOfBirth']);
-	$doc->dateRegistered = strtotime($_POST['systemDateForm']);
-	$doc->facilityId = $facilityId;
-	$doc->firstName = $_POST['firstName'];
-	$doc->lastName = $_POST['lastName'];
-	$doc->middleNames = $_POST['middleNames'];
-	$doc->gender = $_POST['gender'];
-	$doc->login = $_POST['login'];
-	$doc->pass = $_POST['password'];
-	$doc->phone = $_POST['phoneNumber'];
-	$roles = array();
-	foreach($_POST['role'] as $role) {
-		array_push($roles,$role);
-	}
-	$doc->role = $roles;
-	
-try {
-	$response = $members->storeDoc($doc);
-	$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
-} catch ( Exception $e ) {
-	die("Unable to store the document : ".$e->getMessage());
+	//global $couchUrl;
+//	global $facilityId;
+//	$members = new couchClient($couchUrl, "members");
+//	$doc = new stdClass();
+//	
+//	// let's add some other properties
+//	
+//	$doc->kind ="Member";
+//	$doc->dateOfBirth = strtotime($_POST['dateOfBirth']);
+//	$doc->dateRegistered = strtotime($_POST['systemDateForm']);
+//	$doc->facilityId = $facilityId;
+//	$doc->firstName = $_POST['firstName'];
+//	$doc->lastName = $_POST['lastName'];
+//	$doc->middleNames = $_POST['middleNames'];
+//	$doc->gender = $_POST['gender'];
+//	$doc->login = $_POST['login'];
+//	$doc->pass = $_POST['password'];
+//	$roles = array();
+//	foreach($_POST['role'] as $role) {
+//		array_push($roles,$role);
+//	}
+//	$doc->role = $roles;
+//	
+//try {
+//	$response = $members->storeDoc($doc);
+//	$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+//} catch ( Exception $e ) {
+//	die("Unable to store the document : ".$e->getMessage());
+//}
+//	//@todo better log information
+//  recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
+//  
+//  die( $_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
 }
-	//@todo better log information
-  recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
-  
-  die( $_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
-}
-else if(isset($_GET['drop']))
+else if(isset($_GET['edit']))
 {
 	global $couchUrl;
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
-	$docToDel= $members->getDoc($_GET['drop']);
-	$members->deleteDoc($docToDel);
-	echo '<script type="text/javascript">alert("Member deleted succesfully");</script>';
-	die("Deleted Succesfully");
+	$docToEdit = $members->getDoc($_GET['edit']);
+	$docToEditAttachment = $docToEdit->_attachments;
+	foreach($docToEditAttachment as $key => $value){
+			$image = $couchUrl."/members/".$_GET['edit']."/".urlencode($key)."";
+	}
 }
 ?>
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:550px; margin-left:auto; margin-right:auto;">
-  <span style="color:#00C; font-weight: bold;">Manage Accessibility and Privilege</span><br><br>
+  <span style="color:#00C; font-weight: bold;">Manage Accessibility and Privilege - Edit Profile</span><br><br>
     <form action="" method="post" enctype="multipart/form-data" name="form1">
       
       <fieldset style="border-color:#CCC;color:#666;">
@@ -89,7 +89,7 @@ else if(isset($_GET['drop']))
         
           <tr>
             <td><b>Privilage / Role</b></td>
-            <td><p>
+            <td colspan="2"><p>
                 <label>
                   <input name="role[]" type="checkbox" id="role_0" value="teacher" onChange="triggerClassAssigned()" checked="CHECKED">
                 Teacher</label> &nbsp;&nbsp;&nbsp;
@@ -109,7 +109,7 @@ else if(isset($_GET['drop']))
           </tr>
           <tr>
             <td><b id="classAssignedLabel">Class Assigned</b></td>
-            <td><p id="classAssignedID">
+            <td colspan="2"><p id="classAssignedID">
               <label>
                 <input type="checkbox" name="classAssigned[]" value="KG1" id="classAssigned_0">
                 KG 1&nbsp;</label>
@@ -171,42 +171,42 @@ else if(isset($_GET['drop']))
           </tr>
           <tr>
             <td><b>First Name</b></td>
-            <td width="343"><span id="sprytextfield1">
+            <td colspan="2"><span id="sprytextfield1">
               <label for="firstName"></label>
-              <input type="text" name="firstName" id="firstName">
+              <input type="text" name="firstName" id="firstName" value="<?php echo $docToEdit->firstName?>">
               <span class="textfieldRequiredMsg">A value is required.</span></span>
             </td>
 </tr>
           <tr>
             <td><b> Last Name</b></td>
-            <td>
+            <td colspan="2">
               <label for="lastName"></label>
               <span id="sprytextfield2">
               <label for="lastName3"></label>
-              <input type="text" name="lastName" id="lastName3">
+              <input name="lastName" type="text" id="lastName3" value="<?php echo $docToEdit->lastName?>">
             <span class="textfieldRequiredMsg">A value is required.</span></span></td>
           </tr>
           <tr>
             <td><b> Middle Names</b></td>
-            <td>
+            <td colspan="2">
               <label for="middleNames"></label>
               <span id="sprytextfield3">
               <label for="middleNames2"></label>
-              <input type="text" name="middleNames" id="middleNames2">
+              <input name="middleNames" type="text" id="middleNames2" value="<?php echo $docToEdit->middleNames?>">
             <span class="textfieldRequiredMsg">A value is required.</span></span></td>
           </tr>
           <tr>
             <td><b>Date Of Birth</b></td>
-            <td>
+            <td colspan="2">
               <label for="dateOfBirth"></label>
               <span id="sprytextfield4">
               <label for="dateOfBirth2"></label>
-              <input type="text" name="dateOfBirth" id="dateOfBirth">
+              <input name="dateOfBirth" type="text" id="dateOfBirth" value="<?php echo $docToEdit->dateOfBirth?>">
             <span class="textfieldRequiredMsg">A value is required.</span></span></td>
           </tr>
           <tr>
             <td><b>Gender</b></td>
-            <td>
+            <td colspan="2">
               <label>
                 <input type="radio" name="gender" value="Male" id="gender_0">
                 Male</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -216,7 +216,7 @@ else if(isset($_GET['drop']))
           </tr>
           <tr>
             <td><b>Nationality</b></td>
-            <td><select name="nationality">
+            <td colspan="2"><select name="nationality">
               <option value="">-- select one --</option>
               <option value="afghan">Afghan</option>
               <option value="albanian">Albanian</option>
@@ -414,89 +414,52 @@ else if(isset($_GET['drop']))
             &nbsp;</td>
           </tr>
           <tr>
-            <td width="108"><b>Phone Number</b></td>
-            <td><span id="sprytextfield5">
+            <td width="143"><b>Phone Number</b></td>
+            <td colspan="2"><span id="sprytextfield5">
               <label for="phoneNumber"></label>
-              <input type="text" name="phoneNumber" id="phoneNumber">
+              <input name="phoneNumber" type="text" id="phoneNumber" value="<?php echo $docToEdit->phone?>">
             <span class="textfieldRequiredMsg">A value is required.</span></span></td>
 </tr>
           <tr>
             <td><b>Login ID</b></td>
-            <td><span id="sprytextfield6">
+            <td colspan="2"><span id="sprytextfield6">
               <label for="login"></label>
-              <input type="text" name="login" id="login">
+              <input name="login" type="text" id="login" value="<?php echo $docToEdit->login?>">
             <span class="textfieldRequiredMsg">A value is required.</span></span></td>
 </tr>
           <tr>
             <td><b>Password</b></td>
-            <td><span id="sprypassword1">
+            <td colspan="2"><span id="sprypassword1">
               <label for="password"></label>
-              <input type="password" name="password" id="password">
+              <input name="password" type="password" id="password" value="<?php echo $docToEdit->pass?>">
             <span class="passwordRequiredMsg">A value is required.</span></span></td>
 </tr>
           <tr>
             <td><b>Confirm Password</b></td>
-            <td><span id="spryconfirm1">
+            <td colspan="2"><span id="spryconfirm1">
               <label for="confirmPass"></label>
-              <input type="password" name="confirmPass" id="confirmPass">
+              <input name="confirmPass" type="password" id="confirmPass" value="<?php echo $docToEdit->pass?>">
             <span class="confirmRequiredMsg">A value is required.</span><span class="confirmInvalidMsg">The values don't match.</span></span></td>
 </tr>
           <tr>
-            <td><b>Upload Image</b></td>
+            <td colspan="2" rowspan="2"><img name="image" src="<?php echo $image;?>" style="max-width:150px" alt=""></td>
+            <td width="355"><strong>Upload new photo</strong></td>
+          </tr>
+          <tr>
             <td><input name="uploadedfile" type="file" />
-              <input type="hidden" name="MAX_FILE_SIZE" value="100000" /></td>
+            <input type="hidden" name="MAX_FILE_SIZE" value="100000" /></td>
           </tr>
           <tr>
             <td></td>
-            <td><input type="submit" class="button" value="Submit">
-              <input type="reset" class="button" value="Reset">
+            <td colspan="2"><input type="submit" class="button" value="Update">
+              <input type="reset" class="button" value="Cancel">
               <input type="hidden" name="systemDateForm" id="systemDateForm"></td>
           </tr>
         </table>
-      </fieldset>
+        <br>
+        <br>
+  </fieldset>
     </form>
-    <br><br><br>
-    <br>
-    <span style="font-weight: bold">Existing Records</span>
-<form name="form1" method="post" action="">
-  <hr align="center">
-      <table width="72%" align="center">
-      <tr>        </tr>
-      <tr>        </tr>
-      </table>
-      <table width="534" height="60" border="1">
-        <tr>
-          <td width="32" height="26">No.</td>
-          <td width="83"><b>Class / Level</b></td>
-          <td width="178"><b>Name</b></td>
-          <td width="93"><b>Login ID</b></td>
-          <td width="114"><b>Action</b></td>
-        </tr>
-         <?php
-		 	global $couchUrl;
-			$members = new couchClient($couchUrl, "members");
-			// Get members
-			global $facilityId;
-			$viewResults = $members->include_docs(TRUE)->key($facilityId)->getView('api', 'listMemNotAdmin');
-			$docCounter=1;
-			foreach($viewResults->rows as $row) {
-				echo '<tr>
-				  <td width="32" height="26">'.$docCounter.'. </td>
-				  <td width="83"></td>
-				  <td width="178">'.$row->doc->firstName.' '.$row->doc->middleNames." ".$row->doc->lastName.'</td>
-				  <td width="93">'.$row->doc->login.'</td>
-				  <td width="58"><a href="ManClasses.php?drop='.$row->id.'" >Delete</a>&nbsp;&nbsp; ||&nbsp;&nbsp;<a href="editStaffMember.php?edit='.$row->id.'" >Edit</a> </td>
-				</tr>';
-				$docCounter++;
-			}
-          ?>
-        
-      </table>
-      <table width="72%" align="center">
-        <tr> </tr>
-        <tr> </tr>
-      </table>
-  </form>
   </div>
 <div class="clear"></div>
 </div>

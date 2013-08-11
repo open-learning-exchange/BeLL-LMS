@@ -22,23 +22,19 @@ function recordActionDate($action_by,$save_data,$systemDateForm){
 global $couchUrl;
 $couchUrl = 'http://127.0.0.1:5984';
 
+error_reporting(E_ERROR);
 
-
-try{
 	include "lib/couch.php";
 	include "lib/couchClient.php";
 	include "lib/couchDocument.php";
-} catch(Exception $err){
+	/// for docs in pages directory
 	include "../lib/couch.php";
 	include "../lib/couchClient.php";
 	include "../lib/couchDocument.php";
-}
 
 $json = file_get_contents($couchUrl . '/whoami/facility'); 
 $data = json_decode($json);
 global $facilityId;
 $facilityId = $data->facilityId;
 
-
-error_reporting(E_ALL ^ E_NOTICE);
 ?>

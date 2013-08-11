@@ -102,7 +102,7 @@ Teacher Resources</a>
     </div>
   </div>
   <div class="clear"></div>
-<div id="footer">&copy; 2012 Open Learning Exchange - Ghana </div>
+<div id="footer">&copy; 2013 Open Learning Exchange - Ghana </div>
 </div>
 </body>
 </html>

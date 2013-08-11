@@ -24,37 +24,28 @@ body {
 }
 </style>
 <?php
-if($_SESSION['role']=="Admin")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-		<li><a href="coach.php">Coach</a></li>
-        <li><a href="headteacher.php">Head</a></li>
-		<li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Teacher")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Coach")
-{
-	$menu=  '<ul>
-        <li><a href="coach.php">Coach</a></li>
-	</ul>';
-}else if ($_SESSION['role']=="Head")
-{
-	$menu=  '<ul>
-        <li><a href="headteacher.php">Head</a></li>
-	</ul>';
+$roles = "<ul>";
+for($cnt=0;$cnt < sizeof($_SESSION['role']); $cnt++){
+	switch(strtolower($_SESSION['role'][$cnt])){
+		case "teacher":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			break;
+		case "leadteacher":
+			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+			break;
+		case "headteacher":
+			$roles = $roles.'<li><a href="headteacher.php">Head</a></li>';
+			break;
+		case "administrator":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+			$roles = $roles.' <li><a href="headteacher.php">Head</a></li>';
+			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+		break;
+	}
 }
-else if ($_SESSION['role']=="Lead")
-{
-	$menu=  '<ul>
-        <li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-}
-else
+$roles = $roles."</ul>";
+if(sizeof($_SESSION['role'])<1)
 {
 	$mystring = "index.php";
 	die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
@@ -72,7 +63,7 @@ else
 
 <div id="wrapper" style="background: #fff url(images/bg_kiri.png) repeat-y;">
   <div id="leftBar">
-    <?php echo $menu;?>
+    <?php echo $roles;?>
   </div>
   <div id="rightContent">
     <h3>Head Teacher</h3>
@@ -89,7 +80,7 @@ else
  Teacher Resources</a>
 		 </div>
     <div class="shortcutHome"> <a href="pages/ManClasses.php" target="DashScreen"><img src="images/manageClass.png" alt=""><br>
-      Manage Class</a> </div>
+      Manage Accessibility</a> </div>
     <div class="shortcutHome"> <a href="pages/view_LPlan.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
       Lesson Plan</a></div>
       
@@ -105,7 +96,7 @@ else
     </div>
   </div>
   <div class="clear"></div>
-<div id="footer">&copy; 2012 Open Learning Exchange - Ghana </div>
+<div id="footer">&copy; 2013 Open Learning Exchange - Ghana </div>
 </div>
 </body>
 </html>

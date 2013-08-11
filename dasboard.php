@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(1);?>
+<?php session_start(); //error_reporting(1);?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -24,37 +24,28 @@ body {
 }
 </style>
 <?php
-if($_SESSION['role']=="Admin")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-		<li><a href="coach.php">Coach</a></li>
-        <li><a href="headteacher.php">Head</a></li>
-		<li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Teacher")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Coach")
-{
-	$menu=  '<ul>
-        <li><a href="coach.php">Coach</a></li>
-	</ul>';
-}else if ($_SESSION['role']=="Head")
-{
-	$menu=  '<ul>
-        <li><a href="headteacher.php">Head</a></li>
-	</ul>';
+$roles = "<ul>";
+for($cnt=0;$cnt < sizeof($_SESSION['role']); $cnt++){
+	switch(strtolower($_SESSION['role'][$cnt])){
+		case "teacher":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			break;
+		case "leadteacher":
+			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+			break;
+		case "headteacher":
+			$roles = $roles.'<li><a href="headteacher.php">Head</a></li>';
+			break;
+		case "administrator":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+			$roles = $roles.' <li><a href="headteacher.php">Head</a></li>';
+			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+		break;
+	}
 }
-else if ($_SESSION['role']=="Lead")
-{
-	$menu=  '<ul>
-        <li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-}
-else
+$roles = $roles."</ul>";
+if(sizeof($_SESSION['role'])<1)
 {
 	$mystring = "index.php";
 	die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
@@ -68,14 +59,14 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 <div id="header">
 	<div class="inHeader">
 		<div class="mosAdmin">Hello,  <?php echo $_SESSION['name'];?><br>
-	    | <a href="index.php" onClick="location.href=this.href+'?systemDateForm='+fmat;return false;" >Sign Out </a>| <a href="#">Help</a> </div>
+	    | <a href="index.php" onClick="location.href=this.href+'?signout=true&systemDateForm='+fmat;return false;" >Sign Out </a>| <a href="#">Help</a> </div>
 	  <div class="clear"></div>
 	</div>
 </div>
 
 <div id="wrapper" style="background: #fff url(images/bg_kiri.png) repeat-y;">
 	<div id="leftBar">
-	<?php echo $menu;?>
+	<?php echo $roles;?>
 	</div>
 	<div id="rightContent">
 	<h3>Teacher</h3>
