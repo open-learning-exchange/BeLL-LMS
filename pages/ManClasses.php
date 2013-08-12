@@ -35,8 +35,7 @@ if(isset($_POST['firstName']))
 	$members = new couchClient($couchUrl, "members");
 	$doc = new stdClass();
 	
-	// let's add some other properties
-	
+	// get data from form and save it to couch
 	$doc->kind ="Member";
 	$doc->dateOfBirth = strtotime($_POST['dateOfBirth']);
 	$doc->dateRegistered = strtotime($_POST['systemDateForm']);
@@ -48,30 +47,65 @@ if(isset($_POST['firstName']))
 	$doc->login = $_POST['login'];
 	$doc->pass = $_POST['password'];
 	$doc->phone = $_POST['phoneNumber'];
+	// roles is an array.. get selected roles 
 	$roles = array();
 	foreach($_POST['role'] as $role) {
 		array_push($roles,$role);
 	}
 	$doc->role = $roles;
-	
-try {
+	// save doc to couch and for responce->id
 	$response = $members->storeDoc($doc);
-	$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
-} catch ( Exception $e ) {
-	die("Unable to store the document : ".$e->getMessage());
-}
+	
+	try {
+		if(isset($_FILE['uploadedfile']['tmp_name'])){
+	// add attached image to document with specified id from response
+			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+		}
+	} catch ( Exception $e ) {
+		print ("No photo uploaded : ".$e->getMessage());
+	}
+	
+	// Save group assigned to member in group document
+	$groups = new couchClient($couchUrl, "groups");
+	foreach($_POST['classAssigned'] as $role){
+		$key = $facilityId . $role;
+		$viewResults = $groups->include_docs(TRUE)->key($key)->getView('api', 'facilityLevel');
+		$group=$viewResults->rows[0]->doc;
+		array_push($group->owners,$response->id);
+		$groups->storeDoc($group);
+	}
 	//@todo better log information
-  recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
-  
-  die( $_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
+  ////recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
+  die( "<br/><br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
 }
+// Deleting Member
 else if(isset($_GET['drop']))
 {
 	global $couchUrl;
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
+	//remove member id as owner from approprate documents in groups
+	$groups = new couchClient($couchUrl, "groups");
+	//get all groups from view into viewResults
+	$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'facilityOwners');
+	// loop through all documents
+	foreach($viewResults->rows as $groupOwned){
+		// loop through owners array
+		for($cnt=0; $cnt<=sizeof($groupOwned->doc->owners);$cnt++){
+			// look for a match to current member id in owners array
+			if($groupOwned->doc->owners[$cnt]== $_GET['drop']){
+				// delete current member id from array
+				unset($groupOwned->doc->owners[$cnt]);
+				// save document changes
+				$groups->storeDoc($groupOwned->doc);
+			}
+		}
+	}
+	/// get current member document from members with member id
 	$docToDel= $members->getDoc($_GET['drop']);
+	// delet member from members document
 	$members->deleteDoc($docToDel);
+	
 	echo '<script type="text/javascript">alert("Member deleted succesfully");</script>';
 	die("Deleted Succesfully");
 }
