@@ -43,6 +43,7 @@ if(isset($_POST['firstName']))
 	$doc->firstName = $_POST['firstName'];
 	$doc->lastName = $_POST['lastName'];
 	$doc->middleNames = $_POST['middleNames'];
+	$doc->nationality = $_POST['nationality'];
 	$doc->gender = $_POST['gender'];
 	$doc->login = $_POST['login'];
 	$doc->pass = $_POST['password'];
@@ -57,10 +58,8 @@ if(isset($_POST['firstName']))
 	$response = $members->storeDoc($doc);
 	
 	try {
-		if(isset($_FILE['uploadedfile']['tmp_name'])){
 	// add attached image to document with specified id from response
 			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
-		}
 	} catch ( Exception $e ) {
 		print ("No photo uploaded : ".$e->getMessage());
 	}
@@ -79,12 +78,13 @@ if(isset($_POST['firstName']))
   die( "<br/><br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
 }
 // Deleting Member
+
 else if(isset($_GET['drop']))
 {
 	global $couchUrl;
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
-	//remove member id as owner from approprate documents in groups
+	//remove member id as owners from approprate documents in groups
 	$groups = new couchClient($couchUrl, "groups");
 	//get all groups from view into viewResults
 	$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'facilityOwners');

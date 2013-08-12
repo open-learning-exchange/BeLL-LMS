@@ -44,6 +44,7 @@ if(isset($_POST['firstName']))
 //	$doc->firstName = $_POST['firstName'];
 //	$doc->lastName = $_POST['lastName'];
 //	$doc->middleNames = $_POST['middleNames'];
+//  $doc->nationality = $_POST['nationality'];
 //	$doc->gender = $_POST['gender'];
 //	$doc->login = $_POST['login'];
 //	$doc->pass = $_POST['password'];

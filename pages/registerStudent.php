@@ -14,7 +14,7 @@
 	window.onload = function(){
 		new JsDatePick({
 			useMode:2,
-			target:"stuDob",
+			target:"dateOfBirth",
 			dateFormat:"%Y-%m-%d"
 		});
 	};
@@ -32,15 +32,45 @@
 <script src="../SpryAssets/SpryValidationRadio.js" type="text/javascript"></script>
 </head>
 <?php
-if(isset($_POST['logCode']))
+if(isset($_POST['pass']))
 {
+	global $couchUrl;
+	global $facilityId;
+	$members = new couchClient($couchUrl, "members");
+	$doc = new stdClass();
 	
-$savequery = mysql_query("INSERT INTO `students` (`colNum`, `stuCode`, `stuName`, `stuClass`, `stuDOB`, `stuGender`, `DateRegistered`) VALUES (NULL, '".$_POST['logCode']."', '".$_POST['stuName']."', '".$_POST['stuClass']."', '".$_POST['stuDob']."', '".$_POST['stuGender']."','".$_POST['systemDateForm']."')") or die(mysql_error());
+	// get data from form and save it to couch
+	$doc->kind ="Member";
+	$doc->dateOfBirth = strtotime($_POST['dateOfBirth']);
+	$doc->dateRegistered = strtotime($_POST['systemDateForm']);
+	$doc->facilityId = $facilityId;
+	$doc->firstName = $_POST['firstName'];
+	$doc->lastName = $_POST['lastName'];
+	$doc->middleNames = $_POST['middleNames'];
+	$doc->nationality = $_POST['nationality'];
+	$doc->gender = $_POST['gender'];
+	$doc->level =array($_POST['level']);
+	//@todo.. create a login for student
+	$doc->login = "";
+	$doc->pass = $_POST['pass'];
+	$doc->phone = $_POST['phoneNumber'];
+	// roles is an array.. get selected roles 
+	$doc->role = array("student");
+	// save doc to couch and for responce->id
+	$response = $members->storeDoc($doc);
+	try {
+	// add attached image to document with specified id from response
+			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+	} catch ( Exception $e ) {
+		print ("No photo uploaded : ".$e->getMessage());
+	}
+	
+/*$savequery = mysql_query("INSERT INTO `students` (`colNum`, `stuCode`, `stuName`, `stuClass`, `stuDOB`, `stuGender`, `DateRegistered`) VALUES (NULL, '".$_POST['logCode']."', '".$_POST['stuName']."', '".$_POST['stuClass']."', '".$_POST['stuDob']."', '".$_POST['stuGender']."','".$_POST['systemDateForm']."')") or die(mysql_error());
 
  recordActionDate($_SESSION['name']," Added a new student by name ".$_POST['stuName']." in ".$_POST['stuClass'],$_POST['systemDateForm']);
  
 echo '<script type="text/javascript">alert("Successfully Added \n Student Name:'.$_POST['stuName'].'\n Please save student code : '.$_POST['logCode'].'");</script>';
-die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save student code : ".$_POST['logCode']);
+die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save student code : ".$_POST['logCode']);*/
 
 }
 ?>
@@ -54,8 +84,9 @@ die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save s
         <tr>
           <td width="125"><b>Level / Class </b></td>
           <td>
-            <select name="stuClass" id="stuClass">
-              <option value="KG">KG</option>
+            <select name="level" id="level">
+              <option value="KG1">KG 1</option>
+              <option value="KG2">KG 2</option>
               <option value="P1">P1</option>
               <option value="P2">P2</option>
               <option value="P3">P3</option>
@@ -72,37 +103,37 @@ die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save s
           <td><b>Student First Name</b></td>
           <td>
           <span id="sprytextfield1">
-            <input type="text" name="stuName" id="stuName">
+            <input type="text" name="firstName" id="firstName">
           <span class="textfieldRequiredMsg">*</span></span></td>
         </tr>
         <tr>
           <td><b>Student Last Name</b></td>
           <td><span id="sprytextfield4">
-            <label for="stLastName"></label>
-            <input type="text" name="stLastName" id="stLastName">
+            <label for="lastName"></label>
+            <input type="text" name="lastName" id="lastName">
           <span class="textfieldRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
           <td><b>Student Middle Names</b></td>
           <td><span id="sprytextfield5">
-            <label for="stuMiddleName"></label>
-            <input type="text" name="stuMiddleName" id="stuMiddleName">
+            <label for="middleNames"></label>
+            <input type="text" name="middleNames" id="middleNames">
           <span class="textfieldRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
           <td><b>Date Of Birth</b></td>
           <td><span id="sprytextfield2">
-            <input type="text" name="stuDob" id="stuDob">
+            <input type="text" name="dateOfBirth" id="dateOfBirth">
           <span class="textfieldRequiredMsg">*</span></span> eg. 2005-08-15</td>
         </tr>
         <tr>
           <td><b>Gender</b></td>
           <td>
             <label>
-              <input name="stuGender" type="radio" id="stuGender_0" value="Male" checked="CHECKED">
+              <input name="gender" type="radio" id="stuGender_0" value="Male" checked="CHECKED">
               Male</label>
             <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <input type="radio" name="stuGender" value="Female" id="stuGender_1">
+              <input type="radio" name="gender" value="Female" id="stuGender_1">
               Female</label>
           <span class="radioRequiredMsg">*</span></td>
         </tr>
@@ -305,6 +336,13 @@ die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save s
 </select>&nbsp;</td>
         </tr>
         <tr>
+          <td><b>Phone No. of Guardian</b></td>
+          <td><span id="sprytextfield6">
+            <label for="phoneNumber"></label>
+            <input type="text" name="phoneNumber" id="phoneNumber">
+            <span class="textfieldInvalidFormatMsg">Invalid format.</span></span></td>
+        </tr>
+        <tr>
           <td><b>Login Code</b></td>
           <td><span id="sprytextfield3">
             <input name="pass" type="text" id="pass" readonly>
@@ -402,6 +440,7 @@ function NoClicked(nm)
 }
 var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4");
 var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5");
+var sprytextfield6 = new Spry.Widget.ValidationTextField("sprytextfield6", "real", {isRequired:false});
 </script>
 </body>
 <script type="text/javascript">
