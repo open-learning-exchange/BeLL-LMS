@@ -64,22 +64,29 @@ if(isset($_POST['pass']))
 	} catch ( Exception $e ) {
 		print ("No photo uploaded : ".$e->getMessage());
 	}
-	
-/*$savequery = mysql_query("INSERT INTO `students` (`colNum`, `stuCode`, `stuName`, `stuClass`, `stuDOB`, `stuGender`, `DateRegistered`) VALUES (NULL, '".$_POST['logCode']."', '".$_POST['stuName']."', '".$_POST['stuClass']."', '".$_POST['stuDob']."', '".$_POST['stuGender']."','".$_POST['systemDateForm']."')") or die(mysql_error());
-
- recordActionDate($_SESSION['name']," Added a new student by name ".$_POST['stuName']." in ".$_POST['stuClass'],$_POST['systemDateForm']);
+	// Start saving group assigned to member in group document
+	$groups = new couchClient($couchUrl, "groups");
+	//get all groups from view into viewResults
+	$viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['level'])->getView('api', 'facilityLevel');
+	// add student list to group members array
+	array_push($viewResults->rows[0]->doc->members,$response->id);
+	$groups->storeDoc($viewResults->rows[0]->doc);
+	/*
+ recordActionDate($_SESSION['name']," Added a new student by name ".$_POST['stuName']." in ".$_POST['stuClass'],$_POST['systemDateForm']);*/
  
-echo '<script type="text/javascript">alert("Successfully Added \n Student Name:'.$_POST['stuName'].'\n Please save student code : '.$_POST['logCode'].'");</script>';
-die("Successfully Added <br>Student Name:".$_POST['stuName']."<br> Please save student code : ".$_POST['logCode']);*/
+echo '<script type="text/javascript">alert("Successfully Added ||||  Student Name:'.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script>';
+echo ("Successfully Added  <|>  Student Name:".$_POST['firstName']."  <|>  Please save student code : ".$_POST['pass']."<br>
+");
 
 }
+
 ?>
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float: none; margin-left: auto; margin-right: auto; width: 500px; margin-left: auto; margin-right: auto;">
     <span style="color: #00C; font-weight: bold;">Register Students</span><br><br>
-    <form name="form1" method="post" action="">
+    <form action="" method="post" enctype="multipart/form-data" name="form1">
       <table width="95%">
         <tr>
           <td width="125"><b>Level / Class </b></td>
