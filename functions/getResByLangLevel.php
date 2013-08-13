@@ -10,8 +10,8 @@ if(isset($_GET['lang'])){
 	echo '<table width="95%">';
 	for($dispCnt =1;$dispCnt<=4;$dispCnt++){
 		echo ' <tr>
-          		<td colspan="4" align="left"><b>'.($dispCnt+1).'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-				<select name="story[]" id="story'.($dispCnt+1).'">
+          		<td colspan="4" align="left"><b>'.($dispCnt).'. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				<select name="story[]" id="story'.($dispCnt).'. ">
 				<option value="none" selected >none</option>';
 				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
 					$doc = $viewResults->rows[$rcnt]->doc;

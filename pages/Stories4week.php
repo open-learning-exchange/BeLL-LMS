@@ -3,52 +3,49 @@
 <head>
 <title>Open Learning Exchange - Ghana</title>
 <?php 
-function saveRes2DB($ResID)
-  {
-	  if($ResID!="none")
-  	  {
-			  $query = mysql_query("SELECT * FROM `resources` where resrcID = '".$ResID."'") or die(mysql_error());
-			   while($data = mysql_fetch_array($query))
-			   {
-				   mysql_query("INSERT INTO `usedResources` (`colNum`, `resrcID`, `subject`, `title`, `description`, `type`, `usedby`, `dateUsed`,`class`,`rating`) VALUES (NULL, '".$data['resrcID']."', '".$data['subject']."', ' + ".$data['title']."', '".$data['description']."', '".$data['type']."', '".$_SESSION['name']."', '".$_POST['dateExec']."','".$_POST['class']."',0)") or die(mysql_error());
-				   
-			   }
-		 
-  	  }
-  }
-if(isset($_POST['dateExec']))
-{
-  saveRes2DB($_POST['story1']);
-  saveRes2DB($_POST['story2']);
-  saveRes2DB($_POST['story3']);
-  saveRes2DB($_POST['story4']);
-  recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
+global $couchUrl;
+global $facilityId;
+$assignments = new couchClient($couchUrl, "assignments");
+$resources = new couchClient($couchUrl, "resources");
+if(isset($_POST['startDate'])){
+	for($cnt=0; $cnt<sizeof($_POST['story']);$cnt++){
+		if($_POST['story'][$cnt]!="none")
+		{
+			$doc = new stdClass();
+			$resID = $_POST['story'][$cnt];
+			$resDoc = $resources->getDoc($resID);
+			$doc->kind = "Assignment";
+			$doc->resourceId = $_POST['story'][$cnt];
+			$doc->startDate = strtotime($_POST['startDate']);
+			$doc->endDate = strtotime($_POST['endDate']);
+			$doc->context = array(
+			  "subject" => $resDoc->subject,
+			  "use" => "stories for the week",
+			  "groupid" => $_POST['level'],
+			  "facilityId"=>$facilityId
+			  
+			);
+			$response = $assignments->storeDoc($doc);
+		}
+	}
+ //recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
   echo '<script type="text/javascript">alert("Stories saved successfully");</script>';
 }
-function getSelectedLevel()
-{
-	global $couchUrl;
-	global $facilityId;
-	$groups = new couchClient($couchUrl, "groups");
-	$selectedId = 'KG';
-	//get all groups from view into viewResults
-	//$viewResults = $groups->include_docs(TRUE)->key($selectedId)->getView('api', 'groupByID');
-	
-	return $selectedId;;
-}
+
 ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="../stylesheet/img/devil-icon.png">
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <link rel="stylesheet" type="text/css" media="all" href="../css/jsDatePick_ltr.min.css" />
-<script type="text/javascript" src="../js/jquery.js"></script>
-<link href="../SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
-<link href="../SpryAssets/SpryValidationSelect.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../js/jsDatePick.min.1.3.js"></script>
 <script src="../SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
 <script src="../SpryAssets/SpryValidationSelect.js" type="text/javascript"></script>
+<link href="../SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
+<link href="../SpryAssets/SpryValidationSelect.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript">
 	window.onload = function(){
+		requestLoadLanguage();
 		new JsDatePick({
 			useMode:2,
 			target:"endDate",
@@ -61,21 +58,22 @@ function getSelectedLevel()
 		});
 	};
 </script>
+
 </head>
 
 
-<body  style="background-color:#FFF" onLoad="requestLoadLanguage()">
+<body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:500px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Stories for the week</span><br><br>
     <form name="form1" method="post" action="">
-      <table width="95%">
+      <table width="95%" align="center">
         <tr>
           <td width="139"><b>Starting Date</b></td>
-          <td width="93"><span id="sprytextfield1">
+          <td width="93"><span id="fldStartD">
           <input type="text" name="startDate" id="startDate" style="width:90px">
           <span class="textfieldRequiredMsg">required.</span><span class="textfieldInvalidFormatMsg">*.</span></span></td>
           <td width="83" align="right"><b>End Date</b></td>
-          <td width="131"><span id="sprytextfield2">
+          <td width="131"><span id="fldEndDate">
           <label for="endDate"></label>
           <input type="text" name="endDate" id="endDate"  style="width:90px">
           <span class="textfieldRequiredMsg">A value is required.</span><span class="textfieldInvalidFormatMsg">*.</span></span></td>
@@ -355,8 +353,8 @@ Note for discussion:
 <div class="clear"></div>
 </div>
 <script type="text/javascript">
-var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1", "date", {format:"yyyy-mm-dd"});
-var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2", "date");
+var sprytextfield1 = new Spry.Widget.ValidationTextField("fldStartD", "none");
+var sprytextfield2 = new Spry.Widget.ValidationTextField("fldEndDate", "none");
 </script>
 </body>
 <script type="text/javascript">
@@ -370,7 +368,6 @@ var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2", "date
 <script type="text/javascript">
 
 function requestLoadLanguage(){
-	///load("../functions/getResByLangLevel.php?lang="+lang+"&level="+lev);
 	var groupId = document.getElementById("level").value;
 	var lang = document.getElementById("Language").value;
 	var lev;
@@ -379,11 +376,6 @@ function requestLoadLanguage(){
 			$("#res1").load("../functions/getResByLangLevel.php?lang="+lang+"&level="+gback.level+"");
 		})
 	});
-	
-	
-	
-	
-	
 	
 }
 </script>
