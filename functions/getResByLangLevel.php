@@ -25,8 +25,17 @@ if(isset($_GET['lang'])){
 	}
 	echo ' </table>';
 }
-else if(isset($_GET[''])){
+else if(isset($_GET['grade'])){
 	global $couchUrl;
 	global $facilityId;
+	$groups = new couchClient($couchUrl, "groups");
+	$doc = $groups->getDoc($_GET['grade']);
+	///print_r($doc->level);
+	$gobackArr = array();
+	$gobackArr[] = array(
+	'level'=>$doc->level
+	);
+	$obj['gobackArr'] = $gobackArr;
+    echo json_encode($obj);
 }
 ?>

@@ -64,7 +64,7 @@ function getSelectedLevel()
 </head>
 
 
-<body  style="background-color:#FFF">
+<body  style="background-color:#FFF" onLoad="requestLoadLanguage()">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:500px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Stories for the week</span><br><br>
     <form name="form1" method="post" action="">
@@ -83,7 +83,7 @@ function getSelectedLevel()
         <tr>
           <td><b>Group / Level / Class </b>: </td>
           <td><span id="spryselect1">
-          <select name="level" id="level">
+          <select name="level" id="level"  onChange="requestLoadLanguage()">
           <?php
 		  	global $couchUrl;
 			global $facilityId;
@@ -327,7 +327,7 @@ function getSelectedLevel()
         </tr>
             
         <tr>
-          <td align="center">&nbsp;</td>
+          <td align="center"><p id="gdd"></p></td>
           <td colspan="3">&nbsp;</td>
         </tr>
         <tr>
@@ -371,9 +371,19 @@ var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2", "date
 
 function requestLoadLanguage(){
 	///load("../functions/getResByLangLevel.php?lang="+lang+"&level="+lev);
+	var groupId = document.getElementById("level").value;
 	var lang = document.getElementById("Language").value;
-	var lev ='KG';
-	$("#res1").load("../functions/getResByLangLevel.php?lang="+lang+"&level="+lev+"");
+	var lev;
+	$.getJSON("../functions/getResByLangLevel.php?grade="+groupId+"",function (data){
+		$.each(data.gobackArr, function(i,gback){
+			$("#res1").load("../functions/getResByLangLevel.php?lang="+lang+"&level="+gback.level+"");
+		})
+	});
+	
+	
+	
+	
+	
 	
 }
 </script>
