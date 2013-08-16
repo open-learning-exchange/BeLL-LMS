@@ -10,17 +10,20 @@
 <?php
 if(isset($_POST['totRes']))
 {
-	$count=0;
+	$count=1;
 	while($count<$_POST['totRes'])
 	{
 		$itemString ="R".$count;
 		$columnNumb = "Col".$count;
-		///echo "UPDATE `usedResources` SET  `rating` = '".$_POST[$itemString]."' WHERE `colNum` = ".$_POST[$columnNumb]."";
-		$save = mysql_query("UPDATE `usedResources` SET  `rating` = '".$_POST[$itemString]."' WHERE `colNum` = ".$_POST[$columnNumb]."") or die(mysql_error());
+		$feedbacks = new couchClient($couchUrl, "feedback");
+		///echo $_POST[$itemString]."<br>";
+		$doc = $feedbacks->getDoc($_POST[$columnNumb]);
+		$doc->rating = $_POST[$itemString];
+		$feedbacks->storeDoc($doc);
 		$count++;
 	}
-	recordActionDate($_SESSION['name'],"Rate Resources",$_POST['systemDateForm']);
-	echo '<script type="text/javascript">alert("Resources ratings done successfully");</script>';
+	//recordActionDate($_SESSION['name'],"Rate Resources",$_POST['systemDateForm']);
+	echo '<script type="text/javascript">alert("Resource ratings completed successfully");</script>';
  
 	die("Rating saved. You do not have any unrated resources under your account.");
 }
@@ -43,36 +46,38 @@ if(isset($_POST['totRes']))
 	  
 	  
       <?php
-	$cnt = 1;
-	$query = mysql_query("SELECT * FROM  `usedResources` where usedby='".$_SESSION['name']."' and rating = 0") or die(mysql_error());
-			 
-			 while($data = mysql_fetch_array($query))
-			 {
-				 echo '<tr>
-	    <td width="256" height="11"  valign="top">'.$data['title'].'</td>
-	    <td width="75"  valign="top">'.$data['dateUsed'].'</td>
-	    <td width="73"  valign="top">'.$data['subject'].'</td>
+	  
+	global $couchUrl;
+	global $facilityId;
+	$feedbacks = new couchClient($couchUrl, "feedback");
+	$resources = new couchClient($couchUrl, "resources");
+	$viewResults = $feedbacks->include_docs(TRUE)->key($facilityId.$_SESSION['lmsUserID'])->getView('api', 'facilityIdMemberID');
+	$docCounter=1;
+	foreach($viewResults->rows as $row) {
+		$doc = $resources->getDoc($row->doc->resourceId);
+		echo '<tr>
+	    <td width="256" height="11"  valign="top">'.$doc->title.'</td>
+	    <td width="75"  valign="top">'.date('Y-m-d',$row->doc->timestamp).'</td>
+	    <td width="73"  valign="top">'.$row->doc->context->subject.'</td>
 	    <td width="140"  valign="bottom">
-<b><input type="radio" name="R'.$cnt.'" id="R'.$cnt.'_1" value="1" checked onclick="resetMe(\'1\',\'R'.$cnt.'_\')"><label for="R'.$cnt.'_1"></label></b>
-<b><input type="radio" name="R'.$cnt.'" id="R'.$cnt.'_2" value="2" onclick="resetMe(\'2\',\'R'.$cnt.'_\')"><label for="R'.$cnt.'_2"></label></b>
-<b><input type="radio" name="R'.$cnt.'" id="R'.$cnt.'_3" value="3" onclick="resetMe(\'3\',\'R'.$cnt.'_\')"><label for="R'.$cnt.'_3"></label></b>
-<b><input type="radio" name="R'.$cnt.'" id="R'.$cnt.'_4" value="4" onclick="resetMe(\'4\',\'R'.$cnt.'_\')"><label for="R'.$cnt.'_4"></label></b>
-<b><input type="radio" name="R'.$cnt.'" id="R'.$cnt.'_5" value="5" onclick="resetMe(\'5\',\'R'.$cnt.'_\')"><label for="R'.$cnt.'_5"></label></b>
-<input name="Col'.$cnt.'" type="hidden" value="'.$data['colNum'].'">
-
-		
-		</td>
-      </tr>';
-				$cnt++;
-			 }
+		<b><input type="radio" name="R'.$docCounter.'" id="R'.$docCounter.'_1" value="1" checked onclick="resetMe(\'1\',\'R'.$docCounter.'_\')"><label for="R'.$docCounter.'_1"></label></b>
+		<b><input type="radio" name="R'.$docCounter.'" id="R'.$docCounter.'_2" value="2" onclick="resetMe(\'2\',\'R'.$docCounter.'_\')"><label for="R'.$docCounter.'_2"></label></b>
+		<b><input type="radio" name="R'.$docCounter.'" id="R'.$docCounter.'_3" value="3" onclick="resetMe(\'3\',\'R'.$docCounter.'_\')"><label for="R'.$docCounter.'_3"></label></b>
+		<b><input type="radio" name="R'.$docCounter.'" id="R'.$docCounter.'_4" value="4" onclick="resetMe(\'4\',\'R'.$docCounter.'_\')"><label for="R'.$docCounter.'_4"></label></b>
+		<b><input type="radio" name="R'.$docCounter.'" id="R'.$docCounter.'_5" value="5" onclick="resetMe(\'5\',\'R'.$docCounter.'_\')"><label for="R'.$docCounter.'_5"></label></b>
+		<input name="Col'.$docCounter.'" type="hidden" value="'.$row->doc->_id.'">
+				</td>
+			  </tr>';
+			  $docCounter++;
+	}
       ?>
       <tr>
 	    <td width="245" height="5">&nbsp;</td>
 	    <td width="102">&nbsp;</td>
 	    <td width="63">&nbsp;</td>
-	    <td><input name="totRes" type="hidden" value="<?php echo $cnt?>">
+	    <td><input name="totRes" type="hidden" value="<?php echo ($docCounter)?>">
         <?php 
-		if($cnt>=1)
+		if($docCounter>=1)
 		{
 			echo '<input type="submit" class="button" value="Save Rating">'; 
 		}

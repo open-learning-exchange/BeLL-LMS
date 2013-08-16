@@ -5,7 +5,7 @@ $server ="localhost";
 $username ="root";
 ///$password ="raspberry";
 $password ="";
-
+date_default_timezone_set('UTC');
 $dbhandle= mysql_connect($server,$username,$password) or die(mysql_error());
 $selected = mysql_select_db("schoolBell",$dbhandle) or die (mysql_error());
 
@@ -32,9 +32,13 @@ error_reporting(E_ERROR);
 	include "../lib/couchClient.php";
 	include "../lib/couchDocument.php";
 
-$json = file_get_contents($couchUrl . '/whoami/facility'); 
-$data = json_decode($json);
 global $facilityId;
-$facilityId = $data->facilityId;
+global $config;
+global $facility_data;
+$facility_json = file_get_contents($couchUrl . '/whoami/facility'); 
+$facility_data = json_decode($facility_json);
+$config_json = file_get_contents($couchUrl . '/whoami/config'); 
+$config = json_decode($config_json);
+$facilityId = $facility_data->facilityId;
 
 ?>

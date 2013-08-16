@@ -7,7 +7,10 @@ global $couchUrl;
 global $facilityId;
 $assignments = new couchClient($couchUrl, "assignments");
 $resources = new couchClient($couchUrl, "resources");
+$groups = new couchClient($couchUrl, "groups");
+$feedbacks = new couchClient($couchUrl, "feedback");
 if(isset($_POST['startDate'])){
+	
 	for($cnt=0; $cnt<sizeof($_POST['story']);$cnt++){
 		if($_POST['story'][$cnt]!="none")
 		{
@@ -26,6 +29,29 @@ if(isset($_POST['startDate'])){
 			  
 			);
 			$response = $assignments->storeDoc($doc);
+		}
+	}
+	///// save in feedback too
+	for($cnt=0; $cnt<sizeof($_POST['story']);$cnt++){
+		if($_POST['story'][$cnt]!="none")
+		{
+			$doc = new stdClass();
+			$resID = $_POST['story'][$cnt];
+			$resDoc = $resources->getDoc($resID);
+			$groupDoc = $groups->getDoc($_POST['level']);
+			$doc->kind ="Feedback";
+			$doc->rating=0;
+			$doc->comment="";
+			$doc->facilityId=$facilityId;
+			$doc->memberId =$_SESSION['lmsUserID'];
+			$doc->resourceId = $_POST['story'][$cnt];
+			$doc->timestamp = strtotime($_POST['startDate']);
+			$doc->context = array(
+			  "subject" => $resDoc->subject,
+			  "use" => "stories for the week",
+			  "level" => $groupDoc->level[0]
+			);
+			$response = $feedbacks->storeDoc($doc);
 		}
 	}
  //recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
@@ -89,7 +115,7 @@ if(isset($_POST['startDate'])){
 			//get all groups from view into viewResults
 			$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'allGroupsInFacility');
 			$wCnt=0;
-			while($wCnt<=sizeof($viewResults->rows)){
+			while($wCnt<sizeof($viewResults->rows)){
 				print '<option value="'.$viewResults->rows[$wCnt]->doc->_id.'">'.$viewResults->rows[$wCnt]->doc->name.'</option>';
 				$wCnt++;
 			}

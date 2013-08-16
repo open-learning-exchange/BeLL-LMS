@@ -33,6 +33,8 @@ if(isset($_POST['firstName']))
 	global $couchUrl;
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
+	$groups = new couchClient($couchUrl, "groups");
+	$checkedLevels = array();
 	$doc = new stdClass();
 	
 	// get data from form and save it to couch
@@ -43,39 +45,46 @@ if(isset($_POST['firstName']))
 	$doc->firstName = $_POST['firstName'];
 	$doc->lastName = $_POST['lastName'];
 	$doc->middleNames = $_POST['middleNames'];
-	$doc->nationality = $_POST['nationality'];
+	$doc->nationality = strtolower($_POST['nationality']);
 	$doc->gender = $_POST['gender'];
 	$doc->login = $_POST['login'];
-	$doc->pass = $_POST['password'];
+	$doc->pass = md5($_POST['password']);
 	$doc->phone = $_POST['phoneNumber'];
+	foreach($_POST['classAssigned'] as $levels){
+		$groupsDoc= $groups->getDoc($levels);
+		for($grpCnt=0;$grpCnt<sizeof($groupsDoc->level);$grpCnt++){
+			array_push($checkedLevels,$groupsDoc->level[$grpCnt]);
+		}
+	}
+	$doc->levels = $checkedLevels;
+	
 	// roles is an array.. get selected roles 
 	$roles = array();
 	foreach($_POST['role'] as $role) {
 		array_push($roles,$role);
 	}
-	$doc->role = $roles;
+	$doc->roles = $roles;
+	//print_r($doc);
 	// save doc to couch and for responce->id
 	$response = $members->storeDoc($doc);
+	
 	
 	try {
 	// add attached image to document with specified id from response
 			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
 	} catch ( Exception $e ) {
-		print ("No photo uploaded : ".$e->getMessage());
+		print ("No photo uploaded");
 	}
 	
 	// Save group assigned to member in group document
-	$groups = new couchClient($couchUrl, "groups");
-	foreach($_POST['classAssigned'] as $role){
-		$key = $facilityId . $role;
-		$viewResults = $groups->include_docs(TRUE)->key($key)->getView('api', 'facilityLevel');
-		$group=$viewResults->rows[0]->doc;
-		array_push($group->owners,$response->id);
-		$groups->storeDoc($group);
+	foreach($_POST['classAssigned'] as $groupID){
+		$groupDoc = $groups->getDoc($groupID);
+		array_push($groupDoc->owners,$response->id);
+		$groups->storeDoc($groupDoc);
 	}
 	//@todo better log information
   ////recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
-  die( "<br/><br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class']);
+  echo "<br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class'].'<br><br>';
 }
 // Deleting Member
 
@@ -91,13 +100,16 @@ else if(isset($_GET['drop']))
 	// loop through all documents
 	foreach($viewResults->rows as $groupOwned){
 		// loop through owners array
-		for($cnt=0; $cnt<=sizeof($groupOwned->doc->owners);$cnt++){
-			// look for a match to current member id in owners array
-			if($groupOwned->doc->owners[$cnt]== $_GET['drop']){
-				// delete current member id from array
-				unset($groupOwned->doc->owners[$cnt]);
-				// save document changes
-				$groups->storeDoc($groupOwned->doc);
+		if(sizeof($groupOwned->doc->owners)>-1){
+			for($cnt=0; $cnt<sizeof($groupOwned->doc->owners);$cnt++){
+				// look for a match to current member id in owners array
+				print_r($groupOwned->doc->owners);
+				if($groupOwned->doc->owners[$cnt] == $_GET['drop']){
+					 // delete current member id from array
+					unset($groupOwned->doc->owners[$cnt]);
+					// save document changes
+					$groups->storeDoc($groupOwned->doc);
+				}
 			}
 		}
 	}
@@ -106,8 +118,8 @@ else if(isset($_GET['drop']))
 	// delet member from members document
 	$members->deleteDoc($docToDel);
 	
-	echo '<script type="text/javascript">alert("Member deleted succesfully");</script>';
-	die("Deleted Succesfully");
+	echo '<script type="text/javascript">alert("'.$docToDel->lastName.' '.$docToDel->middleNames.' '.$docToDel->firstName.' has been removed from system");</script>';
+	echo ''.$docToDel->lastName.' '.$docToDel->middleNames.' '.$docToDel->firstName.' has been removed from system';
 }
 ?>
 
@@ -144,11 +156,25 @@ else if(isset($_GET['drop']))
           <tr>
             <td><b id="classAssignedLabel">Class Assigned</b></td>
             <td><p id="classAssignedID">
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="KG1" id="classAssigned_0">
-                KG 1&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
+             <?php
+		  	global $couchUrl;
+			global $facilityId;
+			$groups = new couchClient($couchUrl, "groups");
+			//get all groups from view into viewResults
+			$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'allGroupsInFacility');
+			$wCnt=0;
+			while($wCnt<sizeof($viewResults->rows)){
+				print '
+				<label>
+                <input type="checkbox" name="classAssigned[]" value="'.$viewResults->rows[$wCnt]->doc->_id.'" id="classAssigned_'.$wCnt.'">
+               '.$viewResults->rows[$wCnt]->doc->name.'&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				$wCnt++;
+			}
+			
+			
+          ?>
+              
+<!--<label></label>
 &nbsp;&nbsp;
 <label>&nbsp;&nbsp;</label>
               <label>
@@ -200,7 +226,7 @@ else if(isset($_GET['drop']))
 &nbsp;&nbsp;&nbsp;
                 <label>
                   <input type="checkbox" name="classAssigned[]" value="P6" id="classAssigned_7">
-                P 6</label>
+                P 6</label>-->
             </p></td>
           </tr>
           <tr>
@@ -250,202 +276,251 @@ else if(isset($_GET['drop']))
           </tr>
           <tr>
             <td><b>Nationality</b></td>
-            <td><select name="nationality">
-              <option value="">-- select one --</option>
-              <option value="afghan">Afghan</option>
-              <option value="albanian">Albanian</option>
-              <option value="algerian">Algerian</option>
-              <option value="american">American</option>
-              <option value="andorran">Andorran</option>
-              <option value="angolan">Angolan</option>
-              <option value="antiguans">Antiguans</option>
-              <option value="argentinean">Argentinean</option>
-              <option value="armenian">Armenian</option>
-              <option value="australian">Australian</option>
-              <option value="austrian">Austrian</option>
-              <option value="azerbaijani">Azerbaijani</option>
-              <option value="bahamian">Bahamian</option>
-              <option value="bahraini">Bahraini</option>
-              <option value="bangladeshi">Bangladeshi</option>
-              <option value="barbadian">Barbadian</option>
-              <option value="barbudans">Barbudans</option>
-              <option value="batswana">Batswana</option>
-              <option value="belarusian">Belarusian</option>
-              <option value="belgian">Belgian</option>
-              <option value="belizean">Belizean</option>
-              <option value="beninese">Beninese</option>
-              <option value="bhutanese">Bhutanese</option>
-              <option value="bolivian">Bolivian</option>
-              <option value="bosnian">Bosnian</option>
-              <option value="brazilian">Brazilian</option>
-              <option value="british">British</option>
-              <option value="bruneian">Bruneian</option>
-              <option value="bulgarian">Bulgarian</option>
-              <option value="burkinabe">Burkinabe</option>
-              <option value="burmese">Burmese</option>
-              <option value="burundian">Burundian</option>
-              <option value="cambodian">Cambodian</option>
-              <option value="cameroonian">Cameroonian</option>
-              <option value="canadian">Canadian</option>
-              <option value="cape verdean">Cape Verdean</option>
-              <option value="central african">Central African</option>
-              <option value="chadian">Chadian</option>
-              <option value="chilean">Chilean</option>
-              <option value="chinese">Chinese</option>
-              <option value="colombian">Colombian</option>
-              <option value="comoran">Comoran</option>
-              <option value="congolese">Congolese</option>
-              <option value="costa rican">Costa Rican</option>
-              <option value="croatian">Croatian</option>
-              <option value="cuban">Cuban</option>
-              <option value="cypriot">Cypriot</option>
-              <option value="czech">Czech</option>
-              <option value="danish">Danish</option>
-              <option value="djibouti">Djibouti</option>
-              <option value="dominican">Dominican</option>
-              <option value="dutch">Dutch</option>
-              <option value="east timorese">East Timorese</option>
-              <option value="ecuadorean">Ecuadorean</option>
-              <option value="egyptian">Egyptian</option>
-              <option value="emirian">Emirian</option>
-              <option value="equatorial guinean">Equatorial Guinean</option>
-              <option value="eritrean">Eritrean</option>
-              <option value="estonian">Estonian</option>
-              <option value="ethiopian">Ethiopian</option>
-              <option value="fijian">Fijian</option>
-              <option value="filipino">Filipino</option>
-              <option value="finnish">Finnish</option>
-              <option value="french">French</option>
-              <option value="gabonese">Gabonese</option>
-              <option value="gambian">Gambian</option>
-              <option value="georgian">Georgian</option>
-              <option value="german">German</option>
-              <option value="ghanaian" selected >Ghanaian</option>
-              <option value="greek">Greek</option>
-              <option value="grenadian">Grenadian</option>
-              <option value="guatemalan">Guatemalan</option>
-              <option value="guinea-bissauan">Guinea-Bissauan</option>
-              <option value="guinean">Guinean</option>
-              <option value="guyanese">Guyanese</option>
-              <option value="haitian">Haitian</option>
-              <option value="herzegovinian">Herzegovinian</option>
-              <option value="honduran">Honduran</option>
-              <option value="hungarian">Hungarian</option>
-              <option value="icelander">Icelander</option>
-              <option value="indian">Indian</option>
-              <option value="indonesian">Indonesian</option>
-              <option value="iranian">Iranian</option>
-              <option value="iraqi">Iraqi</option>
-              <option value="irish">Irish</option>
-              <option value="israeli">Israeli</option>
-              <option value="italian">Italian</option>
-              <option value="ivorian">Ivorian</option>
-              <option value="jamaican">Jamaican</option>
-              <option value="japanese">Japanese</option>
-              <option value="jordanian">Jordanian</option>
-              <option value="kazakhstani">Kazakhstani</option>
-              <option value="kenyan">Kenyan</option>
-              <option value="kittian and nevisian">Kittian and Nevisian</option>
-              <option value="kuwaiti">Kuwaiti</option>
-              <option value="kyrgyz">Kyrgyz</option>
-              <option value="laotian">Laotian</option>
-              <option value="latvian">Latvian</option>
-              <option value="lebanese">Lebanese</option>
-              <option value="liberian">Liberian</option>
-              <option value="libyan">Libyan</option>
-              <option value="liechtensteiner">Liechtensteiner</option>
-              <option value="lithuanian">Lithuanian</option>
-              <option value="luxembourger">Luxembourger</option>
-              <option value="macedonian">Macedonian</option>
-              <option value="malagasy">Malagasy</option>
-              <option value="malawian">Malawian</option>
-              <option value="malaysian">Malaysian</option>
-              <option value="maldivan">Maldivan</option>
-              <option value="malian">Malian</option>
-              <option value="maltese">Maltese</option>
-              <option value="marshallese">Marshallese</option>
-              <option value="mauritanian">Mauritanian</option>
-              <option value="mauritian">Mauritian</option>
-              <option value="mexican">Mexican</option>
-              <option value="micronesian">Micronesian</option>
-              <option value="moldovan">Moldovan</option>
-              <option value="monacan">Monacan</option>
-              <option value="mongolian">Mongolian</option>
-              <option value="moroccan">Moroccan</option>
-              <option value="mosotho">Mosotho</option>
-              <option value="motswana">Motswana</option>
-              <option value="mozambican">Mozambican</option>
-              <option value="namibian">Namibian</option>
-              <option value="nauruan">Nauruan</option>
-              <option value="nepalese">Nepalese</option>
-              <option value="new zealander">New Zealander</option>
-              <option value="ni-vanuatu">Ni-Vanuatu</option>
-              <option value="nicaraguan">Nicaraguan</option>
-              <option value="nigerien">Nigerien</option>
-              <option value="north korean">North Korean</option>
-              <option value="northern irish">Northern Irish</option>
-              <option value="norwegian">Norwegian</option>
-              <option value="omani">Omani</option>
-              <option value="pakistani">Pakistani</option>
-              <option value="palauan">Palauan</option>
-              <option value="panamanian">Panamanian</option>
-              <option value="papua new guinean">Papua New Guinean</option>
-              <option value="paraguayan">Paraguayan</option>
-              <option value="peruvian">Peruvian</option>
-              <option value="polish">Polish</option>
-              <option value="portuguese">Portuguese</option>
-              <option value="qatari">Qatari</option>
-              <option value="romanian">Romanian</option>
-              <option value="russian">Russian</option>
-              <option value="rwandan">Rwandan</option>
-              <option value="saint lucian">Saint Lucian</option>
-              <option value="salvadoran">Salvadoran</option>
-              <option value="samoan">Samoan</option>
-              <option value="san marinese">San Marinese</option>
-              <option value="sao tomean">Sao Tomean</option>
-              <option value="saudi">Saudi</option>
-              <option value="scottish">Scottish</option>
-              <option value="senegalese">Senegalese</option>
-              <option value="serbian">Serbian</option>
-              <option value="seychellois">Seychellois</option>
-              <option value="sierra leonean">Sierra Leonean</option>
-              <option value="singaporean">Singaporean</option>
-              <option value="slovakian">Slovakian</option>
-              <option value="slovenian">Slovenian</option>
-              <option value="solomon islander">Solomon Islander</option>
-              <option value="somali">Somali</option>
-              <option value="south african">South African</option>
-              <option value="south korean">South Korean</option>
-              <option value="spanish">Spanish</option>
-              <option value="sri lankan">Sri Lankan</option>
-              <option value="sudanese">Sudanese</option>
-              <option value="surinamer">Surinamer</option>
-              <option value="swazi">Swazi</option>
-              <option value="swedish">Swedish</option>
-              <option value="swiss">Swiss</option>
-              <option value="syrian">Syrian</option>
-              <option value="taiwanese">Taiwanese</option>
-              <option value="tajik">Tajik</option>
-              <option value="tanzanian">Tanzanian</option>
-              <option value="thai">Thai</option>
-              <option value="togolese">Togolese</option>
-              <option value="tongan">Tongan</option>
-              <option value="trinidadian or tobagonian">Trinidadian or Tobagonian</option>
-              <option value="tunisian">Tunisian</option>
-              <option value="turkish">Turkish</option>
-              <option value="tuvaluan">Tuvaluan</option>
-              <option value="ugandan">Ugandan</option>
-              <option value="ukrainian">Ukrainian</option>
-              <option value="uruguayan">Uruguayan</option>
-              <option value="uzbekistani">Uzbekistani</option>
-              <option value="venezuelan">Venezuelan</option>
-              <option value="vietnamese">Vietnamese</option>
-              <option value="welsh">Welsh</option>
-              <option value="yemenite">Yemenite</option>
-              <option value="zambian">Zambian</option>
-              <option value="zimbabwean">Zimbabwean</option>
-            </select>
-            &nbsp;</td>
+            <td><select name="nationality" id="nationality" style="font-size:10px; float:left;">
+              <option value="af" >Afghanistan</option>
+              <option value="ax" >Aland Islands</option>
+              <option value="al" >Albania</option>
+              <option value="dz" >Algeria</option>
+              <option value="as" >American Samoa</option>
+              <option value="ad" >Andorra</option>
+              <option value="ao" >Angola</option>
+              <option value="ai" >Anguilla</option>
+              <option value="aq" >Antarctica</option>
+              <option value="ag" >Antigua and Barbuda</option>
+              <option value="ar" >Argentina</option>
+              <option value="am" >Armenia</option>
+              <option value="aw" >Aruba</option>
+              <option value="au" >Australia</option>
+              <option value="at" >Austria</option>
+              <option value="az" >Azerbaijan</option>
+              <option value="bs" >Bahamas</option>
+              <option value="bh" >Bahrain</option>
+              <option value="bd" >Bangladesh</option>
+              <option value="bb" >Barbados</option>
+              <option value="by" >Belarus</option>
+              <option value="be" >Belgium</option>
+              <option value="bz" >Belize</option>
+              <option value="bj" >Benin</option>
+              <option value="bm" >Bermuda</option>
+              <option value="bt" >Bhutan</option>
+              <option value="bo" >Bolivia</option>
+              <option value="bq" >Bonaire</option>
+              <option value="ba" >Bosnia and Herzegovina</option>
+              <option value="bw" >Botswana</option>
+              <option value="bv" >Bouvet Island</option>
+              <option value="br" >Brazil</option>
+              <option value="bn" >Brunei Darussalam</option>
+              <option value="bg" >Bulgaria</option>
+              <option value="bf" >Burkina Faso</option>
+              <option value="bi" >Burundi</option>
+              <option value="kh" >Cambodia</option>
+              <option value="cm" >Cameroon</option>
+              <option value="ca" >Canada</option>
+              <option value="cv" >Cape Verde</option>
+              <option value="ky" >Cayman Islands</option>
+              <option value="cf" >Central African Republic</option>
+              <option value="td" >Chad</option>
+              <option value="cl" >Chile</option>
+              <option value="cn" >China</option>
+              <option value="cx" >Christmas Island</option>
+              <option value="cc" >Cocos (Keeling) Islands</option>
+              <option value="co" >Colombia</option>
+              <option value="km" >Comoros</option>
+              <option value="cg" >Congo</option>
+              <option value="cd" >Congo Republic of the</option>
+              <option value="ck" >Cook Islands</option>
+              <option value="cr" >Costa Rica</option>
+              <option value="ci" >Cote d'Ivoire</option>
+              <option value="hr" >Croatia</option>
+              <option value="cu" >Cuba</option>
+              <option value="cw" >Curacao</option>
+              <option value="cy" >Cyprus</option>
+              <option value="cz" >Czech Republic</option>
+              <option value="dk" >Denmark</option>
+              <option value="dj" >Djibouti</option>
+              <option value="dm" >Dominica</option>
+              <option value="do" >Dominican Republic</option>
+              <option value="ec" >Ecuador</option>
+              <option value="eg" >Egypt</option>
+              <option value="sv" >El Salvador</option>
+              <option value="gq" >Equatorial Guinea</option>
+              <option value="er" >Eritrea</option>
+              <option value="ee" >Estonia</option>
+              <option value="et" >Ethiopia</option>
+              <option value="fo" >Faroe Islands</option>
+              <option value="fj" >Fiji</option>
+              <option value="fi" >Finland</option>
+              <option value="fr" >France</option>
+              <option value="gf" >French Guiana</option>
+              <option value="pf" >French Polynesia</option>
+              <option value="ga" >Gabon</option>
+              <option value="gm" >Gambia</option>
+              <option value="ge" >Georgia</option>
+              <option value="de" >Germany</option>
+              <option value="gh" selected >Ghana</option>
+              <option value="gi" >Gibraltar</option>
+              <option value="gr" >Greece</option>
+              <option value="gl" >Greenland</option>
+              <option value="gd" >Grenada</option>
+              <option value="gp" >Guadeloupe</option>
+              <option value="gu" >Guam</option>
+              <option value="gt" >Guatemala</option>
+              <option value="gg" >Guernsey</option>
+              <option value="gn" >Guinea</option>
+              <option value="gw" >Guinea-Bissau</option>
+              <option value="gy" >Guyana</option>
+              <option value="ht" >Haiti</option>
+              <option value="va" >Holy See (Vatican City State)</option>
+              <option value="hn" >Honduras</option>
+              <option value="hk" >Hong Kong</option>
+              <option value="hu" >Hungary</option>
+              <option value="is" >Iceland</option>
+              <option value="in" >India</option>
+              <option value="id" >Indonesia</option>
+              <option value="ir" >Iran</option>
+              <option value="iq" >Iraq</option>
+              <option value="ie" >Ireland</option>
+              <option value="im" >Isle of Man</option>
+              <option value="il" >Israel</option>
+              <option value="it" >Italy</option>
+              <option value="jm" >Jamaica</option>
+              <option value="jp" >Japan</option>
+              <option value="je" >Jersey</option>
+              <option value="jo" >Jordan</option>
+              <option value="kz" >Kazakhstan</option>
+              <option value="ke" >Kenya</option>
+              <option value="ki" >Kiribati</option>
+              <option value="kp" >Korea</option>
+              <option value="kr" >Korea</option>
+              <option value="kw" >Kuwait</option>
+              <option value="kg" >Kyrgyzstan</option>
+              <option value="lv" >Latvia</option>
+              <option value="lb" >Lebanon</option>
+              <option value="ls" >Lesotho</option>
+              <option value="lr" >Liberia</option>
+              <option value="ly" >Libyan Arab Jamahiriya</option>
+              <option value="li" >Liechtenstein</option>
+              <option value="lt" >Lithuania</option>
+              <option value="lu" >Luxembourg</option>
+              <option value="mo" >Macao</option>
+              <option value="mk" >Macedonia</option>
+              <option value="mg" >Madagascar</option>
+              <option value="mw" >Malawi</option>
+              <option value="my" >Malaysia</option>
+              <option value="mv" >Maldives</option>
+              <option value="ml" >Mali</option>
+              <option value="mt" >Malta</option>
+              <option value="mh" >Marshall Islands</option>
+              <option value="mq" >Martinique</option>
+              <option value="mr" >Mauritania</option>
+              <option value="mu" >Mauritius</option>
+              <option value="yt" >Mayotte</option>
+              <option value="mx" >Mexico</option>
+              <option value="fm" >Micronesia</option>
+              <option value="md" >Moldova</option>
+              <option value="mc" >Monaco</option>
+              <option value="mn" >Mongolia</option>
+              <option value="me" >Montenegro</option>
+              <option value="ms" >Montserrat</option>
+              <option value="ma" >Morocco</option>
+              <option value="mz" >Mozambique</option>
+              <option value="mm" >Myanmar</option>
+              <option value="na" >Namibia</option>
+              <option value="nr" >Nauru</option>
+              <option value="np" >Nepal</option>
+              <option value="nl" >Netherlands</option>
+              <option value="nc" >New Caledonia</option>
+              <option value="nz" >New Zealand</option>
+              <option value="ni" >Nicaragua</option>
+              <option value="ne" >Niger</option>
+              <option value="ng" >Nigeria</option>
+              <option value="nu" >Niue</option>
+              <option value="nf" >Norfolk Island</option>
+              <option value="mp" >N. Mariana Islands</option>
+              <option value="no" >Norway</option>
+              <option value="om" >Oman</option>
+              <option value="pk" >Pakistan</option>
+              <option value="pw" >Palau</option>
+              <option value="ps" >Palestinian</option>
+              <option value="pa" >Panama</option>
+              <option value="pg" >Papua New Guinea</option>
+              <option value="py" >Paraguay</option>
+              <option value="pe" >Peru</option>
+              <option value="ph" >Philippines</option>
+              <option value="pn" >Pitcairn</option>
+              <option value="pl" >Poland</option>
+              <option value="pt" >Portugal</option>
+              <option value="pr" >Puerto Rico</option>
+              <option value="qa" >Qatar</option>
+              <option value="re" >Reunion</option>
+              <option value="ro" >Romania</option>
+              <option value="ru" >Russian Federation</option>
+              <option value="rw" >Rwanda</option>
+              <option value="bl" >Saint Barthelemy</option>
+              <option value="sh" >Saint Helena</option>
+              <option value="kn" >Saint Kitts and Nevis</option>
+              <option value="lc" >Saint Lucia</option>
+              <option value="mf" >Saint Martin</option>
+              <option value="pm" >Saint Pierre and Miquelon</option>
+              <option value="vc" >Saint Vincent </option>
+              <option value="ws" >Samoa</option>
+              <option value="sm" >San Marino</option>
+              <option value="st" >Sao Tome and Principe</option>
+              <option value="sa" >Saudi Arabia</option>
+              <option value="sn" >Senegal</option>
+              <option value="rs" >Serbia</option>
+              <option value="sc" >Seychelles</option>
+              <option value="sl" >Sierra Leone</option>
+              <option value="sg" >Singapore</option>
+              <option value="sx" >Sint Maarten (Dutch Part)</option>
+              <option value="sk" >Slovakia</option>
+              <option value="si" >Slovenia</option>
+              <option value="sb" >Solomon Islands</option>
+              <option value="so" >Somalia</option>
+              <option value="za" >South Africa</option>
+              <option value="gs" >South Georgia</option>
+              <option value="ss" >South Sudan</option>
+              <option value="es" >Spain</option>
+              <option value="lk" >Sri Lanka</option>
+              <option value="sd" >Sudan</option>
+              <option value="sr" >Suriname</option>
+              <option value="sj" >Svalbard and Jan Mayen</option>
+              <option value="sz" >Swaziland</option>
+              <option value="se" >Sweden</option>
+              <option value="ch" >Switzerland</option>
+              <option value="sy" >Syrian Arab Republic</option>
+              <option value="tw" >Taiwan</option>
+              <option value="tj" >Tajikistan</option>
+              <option value="tz" >Tanzania</option>
+              <option value="th" >Thailand</option>
+              <option value="tl" >Timor-Leste</option>
+              <option value="tg" >Togo</option>
+              <option value="tk" >Tokelau</option>
+              <option value="to" >Tonga</option>
+              <option value="tt" >Trinidad and Tobago</option>
+              <option value="tn" >Tunisia</option>
+              <option value="tr" >Turkey</option>
+              <option value="tm" >Turkmenistan</option>
+              <option value="tc" >Turks and Caicos Islands</option>
+              <option value="tv" >Tuvalu</option>
+              <option value="ug" >Uganda</option>
+              <option value="ua" >Ukraine</option>
+              <option value="ae" >United Arab Emirates</option>
+              <option value="gb" >United Kingdom</option>
+              <option value="us" >United States</option>
+              <option value="uy" >Uruguay</option>
+              <option value="uz" >Uzbekistan</option>
+              <option value="vu" >Vanuatu</option>
+              <option value="ve" >Venezuela</option>
+              <option value="vn" >Viet Nam</option>
+              <option value="vg" >Virgin Islands, British</option>
+              <option value="vi" >Virgin Islands, U.S.</option>
+              <option value="wf" >Wallis and Futuna</option>
+              <option value="eh" >Western Sahara</option>
+              <option value="ye" >Yemen</option>
+              <option value="zm" >Zambia</option>
+              <option value="zw" >Zimbabwe</option>
+            </select>              &nbsp;</td>
           </tr>
           <tr>
             <td width="108"><b>Phone Number</b></td>
@@ -489,8 +564,7 @@ else if(isset($_GET['drop']))
         </table>
       </fieldset>
     </form>
-    <br><br><br>
-    <br>
+    <br><br>
     <span style="font-weight: bold">Existing Records</span>
 <form name="form1" method="post" action="">
   <hr align="center">

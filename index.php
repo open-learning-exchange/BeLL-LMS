@@ -1,4 +1,4 @@
-<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(0);include "secure/talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","94000"); session_start();include "secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -24,24 +24,26 @@ if(isset($_POST['loginid']))
 	
 	///print $key;
 	$viewResults = $members->include_docs(TRUE)->key($key)->getView('api', 'facilityLogin');
-	///print_r($viewResults);
+	//print_r($viewResults);
 	foreach($viewResults->rows as $row) {
 		///print_r($row);
 		
 	}
 	$member = $viewResults->rows[0]->doc;
-	//echo $member->pass;
-	if($member->pass == $_POST['pass']) {
+	$password = $_POST['pass'];
+	
+	if($member->pass == md5($password)) {
+		
 		$_SESSION['lmsUserID'] = $viewResults->rows[0]->id;
-		$_SESSION['role'] = $member->role;
+		
+		$_SESSION['role'] = $member->roles;
 		$_SESSION['name'] = $member->firstName." ".$member->middleNames." ".$member->lastName;
 		$_SESSION['facilityID'] = $facilityId;
-		///echo $_SESSION['facilityID'];
 		// Redirect user to dashboard page
-		recordActionDate($_SESSION['lmsUserID'],"Loged in",$_POST['systemDateForm']);
-		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL= dasboard.php">');
+		///recordActionDate($_SESSION['lmsUserID'],"Loged in",$_POST['systemDateForm']);
+		die('<script type="text/javascript">window.location.replace("dasboard.php")</script>');
 	} else{
-		$messageLog = "Login ID & Password Mismatch. Try again ";
+		///$messageLog = "Login ID & Password Mismatch. Try again ";
 	}
 } 
 else {
@@ -55,6 +57,7 @@ else {
 	{
 		recordActionDate($_SESSION['lmsUserID'],"Loged out",$_GET['systemDateForm']);
 		$messageLog = "Welcome Please login";
+		session_destroy();
 	}
 	else{
 		session_destroy();

@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(1);include "../secure/talk2db.php";?>
+<?php session_start();include "../secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -9,11 +9,12 @@
 <link href="../SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css" media="all" href="../css/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="../js/jsDatePick.min.1.3.js"></script>
+<script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript">
 	window.onload = function(){
 		new JsDatePick({
 			useMode:2,
-			target:"schEroll",
+			target:"enroll",
 			dateFormat:"%Y-%m-%d"
 		});
 	};
@@ -30,16 +31,34 @@
 <script src="../SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
 </head>
 <?php
-if(isset($_POST['schName']))
+if(isset($_POST['name']))
 {
-$savequery = mysql_query("UPDATE `schoolDetails` SET `schoolName` = '".$_POST['schName']."', `location` = '".$_POST['schLocation']."', `schoolType` = '".$_POST['schType']."', `dateOfEnrolment` = '".$_POST['schEroll']."'") or die(mysql_error());
- recordActionDate($_SESSION['name'],"Updated school registration destails",$_POST['systemDateForm']);
-echo '<script type="text/javascript">alert("School records successfully updated");</script>';
-
-die("School records successfully updated");
-
+	global $couchUrl;
+	global $facilityId;
+	$facility = new couchClient($couchUrl, "facilities");
+	$facilityDetails = $facility->getDoc($facilityId);
+	$facilityDetails->type = $_POST['Type'];
+	$facilityDetails->GPS[0]=$_POST['lat'];
+	$facilityDetails->GPS[1]=$_POST['lon'];
+	$facilityDetails->phone=$_POST['phone'];
+	$facilityDetails->name=$_POST['name'];
+	$facilityDetails->country=$_POST['nation'];
+	$facilityDetails->region=$_POST['region'];
+	$facilityDetails->district=$_POST['district'];
+	$facilityDetails->area=$_POST['area'];
+	$facilityDetails->street=$_POST['street'];
+	$facilityDetails->enrollDate=$_POST['enroll'];
+	$facility->storeDoc($facilityDetails);
+	echo '<script type="text/javascript">alert("School records successfully updated");</script>';
+	
+	
+	/*$savequery = mysql_query("UPDATE `schoolDetails` SET `schoolName` = '".$_POST['schName']."', `location` = '".$_POST['schLocation']."', `schoolType` = '".$_POST['schType']."', `dateOfEnrolment` = '".$_POST['schEroll']."'") or die(mysql_error());
+	 recordActionDate($_SESSION['name'],"Updated school registration destails",$_POST['systemDateForm']);
+	echo '<script type="text/javascript">alert("School records successfully updated");</script>';
+	
+	die("School records successfully updated");*/
 }
-$shoolName ="";
+/*$shoolName ="";
 $schoolEnr ="";
 $shoolLocat="";
 $schoolType="";
@@ -51,66 +70,80 @@ $query = mysql_query("SELECT * FROM  `schoolDetails` ") or die(mysql_error());
 		$schoolEnr =$data['dateOfEnrolment'];
 		$shoolLocat=$data['location'];
 		$schoolType=$data['schoolType'];
-	}
+	}*/
+global $couchUrl;
+global $facilityId;
+$facility = new couchClient($couchUrl, "facilities");
+$facilityDetails = $facility->getDoc($facilityId);
+//print_r($facilityDetails);
+
 ?>
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:500px; margin-left:auto; margin-right:auto;"><span style="color: #00C; font-weight: bold;">School Details</span><br><br>
     <form name="form1" method="post" action="">
-      <table width="95%">
+      <table width="95%" align="center">
         <tr>
           <td width="125"><b>Type</b></td>
           <td><span id="spryselect1">
             <select name="Type" id="Type">
-            <?php if($schoolType=="Public School")
-            {
-				echo '<option value="Public School"  selected >Public School</option>
-              <option value="Private School">Private School</option>';
-            }else{
-				echo '<option value="Public School">Public School</option>
-              <option value="Private School"  selected >Private School</option>';
-			}
-			?>
+            <<option value="Public School">Public School</option>
+              <option value="Private School">Private School</option>
             </select>
-          <span class="selectRequiredMsg">*</span></span></td>
+          <span class="selectRequiredMsg">*</span></span>
+            <input type="hidden" name="secretField" value="badValueEqualsBadClient"></td>
         </tr>
         <tr>
           <td><b>School Name</b></td>
           <td><span id="sprytextfield1">
-            <input type="text" name="Name" id="Name" class="panjang" value="<?php echo $shoolName;?>">
+            <input type="text" name="name" id="name" class="panjang" value="<?php echo  $facilityDetails->name;?>">
           <span class="textfieldRequiredMsg">*</span></span></td>
         </tr>
         <tr>
           <td><b>Date Enrolled  unto OLE </b></td>
           <td><span id="sprytextfield2">
-            <input type="text" name="schEroll" id="schEroll" value="<?php echo $schoolEnr;?>">
+            <input type="text" name="enroll" id="enroll" value="<?php echo $facilityDetails->enrollDate;?>">
           <span class="textfieldRequiredMsg">*</span></span> eg. 22 / 08 / 2005</td>
+        </tr>
+        <tr>
+          <td><b>Phone Number</b></td>
+          <td><span id="sprytextfield7">
+            <label for="phone"></label>
+            <input type="text" name="phone" id="phone" value="<?php echo  $facilityDetails->phone;?>">
+</span></td>
+        </tr>
+        <tr>
+          <td><b>Street</b></td>
+          <td><span id="sprytextfield6">
+            <label for="street"></label>
+            <input type="text" name="street" id="street"  value="<?php echo $facilityDetails->street?>">
+</span></td>
         </tr>
         <tr>
           <td><b>Area</b></td>
           <td><span id="sprytextfield4">
-            <input name="schLocation" type="text" id="schLocation" value="<?php echo $shoolLocat;?>">
-            <span class="textfieldRequiredMsg">A value is required.</span></span>eg. Town or Area
-            <input type="hidden" name="secretField" value="badValueEqualsBadClient"></td>
+            <input name="area" type="text" id="area" value="<?php echo $facilityDetails->area?>">
+</span>eg. Town or Area
+            </td>
         </tr>
         <tr>
           <td><b>District</b></td>
           <td><span id="sprytextfield3">
             <label for="district"></label>
-            <input name="district" type="text" id="district" value="<?php echo $shoolDistrict;?>">
-          <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+            <input name="district" type="text" id="district" value="<?php echo $facilityDetails->district;?>">
+</span></td>
         </tr>
         <tr>
           <td><b>Region</b></td>
           <td><span id="sprytextfield5">
             <label for="region"></label>
-            <input name="region" type="text" id="region" value="<?php echo $shoolRegion;?>">
-          <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+            <input name="region" type="text" id="region" value="<?php echo $facilityDetails->region;?>">
+</span></td>
         </tr>
         <tr>
           <td><b>Country</b></td>
-          <td><select name="nation" id="nation" style="font-size:10px; float:left;"  onchange="showPics()">
+          <td><select name="nation" id="nation" style="font-size:10px; float:left;">
               <option value="af" >Afghanistan</option>
                     <option value="ax" >Aland Islands</option>
                     <option value="al" >Albania</option>
@@ -191,7 +224,7 @@ $query = mysql_query("SELECT * FROM  `schoolDetails` ") or die(mysql_error());
                     <option value="gm" >Gambia</option>
                     <option value="ge" >Georgia</option>
                     <option value="de" >Germany</option>
-                    <option value="gh" selected="selected" >Ghana</option>
+                    <option value="gh" >Ghana</option>
                     <option value="gi" >Gibraltar</option>
                     <option value="gr" >Greece</option>
                     <option value="gl" >Greenland</option>
@@ -359,8 +392,8 @@ $query = mysql_query("SELECT * FROM  `schoolDetails` ") or die(mysql_error());
         <tr>
           <td><b>GPS Co-ordinate</b></td>
           <td>Lat&nbsp;&nbsp;
-<input type="text" name="lat" id="lat" style="width:57px">
-         &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lon&nbsp;&nbsp;<input type="text" name="lon" id="lon" style="width:57px"></td>
+<input type="text" name="lat" id="lat" style="width:57px" value="<?php echo $facilityDetails->GPS[0];?>">
+         &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lon&nbsp;&nbsp;<input type="text" name="lon" id="lon" style="width:57px" value="<?php echo $facilityDetails->GPS[1];?>"></td>
         </tr>
         <tr>
           <td></td>
@@ -377,9 +410,11 @@ $query = mysql_query("SELECT * FROM  `schoolDetails` ") or die(mysql_error());
 var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
 var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
-var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4");
-var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3");
-var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5");
+var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4", "none", {isRequired:false});
+var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3", "none", {isRequired:false});
+var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5", "none", {isRequired:false});
+var sprytextfield6 = new Spry.Widget.ValidationTextField("sprytextfield6", "none", {isRequired:false});
+var sprytextfield7 = new Spry.Widget.ValidationTextField("sprytextfield7", "none", {isRequired:false});
 </script>
 </body>
 <script type="text/javascript">
@@ -387,5 +422,11 @@ var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5");
 	///now = now.toGMTString();
 	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
 	document.getElementById('systemDateForm').value = fmat;
+</script>
+<script type="text/javascript">
+$(function() { 
+	$("#nation").val("<?php echo $facilityDetails->country; ?>");
+	$("#Type").val("<?php echo $facilityDetails->type; ?>");
+});
 </script>
 </html>

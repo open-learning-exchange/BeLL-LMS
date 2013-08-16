@@ -99,13 +99,14 @@ $(document).ready(function(){
         <tr>
           <td width="163"><b>Subject</b></td>
           <td>
-            <label for="Rsubject2"></label>
-            <select name="subject" id="Rsubject2">
-              <option value="English">English</option>
-              <option value="Maths">Maths</option>
-              <option value="General">General</option>
-              </select>
-            <span class="selectRequiredMsg">Please select an item.</span></td>
+            <?php
+		global $config;
+		echo '<select name="subject" id="subject">';
+		for($cnt=0;$cnt<sizeof($config->subjects);$cnt++){
+			echo '<option value="'.$config->subjects[$cnt].'">'.ucwords($config->subjects[$cnt]).'</option>';
+		}
+		echo  '</select>';
+    ?>            <span class="selectRequiredMsg">Please select an item.</span></td>
           </tr>
         <tr>
           <td width="163"><b>Resource Type</b></td>
@@ -501,7 +502,7 @@ $query = mysql_query("SELECT * FROM `resources` where TLR='' AND type='mp4' orde
 <script type="text/javascript">
 //var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 //var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1");
-//var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
+var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
