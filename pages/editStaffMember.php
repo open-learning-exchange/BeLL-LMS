@@ -18,13 +18,13 @@
 <script type="text/javascript" src="../js/jquery.js"></script>
 
 <script type="text/javascript">
-	//window.onload = function(){
-//		new JsDatePick({
-//			useMode:2,
-//			target:"dateOfBirth",
-//			dateFormat:"%Y-%m-%d"
-//		});
-//	};
+	window.onload = function(){
+		new JsDatePick({
+			useMode:2,
+			target:"dateOfBirth",
+			dateFormat:"%Y-%m-%d"
+		});
+	};
 </script>
 </head>
 <?php
@@ -57,7 +57,6 @@ if(isset($_POST['firstName']))
 		}
 	}
 	$doc->levels = $checkedLevels;
-	
 	// roles is an array.. get selected roles 
 	$roles = array();
 	foreach($_POST['role'] as $role) {
@@ -76,7 +75,20 @@ if(isset($_POST['firstName']))
 		print ("No photo uploaded");
 	}
 	
-	// Save group assigned to member in group document
+	foreach($_POST['prevLevel'] as $prevlevels){
+		//get all groups from view into viewResults
+		
+		$viewResults = $groups->include_docs(TRUE)->key($facilityId.$prevlevels)->getView('api', 'facilityLevel');
+		// search student list to group members array and remove id from previouse group
+		$key = array_search($_POST['memberID'],$viewResults->rows[0]->doc->owners);
+		if($key>-1){;
+			unset($viewResults->rows[0]->doc->owners[$key]);
+			//echo "hello";
+			//print_r($viewResults->rows[0]->doc->members);
+			$groups->storeDoc($viewResults->rows[0]->doc);
+		}
+	}
+	// add to new group owners array
 	foreach($_POST['classAssigned'] as $groupID){
 		$groupDoc = $groups->getDoc($groupID);
 		array_push($groupDoc->owners,$response->id);
@@ -88,6 +100,7 @@ if(isset($_POST['firstName']))
 }
 else if(isset($_GET['edit']))
 {
+	// Load photo into image variable
 	global $couchUrl;
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
@@ -132,64 +145,22 @@ else if(isset($_GET['edit']))
           <tr>
             <td><b id="classAssignedLabel">Class Assigned</b></td>
             <td colspan="2"><p id="classAssignedID">
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="KG1" id="classAssigned_0">
-                KG 1&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="KG2" id="classAssigned_1">
-                KG 2&nbsp;&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="P1" id="classAssigned_2">
-                P 1&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="P2" id="classAssigned_3">
-                P 2&nbsp;&nbsp;&nbsp;<br>
-                <br>
-              </label>
-                <label>
-                <input type="checkbox" name="classAssigned[]" value="P3" id="classAssigned_4">
-                P 3</label>
-                &nbsp;&nbsp;&nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P4" id="classAssigned_5">
-                P 4</label>
-                &nbsp;&nbsp;&nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P5" id="classAssigned_6">
-                P 5</label>
-                &nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P6" id="classAssigned_7">
-                P 6</label>
-            </p></td>
+               <?php
+		  	global $couchUrl;
+			global $facilityId;
+			$groups = new couchClient($couchUrl, "groups");
+			//get all groups from view into viewResults
+			$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'allGroupsInFacility');
+			$wCnt=0;
+			while($wCnt<sizeof($viewResults->rows)){
+				print '
+				<label>
+                <input type="checkbox" name="classAssigned[]" value="'.$viewResults->rows[$wCnt]->doc->_id.'" id="'.$viewResults->rows[$wCnt]->doc->_id.'">
+               '.$viewResults->rows[$wCnt]->doc->name.'&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				$wCnt++;
+			}
+			?>
+                </p></td>
           </tr>
           <tr>
             <td><b>First Name</b></td>
@@ -215,7 +186,7 @@ else if(isset($_GET['edit']))
               <span id="sprytextfield3">
               <label for="middleNames2"></label>
               <input name="middleNames" type="text" id="middleNames2" value="<?php echo $docToEdit->middleNames?>">
-            <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+</span></td>
           </tr>
           <tr>
             <td><b>Date Of Birth</b></td>
@@ -223,17 +194,17 @@ else if(isset($_GET['edit']))
               <label for="dateOfBirth"></label>
               <span id="sprytextfield4">
               <label for="dateOfBirth2"></label>
-              <input name="dateOfBirth" type="text" id="dateOfBirth" value="<?php echo $docToEdit->dateOfBirth?>">
-            <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+              <input name="dateOfBirth" type="text" id="dateOfBirth" value="<?php echo  date('Y-m-d',$docToEdit->dateOfBirth)?>">
+</span></td>
           </tr>
           <tr>
             <td><b>Gender</b></td>
             <td colspan="2">
               <label>
-                <input type="radio" name="gender" value="Male" id="gender_0">
+                <input type="radio" name="gender" value="Male" id="Male_gender">
                 Male</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <label>
-                <input type="radio" name="gender" value="Female" id="gender_1">
+                <input type="radio" name="gender" value="Female" id="Female_gender">
                 Female</label></td>
           </tr>
           <tr>
@@ -489,7 +460,7 @@ else if(isset($_GET['edit']))
             <td colspan="2"><span id="sprytextfield5">
               <label for="phoneNumber"></label>
               <input name="phoneNumber" type="text" id="phoneNumber" value="<?php echo $docToEdit->phone?>">
-            <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+</span></td>
 </tr>
           <tr>
             <td><b>Login ID</b></td>
@@ -525,7 +496,17 @@ else if(isset($_GET['edit']))
             <td colspan="2"><input type="submit" class="button" value="Update">
               <input type="reset" class="button" value="Cancel">
               <input type="hidden" name="systemDateForm" id="systemDateForm">
-              <input type="hidden" name="memberID" id="memberID" value="<?php echo $docToEdit->_id?>"></td>
+              <input type="hidden" name="memberID" id="memberID" value="<?php echo $docToEdit->_id?>">
+              <?php
+			  $grpIds = array();
+			  foreach($docToEdit->levels as $pLev){
+				  echo '<input type="hidden" name="prevLevel[]" id="prevLevel" value="'.$pLev.'">';
+				  $viewResults = $groups->include_docs(TRUE)->key($facilityId.$pLev)->getView('api', 'facilityLevel');
+					// search student list to group members array and remove id from previouse group
+					array_push($grpIds,$viewResults->rows[0]->doc->_id);
+			  }
+              ?>
+             </td>
           </tr>
         </table>
         <br>
@@ -538,9 +519,9 @@ else if(isset($_GET['edit']))
 <script type="text/javascript">
 var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
-var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3");
-var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4");
-var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5");
+var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3", "none", {isRequired:false});
+var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4", "none", {isRequired:false});
+var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5", "none", {isRequired:false});
 var sprytextfield6 = new Spry.Widget.ValidationTextField("sprytextfield6");
 var sprypassword1 = new Spry.Widget.ValidationPassword("sprypassword1");
 var spryconfirm1 = new Spry.Widget.ValidationConfirm("spryconfirm1", "password");
@@ -564,13 +545,16 @@ var spryconfirm1 = new Spry.Widget.ValidationConfirm("spryconfirm1", "password")
 </script>
 <script type="text/javascript">
 $(function() { 
-	//$("#level").val(("<?php echo $doc->levels[0] ?>").toUpperCase());
-	$("#nationality").val(("<?php echo $doc->$docToEdit ?>").toUpperCase());
-	getGender = '<?php echo $doc->gender ?>';
+	$("#nationality").val(("<?php echo $docToEdit->nationality ?>").toUpperCase());
+	getGender = '<?php echo $docToEdit->gender ?>';
 	if(getGender =="Male"){
 		document.getElementById("Male_gender").checked=true;
 	} else{
 		document.getElementById("Female_gender").checked=true;
+	}
+	var jsLevelArray = <?php echo json_encode($grpIds); ?>;
+	for(cnt=0;cnt<jsLevelArray.length;cnt++){
+		$("#"+jsLevelArray[cnt]+"").attr('checked', true);
 	}
 });
 </script>

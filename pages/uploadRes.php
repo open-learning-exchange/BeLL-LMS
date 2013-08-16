@@ -40,26 +40,54 @@
 
 <?php
 
-if(isset($_POST['Rid']))
+if(isset($_POST['title']))
 {
+	global $couchUrl;
+	global $facilityId;
+	$resources = new couchClient($couchUrl, "resources");
+	$doc = new stdClass();
+	$docType = end(explode(".", $_FILES['uploadedfile']['name']));
+	$doc->legacy = array(
+	"id"=>"",
+	"type"=>$docType
+	);
+	$doc->type=$_POST['resType'];
+	$doc->kind='Resource';
+	$doc->language=$_POST['Language'];
+	$doc->description=$_POST['discription'];
+	$doc->title=$_POST['title'];
+	$doc->author=$_POST['author'];
+	$doc->subject=$_POST['subject'];
+	$doc->created=$_POST['systemDateForm'];
+	$audData = array();
+	foreach($_POST['targetedAudience'] as $audience){
+		array_push($audData,$audience);
+	}
+	$doc->audience = $audData;
+	$resLevels = array();
+	foreach($_POST['resLevel'] as $levels){
+		array_push($resLevels,$levels);
+	}
+	$doc->levels = $resLevels;
+	$responce = $resources->storeDoc($doc);
+	print_r($responce);
+	try {
+		// add attached image to document with specified id from response
+		$resources->storeAttachment($resources->getDoc($responce->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+		
+	} catch ( Exception $e ) {
+		print ("No photo uploaded<br>");
+	}
+	$resDoc = $resources->getDoc($responce->id);
+	$resDoc->legacy->id = $responce->id;
+	$resources->storeDoc($resDoc);
 	
-	$location = "../resources";
-
-   ///is_uploaded_file($_FILES['upLfile']['tmp_name'])
-	  $name = $_FILES["upLfile"]["name"];
-	  $ext = end(explode(".", $name));
-	  $name = $_POST['Rid'];
-	  ////$result =
-	  if ( move_uploaded_file($_FILES['upLfile']['tmp_name'], $location."/$name.$ext")) {
-	  $url = $location."/".$name.".".$ext;
-	  $query = mysql_query("INSERT INTO `resources` (`colNum`, `resrcID`, `subject`, `title`, `description`, `type`, `url`, `dateAdded`, `KG`, `P1`, `P2`, `P3`, `P4`, `P5`, `P6`, `Community`, `TLR`) VALUES (NULL, '".$name."', '".$_POST['Rsubject']."', '".$_POST['RTitle']."', '".$_POST['Rdiscription']."', '".$ext."', '".$url."', CURRENT_TIMESTAMP, '".$_POST['KG']."', '".$_POST['P1']."', '".$_POST['P2']."', '".$_POST['P3']."', '".$_POST['P4']."', '".$_POST['P5']."', '".$_POST['P6']."', '".$_POST['Comu']."', '".$_POST['tlr']."')") or die(mysql_error());
-	   recordAction($_SESSION['name'],"Uploaded resources... res title : ".$_POST['RTitle']);
+///   recordAction($_SESSION['name'],"Uploaded resources... res title : ".$_POST['RTitle']);
 	echo '<script type="text/javascript">alert("Successfully Uploaded '.$_POST['RTitle'].'");</script>';
-  die("<br><br><br><br>Successfully saved - ".$_POST['RTitle']."");
-   } else {
-	   echo "File upload error";
-   }
+  die("<br><br><br><br>Successfully saved - ".$_POST['title']."");
+  
 } else if(isset($_POST['quen1'])){
+	// Video Book questions
 	for($cnt=1;$cnt<=$_POST['VBNoOfQuestions'];$cnt++){
 		$AnsNo= $_POST["questAns$cnt"];
 	$qry = mysql_query('INSERT INTO `VBQuestion` (`ColNum`, `resrcID`, `question`, `posAnsw1`, `posAnsw2`, `posAnsw3`, `posAnsw4`, `answer`) VALUES (NULL, "'.$_POST["vbTitle"].'", "'.$_POST["quen$cnt"].'", "'.$_POST["q".$cnt."_pos1"].'", "'.$_POST["q".$cnt."_pos2"].'", "'.$_POST["q".$cnt."_pos3"].'", "'.$_POST["q".$cnt."_pos4"].'", "'.$_POST["q".$cnt."_pos".$AnsNo.""].'")') or die(mysql_error());
@@ -110,11 +138,10 @@ $(document).ready(function(){
           </tr>
         <tr>
           <td width="163"><b>Resource Type</b></td>
-          <td><select name="Rsubject2" id="Rsubject">
-            <option value="Audio Lesson">Audio Lesson</option>
-            <option value="Video Lesson">Video Lesson</option>
-            <option value="Readable">Readable</option>
-            <option value="Video Lesson">Video Lesson</option>
+          <td><select name="resType" id="resType">
+            <option value="audio lesson">Audio Lesson</option>
+            <option value="video lesson">Video Lesson</option>
+            <option value="readable" selected>Readable</option>
           </select></td>
         </tr>
         <tr>
@@ -343,62 +370,61 @@ $(document).ready(function(){
           <td width="163"><b>Targeted Audience</b></td>
           <td><p>
             <label>
-              <input type="checkbox" name="targetedAudience" value="teacher training" id="targetedAudience_0">
+              <input type="checkbox" name="targetedAudience[]" value="teacher training" id="targetedAudience_0">
               Teacher Training</label>
             <br>
             <label>
-              <input type="checkbox" name="targetedAudience" value="health" id="targetedAudience_1">
+              <input type="checkbox" name="targetedAudience[]" value="health" id="targetedAudience_1">
               Health</label>
             <br>
             <label>
-              <input type="checkbox" name="targetedAudience" value="community education" id="targetedAudience_2">
+              <input type="checkbox" name="targetedAudience[]" value="community education" id="targetedAudience_2">
               Community Education</label>
             <br>
             <label>
-              <input type="checkbox" name="targetedAudience" value="formal education" id="targetedAudience_3">
+              <input type="checkbox" name="targetedAudience[]" value="formal education" id="targetedAudience_3">
               Formal Education</label>
             <br>
           </p></td>
         </tr>
         <tr>
           <td><b>This Resource can be used for. (targeted group)</b></td>
-          <td><input type="checkbox" name="KG" id="KG" value="YES"> 
-            KG&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="checkbox" name="P7" id="P7" value="YES">
-Other &nbsp;&nbsp;&nbsp;<br>
-<input type="checkbox" name="P1" id="P1" value="YES"> 
-P1
- &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- <input type="checkbox" name="P2" id="P2" value="YES">
-P2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<br>
-<input type="checkbox" name="P3" id="P3" value="YES"> 
-P3&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="checkbox" name="P4" id="P4" value="YES">
-P4 <br>
-<input type="checkbox" name="P5" id="P5" value="YES"> 
-P5&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input type="checkbox" name="P6" id="P6" value="YES">
-P6 </td>
+          <td>
+          <?php 
+		  	global $config;
+			for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
+				print '<label>
+                <input type="checkbox" name="resLevel[]" value="'.$config->levels[$cnt].'" id="'.$config->levels[$cnt].'">
+               '.$config->levels[$cnt].'&nbsp;</label>&nbsp;&nbsp;&nbsp;';
+				$wCnt++;
+			}
+		  ?>
+          </td>
         </tr>
         <tr>
           <td><b>Resource Title</b></td>
           <td>
             <label for="RTitle"></label>
-            <input type="text" name="RTitle" class="panjang" id="RTitle">
-          <span class="textfieldRequiredMsg">*</span></td>
+            <span id="sprytextfield2">
+            <label for="title"></label>
+            <input type="text" name="title" id="title">
+            <span class="textfieldRequiredMsg">A value is required.</span></span>            <span class="textfieldRequiredMsg">*</span></td>
         </tr>
         <tr>
           <td><b>Author</b></td>
           <td><label for="author"></label>
-            <input type="text" name="author" id="author"></td>
+            <span id="sprytextfield3">
+            <label for="author2"></label>
+            <input type="text" name="author" id="author">
+            <span class="textfieldRequiredMsg">A value is required.</span></span></td>
         </tr>
         <tr>
           <td><b>Remark / Discription</b></td>
           <td ice:editable="*">
             <label for="discription"></label>
-            <textarea name="discription" id="discription" cols="45" rows="5" style="height:100px;"></textarea>
+            <textarea name="discription" id="discription" cols="45" rows="4" style="height:100px;"></textarea>
           <span class="textareaRequiredMsg">*</span>
-          <input type="hidden" name="auploadedby" id="auploadedby"></td>
+          <input type="hidden" name="auploadedby" id="auploadedby" value="<?php echo $_SESSION['lmsUserID'];?>"></td>
         </tr>
         <tr>
           <td><b>Approved By</b></td>
@@ -411,12 +437,13 @@ P6 </td>
         </tr>
         <tr>
           <td><b>Browse for file</b></td>
-          <td><input type="file" name="upLfile" id="upLfile"></td>
+          <td><input name="uploadedfile" type="file" /></td>
         </tr>
         <tr>
           <td></td>
           <td><input type="submit" class="button" value="Submit">
-            <input type="reset" class="button" value="Reset"></td>
+            <input type="reset" class="button" value="Reset">
+            <input type="hidden" name="systemDateForm" id="systemDateForm"></td>
         </tr>
       </table>
     </form>
@@ -427,7 +454,9 @@ P6 </td>
  <div id="vbookQuest"><form action="" method="post">
    <table width="515" border="0">
      <tr>
-       <td colspan="4" align="center"><span style="font-size: 16px; color: #903; font-weight: bold;">Add Video Book Questions</span></td>
+       <td colspan="4" align="center"><span style="font-size: 16px; color: #903; font-weight: bold;">Add Video Book Questions
+         
+       </span></td>
        </tr>
      <tr>
        <td width="137" align="right">Video Book Title  &nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -500,9 +529,10 @@ $query = mysql_query("SELECT * FROM `resources` where TLR='' AND type='mp4' orde
   </div>
 </div>
 <script type="text/javascript">
-//var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
-//var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1");
-var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
+var now = new Date()
+	///now = now.toGMTString();
+	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
+	document.getElementById('systemDateForm').value = fmat;
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -559,6 +589,8 @@ function getDiscription(){
 	var resID = document.getElementById("vbTitle").value;
 	$("#descriptionDisp").load("../functions/getDiscription.php?id="+resID+"");
 }
+var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
+var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3");
 </script>
 </body>
 </html>

@@ -55,6 +55,7 @@ if(isset($_POST['totRes']))
 	$docCounter=1;
 	foreach($viewResults->rows as $row) {
 		$doc = $resources->getDoc($row->doc->resourceId);
+		if($row->doc->rating<1){
 		echo '<tr>
 	    <td width="256" height="11"  valign="top">'.$doc->title.'</td>
 	    <td width="75"  valign="top">'.date('Y-m-d',$row->doc->timestamp).'</td>
@@ -69,6 +70,7 @@ if(isset($_POST['totRes']))
 				</td>
 			  </tr>';
 			  $docCounter++;
+		}
 	}
       ?>
       <tr>
@@ -77,7 +79,7 @@ if(isset($_POST['totRes']))
 	    <td width="63">&nbsp;</td>
 	    <td><input name="totRes" type="hidden" value="<?php echo ($docCounter)?>">
         <?php 
-		if($docCounter>=1)
+		if($docCounter>1)
 		{
 			echo '<input type="submit" class="button" value="Save Rating">'; 
 		}

@@ -34,10 +34,15 @@ if(isset($_POST['firstName']))
 	global $facilityId;
 	$members = new couchClient($couchUrl, "members");
 	$groups = new couchClient($couchUrl, "groups");
+	$facility = new couchClient($couchUrl, "facilities");
+	$facDoc = $facility->getDoc($facilityId);
 	$checkedLevels = array();
 	$doc = new stdClass();
 	
 	// get data from form and save it to couch
+	$uniqueID = $members->getUuids(1);
+	$docId = $facDoc->country.$uniqueID[0];
+	$doc->_id = $docId;
 	$doc->kind ="Member";
 	$doc->dateOfBirth = strtotime($_POST['dateOfBirth']);
 	$doc->dateRegistered = strtotime($_POST['systemDateForm']);
@@ -66,12 +71,12 @@ if(isset($_POST['firstName']))
 	$doc->roles = $roles;
 	//print_r($doc);
 	// save doc to couch and for responce->id
-	$response = $members->storeDoc($doc);
+	$docId = $members->storeDoc($doc);
 	
 	
 	try {
 	// add attached image to document with specified id from response
-			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+			$members->storeAttachment($members->getDoc($docId),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
 	} catch ( Exception $e ) {
 		print ("No photo uploaded");
 	}
@@ -79,7 +84,7 @@ if(isset($_POST['firstName']))
 	// Save group assigned to member in group document
 	foreach($_POST['classAssigned'] as $groupID){
 		$groupDoc = $groups->getDoc($groupID);
-		array_push($groupDoc->owners,$response->id);
+		array_push($groupDoc->owners,$docId);
 		$groups->storeDoc($groupDoc);
 	}
 	//@todo better log information
