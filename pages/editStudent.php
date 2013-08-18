@@ -62,8 +62,10 @@ if(isset($_POST['pass']))
 	// save doc to couch and for responce->id
 	$response = $members->storeDoc($doc);
 	try {
-	// add attached image to document with specified id from response
-			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+			$fileUniqueID = $members->getUuids(1);
+			// add attached image to document with specified id from response
+			$fileName = $fileUniqueID[0].'.'.end(explode(".", $_FILES['uploadedfile']['name']));
+			$members->storeAttachment($members->getDoc($response->id),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']),$fileName);
 	} catch ( Exception $e ) {
 		print ("No photo uploaded");
 	}

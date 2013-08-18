@@ -66,7 +66,8 @@ if(isset($_POST['pass']))
 	$members->storeDoc($doc);
 	try {
 	// add attached image to document with specified id from response
-			$members->storeAttachment($members->getDoc($docId),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']));
+			$fileName = $fileUniqueID[1].'.'.end(explode(".", $_FILES['uploadedfile']['name']));
+			$members->storeAttachment($members->getDoc($docId),$_FILES['uploadedfile']['tmp_name'], mime_content_type($_FILES['uploadedfile']['tmp_name']),$fileName);
 	} catch ( Exception $e ) {
 		print ("No photo uploaded<br>");
 	}

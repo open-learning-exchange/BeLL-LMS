@@ -83,7 +83,7 @@ if(isset($_POST['title']))
 	$resources->storeDoc($resDoc);
 	
 ///   recordAction($_SESSION['name'],"Uploaded resources... res title : ".$_POST['RTitle']);
-	echo '<script type="text/javascript">alert("Successfully Uploaded '.$_POST['RTitle'].'");</script>';
+	echo '<script type="text/javascript">alert("Successfully Uploaded '.$_POST['title'].'");</script>';
   die("<br><br><br><br>Successfully saved - ".$_POST['title']."");
   
 } else if(isset($_POST['quen1'])){
