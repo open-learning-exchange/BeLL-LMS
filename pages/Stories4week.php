@@ -3,40 +3,75 @@
 <head>
 <title>Open Learning Exchange - Ghana</title>
 <?php 
-function saveRes2DB($ResID)
-  {
-	  if($ResID!="none")
-  	  {
-			  $query = mysql_query("SELECT * FROM `resources` where resrcID = '".$ResID."'") or die(mysql_error());
-			   while($data = mysql_fetch_array($query))
-			   {
-				   mysql_query("INSERT INTO `usedResources` (`colNum`, `resrcID`, `subject`, `title`, `description`, `type`, `usedby`, `dateUsed`,`class`,`rating`) VALUES (NULL, '".$data['resrcID']."', '".$data['subject']."', ' + ".$data['title']."', '".$data['description']."', '".$data['type']."', '".$_SESSION['name']."', '".$_POST['dateExec']."','".$_POST['class']."',0)") or die(mysql_error());
-				   
-			   }
-		 
-  	  }
-  }
-if(isset($_POST['dateExec']))
-{
-  saveRes2DB($_POST['story1']);
-  saveRes2DB($_POST['story2']);
-  saveRes2DB($_POST['story3']);
-  saveRes2DB($_POST['story4']);
-  recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
+global $couchUrl;
+global $facilityId;
+$assignments = new couchClient($couchUrl, "assignments");
+$resources = new couchClient($couchUrl, "resources");
+$groups = new couchClient($couchUrl, "groups");
+$feedbacks = new couchClient($couchUrl, "feedback");
+if(isset($_POST['startDate'])){
+	
+	for($cnt=0; $cnt<sizeof($_POST['story']);$cnt++){
+		if($_POST['story'][$cnt]!="none")
+		{
+			$doc = new stdClass();
+			$resID = $_POST['story'][$cnt];
+			$resDoc = $resources->getDoc($resID);
+			$doc->kind = "Assignment";
+			$doc->resourceId = $_POST['story'][$cnt];
+			$doc->startDate = strtotime($_POST['startDate']);
+			$doc->endDate = strtotime($_POST['endDate']);
+			$doc->context = array(
+			  "subject" => $resDoc->subject,
+			  "use" => "stories for the week",
+			  "groupid" => $_POST['level'],
+			  "facilityId"=>$facilityId
+			  
+			);
+			$response = $assignments->storeDoc($doc);
+		}
+	}
+	///// save in feedback too
+	for($cnt=0; $cnt<sizeof($_POST['story']);$cnt++){
+		if($_POST['story'][$cnt]!="none")
+		{
+			$doc = new stdClass();
+			$resID = $_POST['story'][$cnt];
+			$resDoc = $resources->getDoc($resID);
+			$groupDoc = $groups->getDoc($_POST['level']);
+			$doc->kind ="Feedback";
+			$doc->rating=0;
+			$doc->comment="";
+			$doc->facilityId=$facilityId;
+			$doc->memberId =$_SESSION['lmsUserID'];
+			$doc->resourceId = $_POST['story'][$cnt];
+			$doc->timestamp = strtotime($_POST['startDate']);
+			$doc->context = array(
+			  "subject" => $resDoc->subject,
+			  "use" => "stories for the week",
+			  "level" => $groupDoc->level[0]
+			);
+			$response = $feedbacks->storeDoc($doc);
+		}
+	}
+ //recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
   echo '<script type="text/javascript">alert("Stories saved successfully");</script>';
 }
+
 ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="../stylesheet/img/devil-icon.png">
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <link rel="stylesheet" type="text/css" media="all" href="../css/jsDatePick_ltr.min.css" />
-<link href="../SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
-<link href="../SpryAssets/SpryValidationSelect.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../js/jsDatePick.min.1.3.js"></script>
 <script src="../SpryAssets/SpryValidationTextField.js" type="text/javascript"></script>
 <script src="../SpryAssets/SpryValidationSelect.js" type="text/javascript"></script>
+<link href="../SpryAssets/SpryValidationTextField.css" rel="stylesheet" type="text/css">
+<link href="../SpryAssets/SpryValidationSelect.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript">
 	window.onload = function(){
+		requestLoadLanguage();
 		new JsDatePick({
 			useMode:2,
 			target:"endDate",
@@ -49,6 +84,7 @@ if(isset($_POST['dateExec']))
 		});
 	};
 </script>
+
 </head>
 
 
@@ -56,33 +92,40 @@ if(isset($_POST['dateExec']))
 <div id="wrapper" style="background-color:#FFF; width:600px;">
   <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:500px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Stories for the week</span><br><br>
     <form name="form1" method="post" action="">
-      <table width="95%">
+      <table width="95%" align="center">
         <tr>
           <td width="139"><b>Starting Date</b></td>
-          <td width="93"><span id="sprytextfield1">
+          <td width="93"><span id="fldStartD">
           <input type="text" name="startDate" id="startDate" style="width:90px">
-          <span class="textfieldRequiredMsg">required.</span><span class="textfieldInvalidFormatMsg">Invalid format.</span></span></td>
+          <span class="textfieldRequiredMsg">required.</span><span class="textfieldInvalidFormatMsg">*.</span></span></td>
           <td width="83" align="right"><b>End Date</b></td>
-          <td width="131"><span id="sprytextfield2">
-            <label for="endDate"></label>
-            <input type="text" name="endDate" id="endDate"  style="width:90px">
-          <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+          <td width="131"><span id="fldEndDate">
+          <label for="endDate"></label>
+          <input type="text" name="endDate" id="endDate"  style="width:90px">
+          <span class="textfieldRequiredMsg">A value is required.</span><span class="textfieldInvalidFormatMsg">*.</span></span></td>
         </tr>
         <tr>
           <td><b>Group / Level / Class </b>: </td>
           <td><span id="spryselect1">
-          <select name="class" id="class">
-            <option value="KG">KG</option>
-            <option value="P1">P1</option>
-            <option value="P2">P2</option>
-            <option value="P3">P3</option>
-            <option value="P4">P4</option>
-            <option value="P5">P5</option>
-            <option value="P6">P6</option>
+          <select name="level" id="level"  onChange="requestLoadLanguage()">
+          <?php
+		  	global $couchUrl;
+			global $facilityId;
+			$groups = new couchClient($couchUrl, "groups");
+			//get all groups from view into viewResults
+			$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'allGroupsInFacility');
+			$wCnt=0;
+			while($wCnt<sizeof($viewResults->rows)){
+				print '<option value="'.$viewResults->rows[$wCnt]->doc->_id.'">'.$viewResults->rows[$wCnt]->doc->name.'</option>';
+				$wCnt++;
+			}
+			
+			
+          ?>
           </select>
           <span class="selectRequiredMsg">Please select an item.</span></span></td>
           <td align="right"><b>Language</b></td>
-          <td><select name="Language" id="Language">
+          <td><select name="Language" id="Language" onChange="requestLoadLanguage()" >
             <option value='aa'>Afar</option>
             <option value='ab'>Abkhazian</option>
             <option value='af'>Afrikaans</option>
@@ -304,100 +347,11 @@ if(isset($_POST['dateExec']))
           <td colspan="4"><b>Selected Stories</b></td>
         </tr>
         <tr>
-          <td colspan="4" align="left"><b>1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-            <select name="story1" id="story1">
-              <option value="none" selected >none</option>
-              <?php
-			  $cnt =1;
-$query = mysql_query("SELECT * FROM `resources` where TLR=''order by KG, P1, P2, P3, P4, P5, P6") or die(mysql_error());
-			 while($data = mysql_fetch_array($query))
-			 {
-				 $forClass ="";
-				 if($data['KG']=="YES"){$forClass=$forClass."KG :";}
-				 if($data['P1']=="YES"){$forClass=$forClass."P1 :";}
-				 if($data['P2']=="YES"){$forClass=$forClass."P2 :";}
-				 if($data['P3']=="YES"){$forClass=$forClass."P3 :";}
-				 if($data['P4']=="YES"){$forClass=$forClass."P4 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P5 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P6";}
-				 echo  '<option value="'.$data['resrcID'].'">'.$cnt.'. ('.$forClass.')  '.$data['title'].'</option>';
-				 $cnt++;
-			 }
-          ?>
-              
-          </select></td>
+          <td colspan="4"><p id="res1"></p></td>
         </tr>
+            
         <tr>
-          <td colspan="4" align="left"><b>2</b><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>            
-            <select name="story2" id="story2">
-              <option value="none">none</option>
-             <?php
-			  $cnt =1;
-$query = mysql_query("SELECT * FROM `resources` where TLR=''order by KG, P1, P2, P3, P4, P5, P6") or die(mysql_error());
-			 while($data = mysql_fetch_array($query))
-			 {
-				 $forClass ="";
-				 if($data['KG']=="YES"){$forClass=$forClass."KG :";}
-				 if($data['P1']=="YES"){$forClass=$forClass."P1 :";}
-				 if($data['P2']=="YES"){$forClass=$forClass."P2 :";}
-				 if($data['P3']=="YES"){$forClass=$forClass."P3 :";}
-				 if($data['P4']=="YES"){$forClass=$forClass."P4 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P5 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P6";}
-				 echo  '<option value="'.$data['resrcID'].'">'.$cnt.'. ('.$forClass.') '.$data['title'].'</option>';
-				 $cnt++;
-			 }
-          ?>
-          </select></td>
-        </tr>
-        <tr>
-          <td colspan="4" align="left"><b>3</b><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>            
-            <select name="story3" id="story3">
-              <option value="none">none</option>
-              <?php
-			  $cnt =1;
-$query = mysql_query("SELECT * FROM `resources` where TLR=''order by KG, P1, P2, P3, P4, P5, P6") or die(mysql_error());
-			 while($data = mysql_fetch_array($query))
-			 {
-				 $forClass ="";
-				 if($data['KG']=="YES"){$forClass=$forClass."KG :";}
-				 if($data['P1']=="YES"){$forClass=$forClass."P1 :";}
-				 if($data['P2']=="YES"){$forClass=$forClass."P2 :";}
-				 if($data['P3']=="YES"){$forClass=$forClass."P3 :";}
-				 if($data['P4']=="YES"){$forClass=$forClass."P4 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P5 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P6";}
-				 echo  '<option value="'.$data['resrcID'].'">'.$cnt.'. ('.$forClass.') '.$data['title'].'</option>';
-				 $cnt++;
-			 }
-          ?>
-          </select></td>
-        </tr>
-        <tr>
-          <td colspan="4" align="left"><b>4</b><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-            <select name="story4" id="story4">
-              <option value="none">none</option>
-             <?php
-			  $cnt =1;
-$query = mysql_query("SELECT * FROM `resources` where TLR=''order by KG, P1, P2, P3, P4, P5, P6") or die(mysql_error());
-			 while($data = mysql_fetch_array($query))
-			 {
-				 $forClass ="";
-				 if($data['KG']=="YES"){$forClass=$forClass."KG :";}
-				 if($data['P1']=="YES"){$forClass=$forClass."P1 :";}
-				 if($data['P2']=="YES"){$forClass=$forClass."P2 :";}
-				 if($data['P3']=="YES"){$forClass=$forClass."P3 :";}
-				 if($data['P4']=="YES"){$forClass=$forClass."P4 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P5 :";}
-				 if($data['P5']=="YES"){$forClass=$forClass."P6";}
-				 echo  '<option value="'.$data['resrcID'].'">'.$cnt.'. ('.$forClass.') '.$data['title'].'</option>';
-				 $cnt++;
-			 }
-          ?>
-          </select></td>
-        </tr>
-        <tr>
-          <td align="center">&nbsp;</td>
+          <td align="center"><p id="gdd"></p></td>
           <td colspan="3">&nbsp;</td>
         </tr>
         <tr>
@@ -416,7 +370,8 @@ Note for discussion:
           <td></td>
           <td colspan="3"><input type="submit" class="button" value="Submit">
             <input type="reset" class="button" value="Reset">
-            <input type="hidden" name="systemDateForm" id="systemDateForm"></td>
+            <input type="hidden" name="systemDateForm" id="systemDateForm">
+            <input type="hidden" name="grade" id="grade"></td>
         </tr>
       </table>
     </form>
@@ -424,9 +379,8 @@ Note for discussion:
 <div class="clear"></div>
 </div>
 <script type="text/javascript">
-var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1", "date", {format:"yyyy-mm-dd"});
-var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
-var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
+var sprytextfield1 = new Spry.Widget.ValidationTextField("fldStartD", "none");
+var sprytextfield2 = new Spry.Widget.ValidationTextField("fldEndDate", "none");
 </script>
 </body>
 <script type="text/javascript">
@@ -434,5 +388,21 @@ var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
 	///now = now.toGMTString();
 	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
 	document.getElementById('systemDateForm').value = fmat;
+</script>
+
+
+<script type="text/javascript">
+
+function requestLoadLanguage(){
+	var groupId = document.getElementById("level").value;
+	var lang = document.getElementById("Language").value;
+	var lev;
+	$.getJSON("../functions/getResByLangLevel.php?grade="+groupId+"",function (data){
+		$.each(data.gobackArr, function(i,gback){
+			$("#res1").load("../functions/getResByLangLevel.php?lang="+lang+"&level="+gback.level+"");
+		})
+	});
+	
+}
 </script>
 </html>
