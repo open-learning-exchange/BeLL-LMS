@@ -53,10 +53,13 @@ global $config;
 $members = new couchClient($couchUrl, "members");
 // Get members
 for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
-	$key = $facilityId.$config->levels[$cnt];
+	$start_key = array($facilityId,$config->levels[$cnt],"A");
+	$end_key = array($facilityId,$config->levels[$cnt],"Z");
 	if(isset($_GET['inactive']))
 	{
-		$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelInactive_allStudent');
+		
+		$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelInactive_allStudent_sorted');
+		$docCounter=1;
 		echo '<span style="font-size: 12px;">These are Inactive Students. <span style="color: #900;"><a href="delstudent.php"> Click here to view active students</a></span></span><br>';
 		$action = 'Delete';
 		$actionMsg = 'Delete';
@@ -64,7 +67,7 @@ for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
 		$editMsg ='Set Active';
 		$editLink = 'delstudent.php';
 	}else{
-		$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+		$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 		echo '<span style="font-size: 12px;">These are Active Students. <span style="color: #900;"><a href="delstudent.php?inactive=true" >Click here to view inactive students</a></span></span><br>';
 		$action ='Inactive';
 		$actionMsg = 'Set Inactive';

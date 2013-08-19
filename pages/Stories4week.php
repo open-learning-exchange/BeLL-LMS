@@ -24,7 +24,7 @@ if(isset($_POST['startDate'])){
 			$doc->context = array(
 			  "subject" => $resDoc->subject,
 			  "use" => "stories for the week",
-			  "groupid" => $_POST['level'],
+			  "groupId" => $_POST['level'],
 			  "facilityId"=>$facilityId
 			  
 			);

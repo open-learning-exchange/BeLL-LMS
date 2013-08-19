@@ -27,10 +27,10 @@ global $config;
 $members = new couchClient($couchUrl, "members");
 // Get members
 for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
-		$key = $facilityId.$config->levels[$cnt];
-		$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+		$start_key = array($facilityId,$config->levels[$cnt],"A");
+		$end_key = array($facilityId,$config->levels[$cnt],"Z");
+		$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 		$docCounter=1;
-		
 		echo '<a name="'.$config->levels[$cnt].'"></a>
 			<b>'.$config->levels[$cnt].'</b>
 			<table class="data">
