@@ -5,15 +5,163 @@
 -->
 <allstudent>
 <student>
-<name>Asumadu collins</name>
-<bcode>002</bcode>
+<name>Kumadey  Hellen</name>
+<bcode>031</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b073523</stuId>
 </student>
 <student>
-<name>Mavis Ofosu</name>
-<bcode>002</bcode>
+<name>Mariam  Sulemana</name>
+<bcode>030</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b073505</stuId>
 </student>
 <student>
-<name>Opata Joshua</name>
+<name>Jennifer  Quaye</name>
+<bcode>028</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b072572</stuId>
+</student>
+<student>
+<name>Vincentia  Oheneba</name>
+<bcode>027</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b07202f</stuId>
+</student>
+<student>
+<name>Linda  Ofori</name>
+<bcode>026</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b071e53</stuId>
+</student>
+<student>
+<name>Comfort  Kwarteng</name>
+<bcode>032</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b070fc5</stuId>
+</student>
+<student>
+<name>Ivy  Ketadzo</name>
+<bcode>009</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0705ae</stuId>
+</student>
+<student>
+<name>Gifty  Hodor</name>
+<bcode>024</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0700f3</stuId>
+</student>
+<student>
+<name>Ruth  Bosoka</name>
+<bcode>023</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06f1e2</stuId>
+</student>
+<student>
+<name>Venessa  Ayingura</name>
+<bcode>022</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06e834</stuId>
+</student>
+<student>
+<name>Mary  Asem</name>
+<bcode>021</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06dbd1</stuId>
+</student>
+<student>
+<name>Vera  Asare</name>
+<bcode>020</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06d154</stuId>
+</student>
+<student>
+<name>Antoinette  Arthur</name>
+<bcode>019</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06c8fe</stuId>
+</student>
+<student>
+<name>Beauty  Ampomah</name>
+<bcode>018</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06c698</stuId>
+</student>
+<student>
+<name>Fati  Amadu</name>
+<bcode>017</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06b9f6</stuId>
+</student>
+<student>
+<name>David  Adjetey</name>
+<bcode>016</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06b64d</stuId>
+</student>
+<student>
+<name>Isaac  Mensah</name>
+<bcode>015</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06ae36</stuId>
+</student>
+<student>
+<name>Emmanuel  Osei</name>
+<bcode>014</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0699d0</stuId>
+</student>
+<student>
+<name>Gideon  Mintah</name>
+<bcode>013</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b068d54</stuId>
+</student>
+<student>
+<name>Desmond  Mintah</name>
+<bcode>012</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b068782</stuId>
+</student>
+<student>
+<name>Augustine  Mensah-Tei</name>
+<bcode>011</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0678bd</stuId>
+</student>
+<student>
+<name>Elijah  Laryea</name>
+<bcode>010</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b067778</stuId>
+</student>
+<student>
+<name>Sandra  Ketadzo</name>
+<bcode>025</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b066d1f</stuId>
+</student>
+<student>
+<name>Etse  Gadri</name>
+<bcode>008</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b066635</stuId>
+</student>
+<student>
+<name>Caleb  Duho</name>
+<bcode>007</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06647c</stuId>
+</student>
+<student>
+<name>Patrick  Darko</name>
+<bcode>006</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0656ae</stuId>
+</student>
+<student>
+<name>Aziz  Chemenu</name>
+<bcode>005</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06488f</stuId>
+</student>
+<student>
+<name>Oblie  Armah</name>
+<bcode>004</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b063a92</stuId>
+</student>
+<student>
+<name>Emmanuel  Amevor</name>
+<bcode>003</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06303d</stuId>
+</student>
+<student>
+<name>Joshua  Amartey</name>
+<bcode>002</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b062b26</stuId>
+</student>
+<student>
+<name>Jacob  Agbenu</name>
 <bcode>001</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b06278d</stuId>
+</student>
+<student>
+<name>ii ii ii</name>
+<bcode>233</bcode>
+<stuId>ghaaa64712c59fb5fa823aaf72a70338ab</stuId>
 </student>
 </allstudent>

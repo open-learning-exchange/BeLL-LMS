@@ -1,4 +1,4 @@
-<?php ini_set("session.gc_maxlifetime","94000"); session_start(); error_reporting(1);include "secure/talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","94000"); session_start();include "secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -16,77 +16,53 @@ $cntVal =0;
 $messageLog = "";
 if(isset($_POST['loginid']))
 {
-  $query = mysql_query("SELECT * FROM `teacherClass` where loginId='".$_POST['loginid']."' and pswd= md5('".$_POST['password']."')") or die(mysql_error());
-   while($data = mysql_fetch_array($query))
-   {
-	  $_SESSION['teacherid'] = $data['loginId'];
-	  $_SESSION['class-level'] = $data['loginId'];
-	  $_SESSION['role'] = $data['Role'];
-	  $_SESSION['logColmn'] = $data['colNum'];
-	  $_SESSION['name'] = $data['Name'];
-	  $_SESSION['classAsigned'] =$data['classAssign'];
-	  $cntVal++;
-   }
-   if($cntVal>0)
-   {
-	   recordActionDate($_SESSION['name'],"Loged in",$_POST['systemDateForm']);
-		if($_SESSION['role']=="Admin")
-		{
-			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		} else if ($_SESSION['role']=="Teacher")
-		{
-			$mystring = "dasboard.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		} else if ($_SESSION['role']=="Coach")
-		{
-			$mystring = "coach.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		}else if ($_SESSION['role']=="Head")
-		{
-			$mystring = "headteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."";
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-			
-		}
-		else if ($_SESSION['role']=="Lead")
-		{
-			$mystring = "leadteacher.php?role=".$_SESSION['role']."&cnm=".$_SESSION['logColmn']."&dat=".$_POST['systemDateForm'];
-	   		die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-		}
-		else
-		{
-			$mystring = "index.php?login=invalid";
-			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
-		}
-   }else
-	{
-			$mystring = "index.php?login=invalid";
-			die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
+	global $couchUrl;
+	$members = new couchClient($couchUrl, "members");
+	// Get member
+	global $facilityId;
+	$key = $facilityId . $_POST['loginid'];
+	
+	///print $key;
+	$viewResults = $members->include_docs(TRUE)->key($key)->getView('api', 'facilityLogin');
+	//print_r($viewResults);
+	foreach($viewResults->rows as $row) {
+		///print_r($row);
+		
+	}
+	$member = $viewResults->rows[0]->doc;
+	$password = $_POST['pass'];
+	
+	if($member->pass == md5($password)) {
+		
+		$_SESSION['lmsUserID'] = $viewResults->rows[0]->id;
+		
+		$_SESSION['role'] = $member->roles;
+		$_SESSION['name'] = $member->firstName." ".$member->middleNames." ".$member->lastName;
+		$_SESSION['facilityID'] = $facilityId;
+		// Redirect user to dashboard page
+		///recordActionDate($_SESSION['lmsUserID'],"Loged in",$_POST['systemDateForm']);
+		die('<script type="text/javascript">window.location.replace("dasboard.php")</script>');
+	} else{
+		///$messageLog = "Login ID & Password Mismatch. Try again ";
 	}
 } 
-else
-{
-	if($_SESSION['name'])
+else {
+	
+	if(isset($_GET['sesEnded']))
 	{
-		recordActionDate($_SESSION['name'],"Loged out",$_GET['systemDateForm']);
+		recordActionDate($_SESSION['lmsUserID'],"Session Timed-out",$_GET['systemDateForm']);
+		$messageLog = "Login Session Timed-out. Please login again";
+	}
+	else if(isset($_GET['signout']))
+	{
+		recordActionDate($_SESSION['lmsUserID'],"Loged out",$_GET['systemDateForm']);
+		$messageLog = "Welcome Please login";
 		session_destroy();
 	}
-	else
-	{
+	else{
 		session_destroy();
 	}
 }
-if(isset($_GET['login'])){
-	$messageLog = "Login Id & password mismatch. Try again ";
-}
-if(isset($_GET['sesEnded'])){
-	recordActionDate("User login session ended ","Loged out",$_GET['systemDateForm']);
-	$messageLog = "Your session is over. Please login";
-}
-
 ?>
 </head>
 <style>
@@ -120,7 +96,7 @@ body {
 	<label>Login ID</label><br>
 	<input name="loginid" type="text" class="login" id="loginid"><br>
 	<label>Password</label><br>
-	<input name="password" type="password" class="login" id="password"><br>
+	<input name="pass" type="password" class="login" id="pass"><br>
 	<input type="submit" class="button" value="Login">
     <input type="hidden" name="systemDateForm" id="systemDateForm">
     <br><br>

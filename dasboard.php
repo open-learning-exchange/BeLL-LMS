@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(1);?>
+<?php session_start(); //error_reporting(1);?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -24,37 +24,38 @@ body {
 }
 </style>
 <?php
-if($_SESSION['role']=="Admin")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-		<li><a href="coach.php">Coach</a></li>
-        <li><a href="headteacher.php">Head</a></li>
-		<li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Teacher")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Coach")
-{
-	$menu=  '<ul>
-        <li><a href="coach.php">Coach</a></li>
-	</ul>';
-}else if ($_SESSION['role']=="Head")
-{
-	$menu=  '<ul>
-        <li><a href="headteacher.php">Head</a></li>
-	</ul>';
+$showProfStudies = false;
+$roles = "<ul>";
+for($cnt=0;$cnt<= sizeof($_SESSION['role']); $cnt++){
+	switch(strtolower($_SESSION['role'][$cnt])){
+		case "teacher":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			break;
+		case "leadteacher":
+			$roles = $roles.'<li><a href="leadteacher.php">Lead Teacher.</a></li>';
+			break;
+		case "headteacher":
+			$roles = $roles.'<li><a href="headteacher.php">Head Teacher</a></li>';
+			break;
+		case "coach":
+			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+			break;
+		default:
+			if(!$showProfStudies)
+			{
+				$roles = $roles.'<li><a href="profStudies.php">Professional Studies</a></li>';
+				$showProfStudies =true;
+			}
+		//case "administrator":
+//			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+//			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+//			$roles = $roles.' <li><a href="headteacher.php">Head</a></li>';
+//			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+//		break;
+	}
 }
-else if ($_SESSION['role']=="Lead")
-{
-	$menu=  '<ul>
-        <li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-}
-else
+$roles = $roles."</ul>";
+if(sizeof($_SESSION['role'])<1)
 {
 	$mystring = "index.php";
 	die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
@@ -68,14 +69,14 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 <div id="header">
 	<div class="inHeader">
 		<div class="mosAdmin">Hello,  <?php echo $_SESSION['name'];?><br>
-	    | <a href="index.php" onClick="location.href=this.href+'?systemDateForm='+fmat;return false;" >Sign Out </a>| <a href="#">Help</a> </div>
+	    | <a href="index.php" onClick="location.href=this.href+'?signout=true&systemDateForm='+fmat;return false;" >Sign Out </a>| <a href="#">Help</a> </div>
 	  <div class="clear"></div>
 	</div>
 </div>
 
 <div id="wrapper" style="background: #fff url(images/bg_kiri.png) repeat-y;">
 	<div id="leftBar">
-	<?php echo $menu;?>
+	<?php echo $roles;?>
 	</div>
 	<div id="rightContent">
 	<h3>Teacher</h3>
@@ -93,15 +94,12 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
         <a href="pages/assign_task.php" target="DashScreen"><img src="images/photo.png" width="52" height="52"><br>
 		Assign Task (V-Book ect)</a>
       </div>
-      
-         <div class="shortcutHome">
-         <a href="pages/Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt="" width="52" height="52"><br>
-Teacher Resources</a>
-		 </div>
-		<div class="shortcutHome">
+      <div class="shortcutHome"> <a href="pages/delstudent.php" target="DashScreen"><img src="images/manageStudent.png" width="52" height="52"><br>
+        Manage Students</a></div>
+      <div class="shortcutHome">
 		<a href="pages/lessonPlan.php" target="DashScreen"><img src="images/assignTask.png" width="52" height="52"><br>
 		New Lesson Plan</a>
-		</div>
+	  </div>
         <div class="shortcutHome">
 		<a href="pages/edit_lessonPlan.php" target="DashScreen"><img src="images/editLesson_plane.png" width="52" height="52"><br>
 		Edit Lesson Plan</a>
@@ -111,14 +109,14 @@ Teacher Resources</a>
 		Rate Used Resources</a>
 	  </div>
       <div class="shortcutHome"> <a href="pages/all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt="" width="52" height="52"><br>
-      Available Resources
+      Student Resources
       </a> </div>
 		
 		<div class="clear"></div>
 		
 		<div id="smallRight">
 		  <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
-			<tr><td colspan="2" style="border: none;padding: 4px;"><iframe height="570" frameborder="0" width="640" src="pages/registerStudent.php" name="DashScreen"></iframe>&nbsp;</td></tr>
+			<tr><td height="981" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/registerStudent.php" name="DashScreen"></iframe>&nbsp;</td></tr>
 		  </table>
 		</div>
 	</div>

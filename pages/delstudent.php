@@ -7,55 +7,111 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <?php
-if(isset($_GET['drop']))
+if(isset($_GET['Delete']))
 {
-	$delItem = mysql_query("DELETE FROM `students` WHERE `colNum` = ".$_GET['drop']."") or die(mysql_query());
-	recordAction($_SESSION['name'],"Student deleted");
+	global $couchUrl;
+	$members = new couchClient($couchUrl, "members");
+	$doc = $members->getDoc($_GET['Delete']);
+	$members->deleteDoc($doc);
 	
-	echo '<script type="text/javascript">alert("Student deleted succesfully");</script>';
-	die("Deleted Succesfully");
+	///recordAction($_SESSION['name'],"Student deleted");
+	echo '<script type="text/javascript">alert('.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. ' deleted succesfully");</script>';
+	die($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. ' deleted succesfully');
+} else if (isset($_GET['Inactive']))
+{
+	global $couchUrl;
+	$members = new couchClient($couchUrl, "members");
+	$doc = $members->getDoc($_GET['Inactive']);
+	$doc->status = "inactive";
+	$members->storeDoc($doc);
+	///recordAction($_SESSION['name'],"Student deleted");
+	echo '<script type="text/javascript">alert("'.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName.' status made inactive")</script>';
+	echo ($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. '\'s status made inactive<br>');
+}
+else if (isset($_GET['Active']))
+{
+	global $couchUrl;
+	$members = new couchClient($couchUrl, "members");
+	$doc = $members->getDoc($_GET['Active']);
+	$doc->status = "active";
+	$members->storeDoc($doc);
+	///recordAction($_SESSION['name'],"Student deleted");
+	echo '<script type="text/javascript">alert("'.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName.' status made inactive")</script>';
+	echo ($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. '\'s status made active<br>');
 }
 ?>
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
-  <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:500px; margin-left:auto; margin-right:auto;">
+  <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:550px; margin-left:auto; margin-right:auto;">
   <span style="color:#00C; font-weight: bold;">Manage Students</span><br><br>
-  <form name="form1" method="post" action="">
-      <table width="72%" align="center">
-      <tr>        </tr>
-      <tr>        </tr>
-      </table>
-      <table width="478" height="32" border="1">
-        <tr>
-          <td width="32" height="26">No.</td>
-          <td width="83"><b>Class / Level</b></td>
-          <td width="178"><b>Student Name</b></td>
-          <td width="93"><b> Login ID</b></td>
-          <td width="58"><b>Action</b></td>
-        </tr>
-         <?php
-			 $query = mysql_query("SELECT * FROM `students` order by stuClass") or die(mysql_error());
-			 $cnt=1;
-			 while($data = mysql_fetch_array($query))
+<form name="form1" method="post" action="">
+        <?php
+global $couchUrl;
+global $facilityId;
+global $config;
+$members = new couchClient($couchUrl, "members");
+// Get members
+for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
+	$key = $facilityId.$config->levels[$cnt];
+	if(isset($_GET['inactive']))
+	{
+		$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelInactive_allStudent');
+		echo '<span style="font-size: 12px;">These are Inactive Students. <span style="color: #900;"><a href="delstudent.php"> Click here to view active students</a></span></span><br>';
+		$action = 'Delete';
+		$actionMsg = 'Delete';
+		$edit = 'Active';
+		$editMsg ='Set Active';
+		$editLink = 'delstudent.php';
+	}else{
+		$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+		echo '<span style="font-size: 12px;">These are Active Students. <span style="color: #900;"><a href="delstudent.php?inactive=true" >Click here to view inactive students</a></span></span><br>';
+		$action ='Inactive';
+		$actionMsg = 'Set Inactive';
+		$edit = 'Edit';
+		$editMsg ='Edit';
+		$editLink = 'editStudent.php';
+
+	}
+		$docCounter=1;
+		
+		echo '<a name="'.$config->levels[$cnt].'"></a>
+			<b>'.$config->levels[$cnt].'</b>
+			<table class="data">
+				<tr class="data">
+						<th class="data" width="29">No</th>
+						<th width="201" class="data">Name</th>
+						<th width="50" class="data">Code</th>
+						<th width="65" class="data">Gender</th>
+						<th class="data" width="100">Ation</th>
+			  </tr>';
+		foreach($viewResults->rows as $row) {
+			 if($docCounter%2==0)
 			 {
-				 	echo '<tr>
-          <td width="32" height="26">No.</td>
-          <td width="83">'.$data['stuClass'].'</td>
-          <td width="178">'.$data['stuName'].'</td>
-          <td width="93">'.$data['stuCode'].'</td>
-          <td width="58"><a href="delstudent.php?drop='.$data['colNum'].'">Drop</a></td>
-        </tr>';
-				 $cnt++;
+					echo '<tr class="data">
+					<td class="data" width="29">'.$docCounter.'</td>
+					<td class="data">'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</td>
+					<td class="data">'.$row->doc->pass.'</td>
+					<td class="data">'.$row->doc->gender.'</td>
+					<td class="data" width="100"><center><a href="delstudent.php?'.$action.'='.$row->id.'" >'.$actionMsg.'</a>&nbsp;&nbsp; ||&nbsp;&nbsp;<a href="'.$editLink.'?'.$edit.'='.$row->id.'" >'.$editMsg.'</a> </td></center></td>
+				</tr>';
+			 } else {
+					echo '<tr class="data" bgcolor="#EEEEEE">
+					<td class="data" width="29">'.$docCounter.'</td>
+					<td class="data">'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</td>
+					<td class="data">'.$row->doc->pass.'</td>
+					<td class="data">'.$row->doc->gender.'</td>
+					<td class="data" width="100"><center><a href="delstudent.php?'.$action.'='.$row->id.'" >'.$actionMsg.'</a>&nbsp;&nbsp; ||&nbsp;&nbsp;<a href="'.$editLink.'?'.$edit.'='.$row->id.'" >'.$editMsg.'</a> </td></center></td>
+				</tr>';
 			 }
-          ?>
+			 $docCounter++;
+		}
+		echo '</table>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<a href="#top"><span style="font-size: 12px; color: #900;"> ^ go to the top ^ </a> </span><br><br>';
+}
+?>
         
       </table>
-      <table width="72%" align="center">
-        <tr> </tr>
-        <tr> </tr>
-      </table>
-    </form>
+</form>
   </div>
 <div class="clear"></div>
 </div>

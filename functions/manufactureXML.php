@@ -5,22 +5,41 @@ if(isset($_POST['dateFrom']))
 ///// begin function for compiling students ////
 function compileClass($theClass)
 {	
+global $couchUrl;
+global $facilityId;
+global $config;
+$members = new couchClient($couchUrl, "members");
+$key = $facilityId.$theClass;
+$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+$docCounter=1;
 $dataBody ='<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Document   : '.$theClass.'.xml
     Author     : Open Learning Exchange
 -->
 <allstudent>';
-   $query = mysql_query("SELECT * FROM  `students` where stuClass = '".$theClass."' order by `stuName`") or die(mysql_error());
-   while($data = mysql_fetch_array($query))
-   {
+foreach($viewResults->rows as $row) {
 $dataBody = $dataBody.'
 <student>
-<name>'.$data['stuName'].'</name>
-<bcode>'.$data['stuCode'].'</bcode>
+<name>'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</name>
+<bcode>'.$row->doc->pass.'</bcode>
+<stuId>'.$row->doc->_id.'</stuId>
 </student>';
-	   
-   }
+}
+
+if($theClass=="KG1"){
+$key = $facilityId.'KG2';
+$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+foreach($viewResults->rows as $row) {
+$dataBody = $dataBody.'
+<student>
+<name>'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</name>
+<bcode>'.$row->doc->pass.'</bcode>
+<stuId>'.$row->doc->_id.'</stuId>
+</student>';
+$theClass="KG";
+}
+}
  $dataBody=$dataBody.'
 </allstudent>';
  $myFile = "../transferData/studentsRecords/".$theClass.".xml";
@@ -192,7 +211,7 @@ chmod($fh,777);
 /// Class Names and Code //////
 //////////////////////////////
 
-compileClass("KG");
+compileClass("KG1");
 compileClass("P1");
 compileClass("P2");
 compileClass("P3");
@@ -202,32 +221,32 @@ compileClass("P6");
 
 ///////// Used Readable Resources /////
 ///////////////////////////////////////
-compileResources("KG");
-compileResources("P1");
-compileResources("P2");
-compileResources("P3");
-compileResources("P4");
-compileResources("P5");
-compileResources("P6");
-/////////////////////////////////////
-////////////////////////////////////
+//compileResources("KG");
+//compileResources("P1");
+//compileResources("P2");
+//compileResources("P3");
+//compileResources("P4");
+//compileResources("P5");
+//compileResources("P6");
 ///////////////////////////////////////
-compileVBResources("KG");
-compileVBResources("P1");
-compileVBResources("P2");
-compileVBResources("P3");
-compileVBResources("P4");
-compileVBResources("P5");
-compileVBResources("P6");
-/////////////////////////////////////
-
-compileVBQuestions("KG");
-compileVBQuestions("P1");
-compileVBQuestions("P2");
-compileVBQuestions("P3");
-compileVBQuestions("P4");
-compileVBQuestions("P5");
-compileVBQuestions("P6");
+//////////////////////////////////////
+/////////////////////////////////////////
+//compileVBResources("KG");
+//compileVBResources("P1");
+//compileVBResources("P2");
+//compileVBResources("P3");
+//compileVBResources("P4");
+//compileVBResources("P5");
+//compileVBResources("P6");
+///////////////////////////////////////
+//
+//compileVBQuestions("KG");
+//compileVBQuestions("P1");
+//compileVBQuestions("P2");
+//compileVBQuestions("P3");
+//compileVBQuestions("P4");
+//compileVBQuestions("P5");
+//compileVBQuestions("P6");
 
 recordActionDate($_SESSION['name'],"Prepared system for syncing -: ".$_POST['dateFrom']." to ".$_POST['dateTo']."",$_POST['systemDateForm']);
 

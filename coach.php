@@ -1,4 +1,4 @@
-<?php session_start(); error_reporting(1);?>
+<?php session_start(); ///error_reporting(1);?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -24,37 +24,38 @@ body {
 }
 </style>
 <?php
-if($_SESSION['role']=="Admin")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-		<li><a href="coach.php">Coach</a></li>
-        <li><a href="headteacher.php">Head</a></li>
-		<li><a href="leadteacher.php">Lead T.</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Teacher")
-{
-	$menu= '<ul>
-		<li><a href="dasboard.php">Teacher</a></li>
-	</ul>';
-} else if ($_SESSION['role']=="Coach")
-{
-	$menu=  '<ul>
-        <li><a href="coach.php">Coach</a></li>
-	</ul>';
-}else if ($_SESSION['role']=="Head")
-{
-	$menu=  '<ul>
-        <li><a href="headteacher.php">Head</a></li>
-	</ul>';
+$showProfStudies = false;
+$roles = "<ul>";
+for($cnt=0;$cnt<= sizeof($_SESSION['role']); $cnt++){
+	switch(strtolower($_SESSION['role'][$cnt])){
+		case "teacher":
+			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			break;
+		case "leadteacher":
+			$roles = $roles.'<li><a href="leadteacher.php">Lead Teacher.</a></li>';
+			break;
+		case "headteacher":
+			$roles = $roles.'<li><a href="headteacher.php">Head Teacher</a></li>';
+			break;
+		case "coach":
+			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+			break;
+		default:
+			if(!$showProfStudies)
+			{
+				$roles = $roles.'<li><a href="profStudies.php">Professional Studies</a></li>';
+				$showProfStudies =true;
+			}
+		//case "administrator":
+//			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+//			$roles = $roles.'<li><a href="leadteacher.php">Lead T.</a></li>';
+//			$roles = $roles.' <li><a href="headteacher.php">Head</a></li>';
+//			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+//		break;
+	}
 }
-else if ($_SESSION['role']=="Lead")
-{
-	$menu=  '<ul>
-        <li><a href="leadteacher.php">Lead T./a></li>
-	</ul>';
-}
-else
+$roles = $roles."</ul>";
+if(sizeof($_SESSION['role'])<1)
 {
 	$mystring = "index.php";
 	die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
@@ -71,7 +72,7 @@ else
 
 <div id="wrapper" style="background: #fff url(images/bg_kiri.png) repeat-y;">
   <div id="leftBar">
-    <?php echo $menu;?>
+    <?php echo $roles;?>
   </div>
   <div id="rightContent">
     <h3>Coach</h3>
@@ -85,24 +86,20 @@ else
     </a> </div>
       <div class="shortcutHome"> <a href="pages/studentsList.php"  target="DashScreen"><img src="images/students.png" alt=""><br>View all Students</a> </div>
       <div class="shortcutHome"> <a href="pages/all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>
-      Available Resources
+      Student Resources
       </a> </div>
-      <div class="shortcutHome">
-         <a href="pages/Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
-Teacher Resources</a>
-		 </div>
     <div class="clear"></div>
     <div id="smallRight">
       <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
         <tr>
-          <td colspan="2" style="border: none;padding: 4px;"><iframe height="570" frameborder="0" width="640" src="pages/uploadRes.php" name="DashScreen"></iframe>
+          <td height="983" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/uploadRes.php" name="DashScreen"></iframe>
             &nbsp;</td>
         </tr>
       </table>
     </div>
   </div>
   <div class="clear"></div>
-<div id="footer">&copy; 2012 Open Learning Exchange - Ghana </div>
+<div id="footer">&copy; 2013 Open Learning Exchange - Ghana </div>
 </div>
 </body>
 </html>
