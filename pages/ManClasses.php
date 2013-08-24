@@ -88,9 +88,8 @@ if(isset($_POST['firstName']))
 		array_push($groupDoc->owners,$docId);
 		$groups->storeDoc($groupDoc);
 	}
-	//@todo better log information
-  ////recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
-  echo "<br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class'].'<br><br>';
+	  recordActionObject($_SESSION['lmsUserID'],"added a new member (staff) ",$docId);
+	echo "<br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class'].'<br><br>';
 }
 // Deleting Member
 
@@ -109,7 +108,7 @@ else if(isset($_GET['drop']))
 		if(sizeof($groupOwned->doc->owners)>-1){
 			for($cnt=0; $cnt<sizeof($groupOwned->doc->owners);$cnt++){
 				// look for a match to current member id in owners array
-				print_r($groupOwned->doc->owners);
+				///print_r($groupOwned->doc->owners);
 				if($groupOwned->doc->owners[$cnt] == $_GET['drop']){
 					 // delete current member id from array
 					unset($groupOwned->doc->owners[$cnt]);

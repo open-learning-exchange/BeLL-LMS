@@ -21,8 +21,10 @@ if(isset($_POST['totRes']))
 		$doc->rating = $_POST[$itemString];
 		$feedbacks->storeDoc($doc);
 		$count++;
+		
 	}
-	//recordActionDate($_SESSION['name'],"Rate Resources",$_POST['systemDateForm']);
+	
+	recordActionObject($_SESSION['lmsUserID'],"Rate all used resources","");
 	echo '<script type="text/javascript">alert("Resource ratings completed successfully");</script>';
  
 	die("Rating saved. You do not have any unrated resources under your account.");

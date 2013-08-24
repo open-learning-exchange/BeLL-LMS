@@ -49,28 +49,11 @@ if(isset($_POST['name']))
 	$facilityDetails->street=$_POST['street'];
 	$facilityDetails->enrollDate=$_POST['enroll'];
 	$facility->storeDoc($facilityDetails);
+	recordActionObject($_SESSION['lmsUserID'],"updated school details (student)",$docId);
 	echo '<script type="text/javascript">alert("School records successfully updated");</script>';
 	
 	
-	/*$savequery = mysql_query("UPDATE `schoolDetails` SET `schoolName` = '".$_POST['schName']."', `location` = '".$_POST['schLocation']."', `schoolType` = '".$_POST['schType']."', `dateOfEnrolment` = '".$_POST['schEroll']."'") or die(mysql_error());
-	 recordActionDate($_SESSION['name'],"Updated school registration destails",$_POST['systemDateForm']);
-	echo '<script type="text/javascript">alert("School records successfully updated");</script>';
-	
-	die("School records successfully updated");*/
 }
-/*$shoolName ="";
-$schoolEnr ="";
-$shoolLocat="";
-$schoolType="";
-
-$query = mysql_query("SELECT * FROM  `schoolDetails` ") or die(mysql_error());
-	while($data = mysql_fetch_array($query))
-	{
-		$shoolName =$data['schoolName'];
-		$schoolEnr =$data['dateOfEnrolment'];
-		$shoolLocat=$data['location'];
-		$schoolType=$data['schoolType'];
-	}*/
 global $couchUrl;
 global $facilityId;
 $facility = new couchClient($couchUrl, "facilities");

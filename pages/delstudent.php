@@ -14,7 +14,8 @@ if(isset($_GET['Delete']))
 	$doc = $members->getDoc($_GET['Delete']);
 	$members->deleteDoc($doc);
 	
-	///recordAction($_SESSION['name'],"Student deleted");
+	recordActionObjectDate($_SESSION['lmsUserID'],"deleted student from system",$_GET['Delete'],$_GET['systDate']);
+	
 	echo '<script type="text/javascript">alert('.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. ' deleted succesfully");</script>';
 	die($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. ' deleted succesfully');
 } else if (isset($_GET['Inactive']))
@@ -24,7 +25,9 @@ if(isset($_GET['Delete']))
 	$doc = $members->getDoc($_GET['Inactive']);
 	$doc->status = "inactive";
 	$members->storeDoc($doc);
-	///recordAction($_SESSION['name'],"Student deleted");
+	
+	recordActionObjectDate($_SESSION['lmsUserID'],"made student from status inactive",$_GET['Delete'],$_GET['systDate']);
+	
 	echo '<script type="text/javascript">alert("'.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName.' status made inactive")</script>';
 	echo ($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. '\'s status made inactive<br>');
 }
@@ -35,7 +38,8 @@ else if (isset($_GET['Active']))
 	$doc = $members->getDoc($_GET['Active']);
 	$doc->status = "active";
 	$members->storeDoc($doc);
-	///recordAction($_SESSION['name'],"Student deleted");
+	recordActionObjectDate($_SESSION['lmsUserID'],"made student from status active",$_GET['Delete'],$_GET['systDate']);
+	
 	echo '<script type="text/javascript">alert("'.$doc->lastName.' '.$doc->middleNames.' '.$doc->firstName.' status made inactive")</script>';
 	echo ($doc->lastName.' '.$doc->middleNames.' '.$doc->firstName. '\'s status made active<br>');
 }

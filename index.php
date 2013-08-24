@@ -11,6 +11,8 @@
 
 <link rel="shortcut icon" href="stylesheet/img/devil-icon.png"> 
 <link rel="stylesheet" type="text/css" href="css/style.css">
+
+<script type="text/javascript" src="../js/jquery.js"></script>
 <?php
 $cntVal =0;
 $messageLog = "";
@@ -107,6 +109,7 @@ body {
 </div>
 </body>
 <script type="text/javascript">
+
 	var now = new Date()
 	///now = now.toGMTString();
 	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());

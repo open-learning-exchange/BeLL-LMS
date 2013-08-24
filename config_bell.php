@@ -1,37 +1,104 @@
-<?php session_start(); error_reporting(1);include "../secure/talk2db.php";?>
-<html>
+<?php 
+
+//error_reporting(E_ERROR);
+include "lib/couch.php";
+include "lib/couchClient.php";
+include "lib/couchDocument.php";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Open Learning Exchange - Ghana</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="../stylesheet/img/devil-icon.png">
-<link rel="stylesheet" type="text/css" href="../css/style.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>System Configuration</title>
+<script src="SpryAssets/SpryValidationSelect.js" type="text/javascript"></script>
+<script src="SpryAssets/SpryValidationTextarea.js" type="text/javascript"></script>
+<script src="SpryAssets/SpryValidationPassword.js" type="text/javascript"></script>
+<link href="SpryAssets/SpryValidationSelect.css" rel="stylesheet" type="text/css" />
+<link href="SpryAssets/SpryValidationTextarea.css" rel="stylesheet" type="text/css" />
+<link href="SpryAssets/SpryValidationPassword.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.tableText {
+	font-family: Verdana, Geneva, sans-serif;
+}
+</style>
+<?php
+if(isset($_POST['systemPassword'])){
+global $couchUrl;
+$couchUrl = 'http://pi:raspberry@127.0.0.1:5984';
+$Facilities = new couchClient($couchUrl,'facilities');
+$Facilities->createDatabase();
+
+$facility = (object) array(
+  "kind"     => "Facility",
+  "type"     => "",
+  "GPS"      => array("", ""),
+  "phone"    => "",
+  "name"     => "",
+  "country"  => "gh",
+  "region"   => "",
+  "district" => "",
+  "area"     => "",
+  "street"   => "",
+  "dateEnrolled" => strtotime('2013-01-01')
+);
+$facility = $Facilities->storeDoc($facility);
+echo "here";
+$facilityId = $facility->id;
+$whoami = new couchClient($couchUrl,'whoami');
+$whoami->createDatabase();
+$whoamiFacility = new couchDocument($whoami);
+$whoamiFacility->set(array(
+  "_id" => "facility",
+  "kind" => "system",
+  "facilityId" => $facilityId,
+));
+
+// Create the whoami/config doc
+$whoamiConfig = new couchDocument($whoami);
+$whoamiConfig->set(array(
+  "_id" => "config",
+  "kind" => "system",
+  "timezone" => $_POST['timeZone'],
+  "language" => $_POST['Language'],
+  "version" => $_POST['version'],
+  "layout" => $_POST['layout'],
+  "subjects" => explode(',', $_POST['subjects']),
+  "levels" => array('KG1', 'KG2', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6') 
+));
+
+}
+?>
 </head>
 
-
-<body  style="background-color:#FFF">
-<div id="wrapper" style="background-color: #FFF; width: 600px;">
-  <div id="rightContent" style="float: none; margin-left: auto; margin-right: auto; width: 550px; margin-left: auto; margin-right: auto; font-size: 14px;"><span style="color:#00C; font-weight: bold;">Available Student Resources</span><br>
-    <br>
-    <form action="" method="post">
-    <fieldset>
-    <legend>Search By</legend>
-    <?php
-	global $config;
-			echo '<p>';
-			for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
-				echo '<label>
-          <input type="radio" name="rdLevel" value="'.$config->levels[$cnt].'" id="rdLevel" onChange="requestLoadLanguage()">
-         '.$config->levels[$cnt].'</label>
-        &nbsp;&nbsp;';
-			}
-	echo  '</p>
-	<hr>';
-    ?>
-    <table width="493" border="0" align="center" cellspacing="0">
+<body>
+<form id="form1" name="form1" method="post" action="">
+<table width="534" border="0" align="center" cellpadding="4" cellspacing="4">
   <tr>
-    <td width="75"><b>Language</b></td>
-    <td width="172"><select name="Language" id="Language" onChange="requestLoadLanguage()" >
+    <td width="116">&nbsp;</td>
+    <td width="390">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="font-weight: bold">Configuration</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Time Zone</td>
+    <td>
+      <span id="spryselect1">
+        <label for="timeZone"></label>
+        <select name="timeZone" id="timeZone">
+          <option value="GMT">GMT</option>
+        </select>
+        <span class="selectRequiredMsg">Please select an item.</span></span>
+    </td>
+  </tr>
+  <tr>
+    <td>Language</td>
+    <td>
+    </select>
+      <span id="spryselect2">
+      <label for="select1"></label>
+      <select name="Language" id="Language">
       <option value='aa'>Afar</option>
       <option value='ab'>Abkhazian</option>
       <option value='af'>Afrikaans</option>
@@ -81,7 +148,7 @@
       <option value='dv'>Maldivian</option>
       <option value='nl'>Dutch; Flemish</option>
       <option value='dz'>Dzongkha</option>
-      <option value='en' selected>English</option>
+      <option value='en' selected="selected">English</option>
       <option value='eo'>Esperanto</option>
       <option value='et'>Estonian</option>
       <option value='ee'>Ewe</option>
@@ -247,46 +314,61 @@
       <option value='yo'>Yoruba</option>
       <option value='za'>Zhuang Chuang</option>
       <option value='zu'>Zulu</option>
-    </select></td>
-    <td width="74" align="right"><b>Subject</b></td>
-    <td width="164">
-    <?php
-		global $config;
-		echo '<select name="subject" id="subject"  onChange="requestLoadLanguage()">';
-		for($cnt=0;$cnt<sizeof($config->subjects);$cnt++){
-			echo '<option value="'.$config->subjects[$cnt].'">'.ucwords($config->subjects[$cnt]).'</option>';
-		}
-		echo  '</select>';
-    ?>
+      </select>
+      <span class="selectRequiredMsg">Please select an item.</span></span></td>
+  </tr>
+  <tr>
+    <td>Version</td>
+    <td><label for="version"></label>
+      <select name="version" id="version">
+        <option value="1.0">1.0</option>
+        <option value="2.0" selected="selected">2.0</option>
+        <option value="2.1">2.1</option>
+        <option value="2.2">2.2</option>
+        <option value="3.0">3.0</option>
       </select></td>
   </tr>
+  <tr>
+    <td>Layout</td>
+    <td><span id="spryselect3">
+      <label for="layout"></label>
+      <select name="layout" id="layout">
+      <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <span class="selectRequiredMsg">Please select an item.</span></span></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td style="font-size: 12px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;">separate text a comma [ , ]</td>
+  </tr>
+  <tr>
+    <td>Subjects</td>
+    <td><span id="sprytextarea1">
+      <label for="subjects"></label>
+      <textarea name="subjects" id="subjects" cols="45" rows="5"></textarea>
+      <span class="textareaRequiredMsg"><br />
+A value is required.</span></span></td>
+  </tr>
+  <tr>
+    <td>System Password</td>
+    <td><pre><span id="sprypassword1"><label for="systemPassword"></label><input type="password" name="systemPassword" id="systemPassword" /><span class="passwordRequiredMsg">A value is required.</span></span></pre></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td align="right"><input type="submit" name="submit" id="submit" value="Configue System &gt;&gt;" /></td>
+  </tr>
 </table>
-
-    </fieldset>
-    </form>
-      <p id="results"></p>
-	</div><span style="color: #900; font-weight:bold; font-style:italic"></span>  
-<div class="clear"></div>
-</div>
+</form>
+<script type="text/javascript">
+var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
+var spryselect2 = new Spry.Widget.ValidationSelect("spryselect2");
+var spryselect3 = new Spry.Widget.ValidationSelect("spryselect3");
+var sprytextarea1 = new Spry.Widget.ValidationTextarea("sprytextarea1");
+var sprypassword1 = new Spry.Widget.ValidationPassword("sprypassword1");
+</script>
 </body>
-<script type="text/javascript">
-function openRes(pNumber)
-{
-	var now = new Date()
-	///now = now.toGMTString();
-	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
-	window.open('viewResource.php?resid='+pNumber+'&systDate='+fmat);
-	///alert('Yes'); 
-}
-</script>
-
-<script type="text/javascript">
-
-function requestLoadLanguage(){
-	var lang = document.getElementById("Language").value;
-	var subject =  document.getElementById("subject").value;
-	var level = $('input:radio[name=rdLevel]:checked').val();
-	$("#results").load("../functions/getResByLangLevel.php?sLanguage="+lang+"&sLevel="+level+"&sSubject="+subject);
-}
-</script>
 </html>

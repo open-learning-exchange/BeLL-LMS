@@ -1,6 +1,4 @@
 <?php
-
-
 $server ="localhost";
 $username ="root";
 ///$password ="raspberry";
@@ -10,27 +8,70 @@ $dbhandle= mysql_connect($server,$username,$password) or die(mysql_error());
 $selected = mysql_select_db("schoolBell",$dbhandle) or die (mysql_error());
 
 function recordAction($action_by,$save_data){
-	$save = mysql_query("INSERT INTO `action_log` (`colNum`, `person`, `action`, `dateTime`) VALUES (NULL, '".$action_by."', '".$save_data."', CURRENT_TIMESTAMP)");
-	
+	global $facilityId;
+	$todayDate = date("Y-m-d H:i:s"); 
+ $actions = new couchClient($couchUrl, 'actions');
+  $doc = new stdClass();
+  $doc->kind ='Action';
+  $doc->memberId = $_SESSION['lmsUserID'];
+ $doc->facilityId = $facilityId;
+  $doc->action = $save_data;
+  $doc->objectId= strtotime($todayDate);
+  $doc->timestamp= "";
+  $doc->context= "lms";
+  $actions->storeDoc($doc);
 }
 
 
-function recordActionDate($action_by,$save_data,$systemDateForm){
-	$save = mysql_query("INSERT INTO `action_log` (`colNum`, `person`, `action`, `dateTime`) VALUES (NULL, '".$action_by."', '".$save_data."','".$systemDateForm."')");
+function recordActionObject($userID,$action,$object){
+	global $facilityId;
+	global $couchUrl;
+	$todayDate = date("Y-m-d H:i:s"); 
+	 $actions = new couchClient($couchUrl, "actions");
+	  $doc = new stdClass();
+	 $doc->kind ="Action";
+	  $doc->memberId = $_SESSION['lmsUserID'];
+	  $doc->memberRoles = $_SESSION['role'];
+	  $doc->facilityId = $facilityId;
+	  $doc->action = $action;
+	  $doc->objectId= $object;
+	  $doc->timestamp= strtotime($todayDate);
+	  $doc->context= "lms";
+	  //print_r($doc);
+	  $response = $actions->storeDoc($doc);
 }
 
+function recordActionObjectDate($userID,$action,$object,$systemDateForm){
+	global $facilityId;
+	global $couchUrl;
+	$todayDate = date("Y-m-d H:i:s"); 
+	 $actions = new couchClient($couchUrl, "actions");
+	  $doc = new stdClass();
+	 $doc->kind ="Action";
+	  $doc->memberId = $_SESSION['lmsUserID'];
+	  $doc->memberRoles = $_SESSION['role'];
+	  $doc->facilityId = $facilityId;
+	  $doc->action = $action;
+	  $doc->objectId= $object;
+	  $doc->timestamp= strtotime($todayDate);
+	  $doc->context= "lms";
+	  //print_r($doc);
+	  $response = $actions->storeDoc($doc);
+}
 global $couchUrl;
-$couchUrl = 'http://127.0.0.1:5984';
+$couchUrl = 'http://pi:raspberry@127.0.0.1:5984';
 
 error_reporting(E_ERROR);
 
-	include "lib/couch.php";
-	include "lib/couchClient.php";
-	include "lib/couchDocument.php";
-	/// for docs in pages directory
-	include "../lib/couch.php";
-	include "../lib/couchClient.php";
-	include "../lib/couchDocument.php";
+include "quotes.php";
+
+include "lib/couch.php";
+include "lib/couchClient.php";
+include "lib/couchDocument.php";
+/// for docs in pages directory
+include "../lib/couch.php";
+include "../lib/couchClient.php";
+include "../lib/couchDocument.php";
 
 global $facilityId;
 global $config;

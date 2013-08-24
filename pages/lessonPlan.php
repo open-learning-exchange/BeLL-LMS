@@ -58,8 +58,9 @@ if(isset($_POST['subject']))
   saveRes2DB($_POST['bellRes4']);
   saveRes2DB($_POST['bellRes5']);
   saveRes2DB($_POST['bellRes6']);
-  recordActionDate($_POST['preparedBy'],"Created Lesson Plan",$_POST['systemDateForm']);
   
+  recordActionObject($_SESSION['lmsUserID'],"created lesson note",$_POST['lessonNoteID']);
+
   echo '<script type="text/javascript">alert("Lesson plan successfully saved for '.$_POST['dateExec'].'");</script>';
   $mystring = "printLessonPlan.php?printDate=".$_POST['dateExec']."";
   die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
