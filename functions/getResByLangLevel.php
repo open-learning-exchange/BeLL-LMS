@@ -71,14 +71,14 @@ else if(isset($_GET['sLevel'])){
 				<td width="457" height="24"><span style="color: #900;font-weight:bold;">'.($colorCnt+1).'.   '.$doc->title.'</span><br>
 					<span style="font-style:italic">'.$doc->discription.'</span>
 				</td>
-				<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes('.$data['colNum'].')>'.$image.'</td>
+				<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes("'.$doc->_id.'")>'.$image.'</td>
 			  </tr>';
 			 }else{
 				 echo '<tr bgcolor="#F0F0F0">
 			<td width="457" height="24"><span style="color: #900;font-weight:bold;">'.($colorCnt+1).'.   '.$doc->title.'</span><br>
 				<span style="font-style:italic">'.$doc->discription.'</span>
 			</td>
-			<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes('.$data['colNum'].')>'.$image.'</td>
+			<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes("'.$doc->_id.'")>'.$image.'</td>
 		  </tr>';
 			 }
 			 $colorCnt++;

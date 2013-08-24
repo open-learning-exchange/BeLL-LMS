@@ -25,11 +25,13 @@ body {
 </style>
 <?php
 $showProfStudies = false;
+$pageDisplay ="";
 $roles = "<ul>";
 for($cnt=0;$cnt<= sizeof($_SESSION['role']); $cnt++){
 	switch(strtolower($_SESSION['role'][$cnt])){
 		case "teacher":
 			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
+			$pageDisplay = "pages/registerStudent.php";
 			break;
 		case "leadteacher":
 			$roles = $roles.'<li><a href="leadteacher.php">Lead Teacher.</a></li>';
@@ -116,7 +118,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 		
 		<div id="smallRight">
 		  <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
-			<tr><td height="981" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/registerStudent.php" name="DashScreen"></iframe>&nbsp;</td></tr>
+			<tr><td height="981" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/displayQuotes.php" name="DashScreen"></iframe>&nbsp;</td></tr>
 		  </table>
 		</div>
 	</div>

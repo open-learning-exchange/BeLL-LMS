@@ -1,5 +1,7 @@
 Teacher_Resources
+node_modules
 .DS_Store
 backup
 resources
 feedbacks
+transferData

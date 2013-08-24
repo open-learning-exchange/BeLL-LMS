@@ -5,119 +5,9 @@
 -->
 <allstudent>
 <student>
-<name>Gideon  Essah</name>
-<bcode>054</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b095d65</stuId>
-</student>
-<student>
-<name>Felix  Oppong</name>
-<bcode>053</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b094fbb</stuId>
-</student>
-<student>
-<name>Aziz  Commey</name>
-<bcode>052</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b09499f</stuId>
-</student>
-<student>
-<name>wisdom  Anyomi</name>
-<bcode>051</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b093bcd</stuId>
-</student>
-<student>
-<name>Nancy  Tetteh</name>
-<bcode>034</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0919d0</stuId>
-</student>
-<student>
-<name>Blessing  Kupogbe</name>
-<bcode>030</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0905d7</stuId>
-</student>
-<student>
-<name>Jennifer  Hodor</name>
-<bcode>029</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0901fb</stuId>
-</student>
-<student>
-<name>Wisdom  Adjonyoh</name>
-<bcode>002</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02a8b5</stuId>
-</student>
-<student>
-<name>Adams  Rashid</name>
-<bcode>001</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0299b3</stuId>
-</student>
-<student>
-<name>Gideon  Agbobada</name>
-<bcode>003</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027f63</stuId>
-</student>
-<student>
-<name>Samuel  Agbobada</name>
-<bcode>004</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027bae</stuId>
-</student>
-<student>
-<name>Herbert  Akosah</name>
-<bcode>005</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027426</stuId>
-</student>
-<student>
-<name>Clifford Adu Amoako</name>
-<bcode>006</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b026898</stuId>
-</student>
-<student>
-<name>Jonathan  Armah</name>
-<bcode>007</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b025eb3</stuId>
-</student>
-<student>
-<name>Richard  Asare</name>
-<bcode>008</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b025b2b</stuId>
-</student>
-<student>
-<name>Bernard Obeng Asiedu</name>
-<bcode>009</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02539f</stuId>
-</student>
-<student>
-<name>David  Asiedu</name>
-<bcode>010</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b024e5e</stuId>
-</student>
-<student>
-<name>Bright  Attipoe</name>
-<bcode>011</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b024d1a</stuId>
-</student>
-<student>
-<name>Anthony  Ayingura</name>
-<bcode>012</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0241f4</stuId>
-</student>
-<student>
-<name>Nyarkson Essuman Andrew</name>
-<bcode>013</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b023e3c</stuId>
-</student>
-<student>
-<name>Theophilus  Fosu</name>
-<bcode>014</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0238bd</stuId>
-</student>
-<student>
-<name>Robert  Gapeh</name>
-<bcode>015</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b023294</stuId>
-</student>
-<student>
-<name>Bismark  Gyamfi</name>
-<bcode>016</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b022e98</stuId>
+<name>Abigail  Charway</name>
+<bcode>038</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019978</stuId>
 </student>
 <student>
 <name>Abraham  Lamptey</name>
@@ -125,59 +15,9 @@
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b022627</stuId>
 </student>
 <student>
-<name>Patrick  Lamptey</name>
-<bcode>018</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02206a</stuId>
-</student>
-<student>
-<name> John Mensah</name>
-<bcode>019</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b021f9f</stuId>
-</student>
-<student>
-<name>Bismark  Ofori</name>
-<bcode>020</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b021c31</stuId>
-</student>
-<student>
-<name>Kingsley  Osei</name>
-<bcode>021</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b021c19</stuId>
-</student>
-<student>
-<name>Emmanuel  Quartey</name>
-<bcode>022</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b020ff4</stuId>
-</student>
-<student>
-<name>Daniel  Quaye</name>
-<bcode>023</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0202fe</stuId>
-</student>
-<student>
-<name>Wilson  Solomon</name>
-<bcode>024</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01f427</stuId>
-</student>
-<student>
-<name>Amidu  Saliu</name>
-<bcode>025</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01e98e</stuId>
-</student>
-<student>
-<name>Moro  Sulley</name>
-<bcode>026</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01e393</stuId>
-</student>
-<student>
-<name>Zainab  Abdallah</name>
-<bcode>027</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01dbe7</stuId>
-</student>
-<student>
-<name>Rashidatu  Adams</name>
-<bcode>028</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01da5a</stuId>
+<name>Adams  Rashid</name>
+<bcode>001</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0299b3</stuId>
 </student>
 <student>
 <name>Adwoa Osei Agyeman</name>
@@ -185,29 +25,19 @@
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01cfcc</stuId>
 </student>
 <student>
-<name>Florence Otwiwa Agyekum</name>
-<bcode>030</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c85c</stuId>
+<name>Amidu  Saliu</name>
+<bcode>025</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01e98e</stuId>
 </student>
 <student>
-<name>Gloria  Antwi</name>
-<bcode>031</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c7f2</stuId>
+<name>Anthony  Ayingura</name>
+<bcode>012</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0241f4</stuId>
 </student>
 <student>
-<name>Rejoice  Appiah</name>
-<bcode>032</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c395</stuId>
-</student>
-<student>
-<name>Yvonne  Appiah</name>
-<bcode>033</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01ba56</stuId>
-</student>
-<student>
-<name>Jemima  Atisu</name>
-<bcode>034</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01b4b5</stuId>
+<name>Aziz  Commey</name>
+<bcode>052</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b09499f</stuId>
 </student>
 <student>
 <name>Beatrice  Atobrah</name>
@@ -215,59 +45,9 @@
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01a97c</stuId>
 </student>
 <student>
-<name>Helena  Aryeetey</name>
-<bcode>036</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019d01</stuId>
-</student>
-<student>
-<name>Priscilla  Ayesua</name>
-<bcode>037</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019c11</stuId>
-</student>
-<student>
-<name>Abigail  Charway</name>
-<bcode>038</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019978</stuId>
-</student>
-<student>
-<name>Nora  Daremanda</name>
-<bcode>039</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0193dd</stuId>
-</student>
-<student>
-<name>Perfect  Dzorkpe</name>
-<bcode>040</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0189c0</stuId>
-</student>
-<student>
-<name>Linda  Eshun</name>
-<bcode>041</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b017ff8</stuId>
-</student>
-<student>
-<name>Bernice  Fosu</name>
-<bcode>042</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b017f77</stuId>
-</student>
-<student>
-<name>Emefa  Gadagbui</name>
-<bcode>043</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0170fe</stuId>
-</student>
-<student>
-<name>Priscilla  Mensah</name>
-<bcode>044</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b016433</stuId>
-</student>
-<student>
-<name>Diana  Nipa</name>
-<bcode>045</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b015d4b</stuId>
-</student>
-<student>
-<name>Natasha  Ntow</name>
-<bcode>046</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0157d6</stuId>
+<name>Bernard Obeng Asiedu</name>
+<bcode>009</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02539f</stuId>
 </student>
 <student>
 <name>Bernice  Ofori</name>
@@ -275,9 +55,199 @@
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b015373</stuId>
 </student>
 <student>
+<name>Bernice  Fosu</name>
+<bcode>042</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b017f77</stuId>
+</student>
+<student>
+<name>Bismark  Ofori</name>
+<bcode>020</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b021c31</stuId>
+</student>
+<student>
+<name>Bismark  Gyamfi</name>
+<bcode>016</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b022e98</stuId>
+</student>
+<student>
+<name>Blessing  Kupogbe</name>
+<bcode>030</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0905d7</stuId>
+</student>
+<student>
+<name>Bright  Attipoe</name>
+<bcode>011</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b024d1a</stuId>
+</student>
+<student>
 <name>Cindy  Osei</name>
 <bcode>048</bcode>
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b014c1c</stuId>
+</student>
+<student>
+<name>Clifford Adu Amoako</name>
+<bcode>006</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b026898</stuId>
+</student>
+<student>
+<name>Collins  Gabienu</name>
+<bcode>050</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0131fc</stuId>
+</student>
+<student>
+<name>Daniel  Quaye</name>
+<bcode>023</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0202fe</stuId>
+</student>
+<student>
+<name>David  Asiedu</name>
+<bcode>010</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b024e5e</stuId>
+</student>
+<student>
+<name>Diana  Nipa</name>
+<bcode>045</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b015d4b</stuId>
+</student>
+<student>
+<name>Emefa  Gadagbui</name>
+<bcode>043</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0170fe</stuId>
+</student>
+<student>
+<name>Emmanuel  Quartey</name>
+<bcode>022</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b020ff4</stuId>
+</student>
+<student>
+<name>Felix  Oppong</name>
+<bcode>053</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b094fbb</stuId>
+</student>
+<student>
+<name>Florence Otwiwa Agyekum</name>
+<bcode>030</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c85c</stuId>
+</student>
+<student>
+<name>Gideon  Agbobada</name>
+<bcode>003</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027f63</stuId>
+</student>
+<student>
+<name>Gideon  Essah</name>
+<bcode>054</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b095d65</stuId>
+</student>
+<student>
+<name>Gloria  Antwi</name>
+<bcode>031</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c7f2</stuId>
+</student>
+<student>
+<name>Helena  Aryeetey</name>
+<bcode>036</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019d01</stuId>
+</student>
+<student>
+<name>Herbert  Akosah</name>
+<bcode>005</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027426</stuId>
+</student>
+<student>
+<name>Jemima  Atisu</name>
+<bcode>034</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01b4b5</stuId>
+</student>
+<student>
+<name>Jennifer  Hodor</name>
+<bcode>029</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0901fb</stuId>
+</student>
+<student>
+<name>Jonathan  Armah</name>
+<bcode>007</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b025eb3</stuId>
+</student>
+<student>
+<name>Kingsley  Osei</name>
+<bcode>021</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b021c19</stuId>
+</student>
+<student>
+<name>Linda  Eshun</name>
+<bcode>041</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b017ff8</stuId>
+</student>
+<student>
+<name>Moro  Sulley</name>
+<bcode>026</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01e393</stuId>
+</student>
+<student>
+<name>Nancy  Tetteh</name>
+<bcode>034</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0919d0</stuId>
+</student>
+<student>
+<name>Natasha  Ntow</name>
+<bcode>046</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0157d6</stuId>
+</student>
+<student>
+<name>Nora  Daremanda</name>
+<bcode>039</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0193dd</stuId>
+</student>
+<student>
+<name>Nyarkson Essuman Andrew</name>
+<bcode>013</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b023e3c</stuId>
+</student>
+<student>
+<name>Patrick  Lamptey</name>
+<bcode>018</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02206a</stuId>
+</student>
+<student>
+<name>Perfect  Dzorkpe</name>
+<bcode>040</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0189c0</stuId>
+</student>
+<student>
+<name>Priscilla  Mensah</name>
+<bcode>044</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b016433</stuId>
+</student>
+<student>
+<name>Priscilla  Ayesua</name>
+<bcode>037</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b019c11</stuId>
+</student>
+<student>
+<name>Rashidatu  Adams</name>
+<bcode>028</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01da5a</stuId>
+</student>
+<student>
+<name>Rejoice  Appiah</name>
+<bcode>032</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01c395</stuId>
+</student>
+<student>
+<name>Richard  Asare</name>
+<bcode>008</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b025b2b</stuId>
+</student>
+<student>
+<name>Robert  Gapeh</name>
+<bcode>015</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b023294</stuId>
+</student>
+<student>
+<name>Samuel  Agbobada</name>
+<bcode>004</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b027bae</stuId>
 </student>
 <student>
 <name>Sarah  Pappoe</name>
@@ -285,8 +255,28 @@
 <stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01407a</stuId>
 </student>
 <student>
-<name>Collins  Gabienu</name>
-<bcode>050</bcode>
-<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0131fc</stuId>
+<name>Theophilus  Fosu</name>
+<bcode>014</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b0238bd</stuId>
+</student>
+<student>
+<name>Wilson  Solomon</name>
+<bcode>024</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01f427</stuId>
+</student>
+<student>
+<name>wisdom  Anyomi</name>
+<bcode>051</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b093bcd</stuId>
+</student>
+<student>
+<name>Wisdom  Adjonyoh</name>
+<bcode>002</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b02a8b5</stuId>
+</student>
+<student>
+<name>Yvonne  Appiah</name>
+<bcode>033</bcode>
+<stuId>ghaeaa47d6ac5e9c22e2d1ed6d8b01ba56</stuId>
 </student>
 </allstudent>

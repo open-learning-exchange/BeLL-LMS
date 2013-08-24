@@ -78,9 +78,9 @@ if(isset($_POST['pass']))
 	// add student list to group members array
 	array_push($viewResults->rows[0]->doc->members,$docId);
 	$groups->storeDoc($viewResults->rows[0]->doc);
-	/*
- recordActionDate($_SESSION['name']," Added a new student by name ".$_POST['stuName']." in ".$_POST['stuClass'],$_POST['systemDateForm']);*/
- 
+	
+	recordActionObject($_SESSION['lmsUserID'],"added a new member (student) ",$docId);
+	
 echo '<script type="text/javascript">alert("Successfully Added ||||  Student Name:'.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script>';
 echo ("Successfully Added  <|>  Student Name:".$_POST['firstName']."  <|>  Please save student code : ".$_POST['pass']."<br>
 ");

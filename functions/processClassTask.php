@@ -13,6 +13,8 @@ if(isset($_POST['Vbook']))
 		mysql_query("INSERT INTO `VBTask` (`ColNum`, `resrcID`, `questColNum`, `usedby`, `dateUsed`, `class`) VALUES (NULL, '".$_POST['vbTitle']."', '".substr($whatQuestions, 1)."', '".$_SESSION['name']."', '".$_POST['dateExec']."', '".$_POST['class']."')") or die(mysql_error());
 			// -- insert into database call might go here
 	}
+	///recordActionObjectDate($_SESSION['lmsUserID'],"Assigned Task To Group",$_GET['groupID'],$_GET['systDate']);
+	
 }
 if(isset($_POST['AStory']))
 {

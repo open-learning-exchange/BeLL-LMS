@@ -60,7 +60,7 @@ if ($handle = opendir('../feedbacks/')) {
      }
     }
     closedir($handle);
-	 recordAction($_SESSION['name'],"Saved tablet usage feedback into db");
+	recordActionObject($_SESSION['lmsUserID'],"Saved tablet usage feedback into db","");
 } else
 {
 	 echo "System folder acces error";

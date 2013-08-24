@@ -24,7 +24,7 @@ if(isset($_POST['startDate'])){
 			$doc->context = array(
 			  "subject" => $resDoc->subject,
 			  "use" => "stories for the week",
-			  "groupid" => $_POST['level'],
+			  "groupId" => $_POST['level'],
 			  "facilityId"=>$facilityId
 			  
 			);
@@ -54,7 +54,9 @@ if(isset($_POST['startDate'])){
 			$response = $feedbacks->storeDoc($doc);
 		}
 	}
- //recordActionDate($_SESSION['name'],"Prepared stories for the week",$_POST['systemDateForm']);
+	
+
+	recordActionObject($_SESSION['lmsUserID'],"Prepared stories for the week",$_POST['level']);
   echo '<script type="text/javascript">alert("Stories saved successfully");</script>';
 }
 

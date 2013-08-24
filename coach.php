@@ -92,7 +92,7 @@ if(sizeof($_SESSION['role'])<1)
     <div id="smallRight">
       <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
         <tr>
-          <td height="983" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/uploadRes.php" name="DashScreen"></iframe>
+          <td height="983" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/displayQuotes.php" name="DashScreen"></iframe>
             &nbsp;</td>
         </tr>
       </table>

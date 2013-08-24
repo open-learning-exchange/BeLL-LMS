@@ -91,6 +91,7 @@ function backup_tables($host,$user,$pass,$name,$tables = '*')
 	 
 	////readfile($targetFile,true); // send file to client
 }
+die("Please go sync with Sync Pi");
 backup_tables('localhost','schoolbell','oleole','schoolbell');
 
 ?>

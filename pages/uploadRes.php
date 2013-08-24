@@ -25,7 +25,7 @@
 	border-style:double;
 	min-height: 250px;
 	width: 530px;
-	/*display:none;*/
+	display:none;
 }
 #audQuest {
 	background-color: #693;

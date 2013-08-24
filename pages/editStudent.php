@@ -87,12 +87,10 @@ if(isset($_POST['pass']))
 	$viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['level'])->getView('api', 'facilityLevel');
 	array_push($viewResults->rows[0]->doc->members,$response->id);
 	$groups->storeDoc($viewResults->rows[0]->doc);
-	/*
- recordActionDate($_SESSION['name']," Added a new student by name ".$_POST['stuName']." in ".$_POST['stuClass'],$_POST['systemDateForm']);*/
- 
+	
+recordActionObject($_SESSION['lmsUserID'],"modified (student) member details",$_POST['studentID']);
 echo '<script type="text/javascript">alert("Successfully Updated ||||  Student Name:'.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script><br>';
-echo ("Successfully Updated  <|>  Student Name:".$_POST['firstName']."  <|>  Please save student code : ".$_POST['pass']."<br>
-");
+die ("Successfully Updated  <|>  Student Name:".$_POST['firstName']."  <|> Please save student code : ".$_POST['pass']."<br>");
 
 }
 if(isset($_GET['Edit']))

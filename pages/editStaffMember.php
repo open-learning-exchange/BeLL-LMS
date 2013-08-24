@@ -48,7 +48,9 @@ if(isset($_POST['firstName']))
 	$doc->nationality = strtolower($_POST['nationality']);
 	$doc->gender = $_POST['gender'];
 	$doc->login = $_POST['login'];
-	$doc->pass = md5($_POST['password']);
+	if($_POST['oldPassword']!=$_POST['password']){
+		$doc->pass = md5($_POST['password']);
+	}
 	$doc->phone = $_POST['phoneNumber'];
 	foreach($_POST['classAssigned'] as $levels){
 		$groupsDoc= $groups->getDoc($levels);
@@ -62,6 +64,7 @@ if(isset($_POST['firstName']))
 	foreach($_POST['role'] as $role) {
 		array_push($roles,$role);
 	}
+	print_r($roles);
 	$doc->roles = $roles;
 	//print_r($doc);
 	// save doc to couch and for responce->id
@@ -97,7 +100,7 @@ if(isset($_POST['firstName']))
 		$groups->storeDoc($groupDoc);
 	}
 	//@todo better log information
-  ////recordActionDate($_SESSION['lmsUserID'],"Created new account for ".$members->getDoc($response->id),$_POST['systemDateForm']);
+	 recordActionObject($_SESSION['lmsUserID'],"Modified (Staff) Member Details",$_POST['memberID']);
   echo "<br/>".$_POST['firstName']." ".$_POST['middleNames']." ".$_POST['lastName']." successfully added to members ".$_POST['Class'].'<br><br>';
 }
 else if(isset($_GET['edit']))
@@ -133,17 +136,17 @@ else if(isset($_GET['edit']))
             <td><b>Privilage / Role</b></td>
             <td colspan="2"><p>
                 <label>
-                  <input name="role[]" type="checkbox" id="role_0" value="teacher" onChange="triggerClassAssigned()" checked="CHECKED">
+                  <input name="role[]" type="checkbox" id="teacher" value="teacher" onChange="triggerClassAssigned()" checked="CHECKED">
                 Teacher</label> &nbsp;&nbsp;&nbsp;
                 <label>
-                  <input type="checkbox" name="role[]" value="leadteacher" id="role_1">
+                  <input type="checkbox" name="role[]" value="leadteacher" id="leadteacher">
                   Leadteacher</label> 
                 <label>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <input type="checkbox" name="role[]" value="headteacher" id="role_2">
+                  <input type="checkbox" name="role[]" value="headteacher" id="headteacher">
                   Headteacher</label>&nbsp;&nbsp;&nbsp;
                 <label>
-                  <input type="checkbox" name="role[]" value="coach" id="role_3">
+                  <input type="checkbox" name="role[]" value="coach" id="coach">
                   Coach</label>
                 <br>
                 <br>
@@ -494,7 +497,8 @@ else if(isset($_GET['edit']))
             <td colspan="2"><span id="spryconfirm1">
               <label for="confirmPass"></label>
               <input name="confirmPass" type="password" id="confirmPass" value="<?php echo $docToEdit->pass?>">
-            <span class="confirmRequiredMsg">A value is required.</span><span class="confirmInvalidMsg">The values don't match.</span></span></td>
+            <span class="confirmRequiredMsg">A value is required.</span><span class="confirmInvalidMsg">The values don't match.</span></span>
+              <input type="hidden" name="oldPassword" id="oldPassword" value="<?php echo $docToEdit->pass?>"></td>
 </tr>
           <tr>
             <td colspan="2" rowspan="2"><img name="image" src="<?php echo $image;?>" style="max-width:150px" alt=""></td>
@@ -568,6 +572,10 @@ $(function() {
 	var jsLevelArray = <?php echo json_encode($grpIds); ?>;
 	for(cnt=0;cnt<jsLevelArray.length;cnt++){
 		$("#"+jsLevelArray[cnt]+"").attr('checked', true);
+	}
+	var jsRolesArray = <?php echo json_encode($docToEdit->roles); ?>;
+	for(cnt=0;cnt<jsRolesArray.length;cnt++){
+		$("#"+jsRolesArray[cnt]+"").attr('checked', true);
 	}
 });
 </script>
