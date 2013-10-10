@@ -301,3 +301,10 @@ Assisning Task to students
 .active {
 	background-position: right 12px;
 }
+
+#showSyncDate{
+	width:555px;
+	min-height:400px;
+	background-color:#FFC;
+	/*display:none;*/
+}

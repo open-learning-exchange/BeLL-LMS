@@ -1,7 +1,7 @@
 <?php
 $server ="localhost";
 $username ="root";
-///$password ="raspberry";
+//$password ="raspberry";
 $password ="";
 date_default_timezone_set('UTC');
 $dbhandle= mysql_connect($server,$username,$password) or die(mysql_error());
@@ -16,8 +16,8 @@ function recordAction($action_by,$save_data){
   $doc->memberId = $_SESSION['lmsUserID'];
  $doc->facilityId = $facilityId;
   $doc->action = $save_data;
-  $doc->objectId= strtotime($todayDate);
-  $doc->timestamp= "";
+  $doc->objectId= "";
+  $doc->timestamp= strtotime($_SESSION['dateTime']);
   $doc->context= "lms";
   $actions->storeDoc($doc);
 }
@@ -35,7 +35,7 @@ function recordActionObject($userID,$action,$object){
 	  $doc->facilityId = $facilityId;
 	  $doc->action = $action;
 	  $doc->objectId= $object;
-	  $doc->timestamp= strtotime($todayDate);
+	  $doc->timestamp= strtotime($_SESSION['dateTime']);
 	  $doc->context= "lms";
 	  //print_r($doc);
 	  $response = $actions->storeDoc($doc);
@@ -53,7 +53,7 @@ function recordActionObjectDate($userID,$action,$object,$systemDateForm){
 	  $doc->facilityId = $facilityId;
 	  $doc->action = $action;
 	  $doc->objectId= $object;
-	  $doc->timestamp= strtotime($todayDate);
+	  $doc->timestamp= strtotime($_SESSION['dateTime']);
 	  $doc->context= "lms";
 	  //print_r($doc);
 	  $response = $actions->storeDoc($doc);

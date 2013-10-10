@@ -73,18 +73,21 @@ if(isset($_POST['pass']))
 	}
 	// Start saving group assigned to member in group document
 	$groups = new couchClient($couchUrl, "groups");
+	$key = array($facilityId,$_POST['level']);
 	//get all groups from view into viewResults
-	$viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['level'])->getView('api', 'facilityLevel');
-	// add student list to group members array
-	array_push($viewResults->rows[0]->doc->members,$docId);
-	$groups->storeDoc($viewResults->rows[0]->doc);
+	$group_viewResults = $groups->include_docs(TRUE)->key($key)->getView('api', 'facilityIdLevel');
+	foreach($group_viewResults->rows as $row){
+		// add student list to group members array
+		$newDoc = $groups->getDoc($row->doc->_id);
+		array_push($newDoc->members,$docId);
+		$groups->storeDoc($newDoc);
+	}
+	
 	
 	recordActionObject($_SESSION['lmsUserID'],"added a new member (student) ",$docId);
 	
-echo '<script type="text/javascript">alert("Successfully Added ||||  Student Name:'.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script>';
-echo ("Successfully Added  <|>  Student Name:".$_POST['firstName']."  <|>  Please save student code : ".$_POST['pass']."<br>
-");
-echo $docId;
+echo '<script type="text/javascript">alert("Successfully added : '.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script>';
+echo ("Successfully added : ".$_POST['firstName']."  |  Please save student code : ".$_POST['pass']."<br>");
 }
 
 ?>

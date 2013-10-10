@@ -64,7 +64,7 @@ if(isset($_POST['firstName']))
 	foreach($_POST['role'] as $role) {
 		array_push($roles,$role);
 	}
-	print_r($roles);
+	///print_r($roles);
 	$doc->roles = $roles;
 	//print_r($doc);
 	// save doc to couch and for responce->id
@@ -82,17 +82,20 @@ if(isset($_POST['firstName']))
 	
 	foreach($_POST['prevLevel'] as $prevlevels){
 		//get all groups from view into viewResults
-		
 		$viewResults = $groups->include_docs(TRUE)->key($facilityId.$prevlevels)->getView('api', 'facilityLevel');
 		// search student list to group members array and remove id from previouse group
-		$key = array_search($_POST['memberID'],$viewResults->rows[0]->doc->owners);
-		if($key>-1){;
-			unset($viewResults->rows[0]->doc->owners[$key]);
-			//echo "hello";
-			//print_r($viewResults->rows[0]->doc->members);
-			$groups->storeDoc($viewResults->rows[0]->doc);
+		$updatedOwners=array();
+		foreach($viewResults->rows as $groupView){
+			for($gcnt=0;$gcnt<sizeof($groupView->doc->owners);$gcnt++){
+				if($_POST['memberID']!=$groupView->doc->owners[$gcnt]){
+					array_push($updatedOwners,$groupView->doc->owners[$gcnt]);
+				}
+			}
+		   $groupView->doc->owners = $updatedOwners;
+		   $groups->storeDoc($groupView->doc);
 		}
 	}
+	
 	// add to new group owners array
 	foreach($_POST['classAssigned'] as $groupID){
 		$groupDoc = $groups->getDoc($groupID);
@@ -118,7 +121,7 @@ else if(isset($_GET['edit']))
 			
 	}
 	//echo $arrayImage[0];
-	$image = $couchUrl."/members/".$_GET['edit']."/".urlencode($arrayImage[0])."";
+	$image = "http://".$_SERVER['SERVER_NAME'].":5984/members/".$_GET['edit']."/".urlencode($arrayImage[0])."";
 }
 ?>
 

@@ -86,9 +86,8 @@ if(sizeof($_SESSION['role'])<1)
       </a> </div>
     <div class="shortcutHome"> <a href="pages/ManClasses.php" target="DashScreen"><img src="images/manageClass.png" alt=""><br>
       Manage Accessibility</a> </div>
-    <div class="shortcutHome"> <a href="pages/view_LPlan.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
-      Lesson Plan</a></div>
-      
+   <div class="shortcutHome"> <a href="pages/listAllLessonPlans.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
+      All Lesson Plans</a></div>
       <div class="shortcutHome"> <a href="pages/studentsList.php"  target="DashScreen"><img src="images/students.png" alt=""><br>View all Students</a> </div>
     <div class="clear"></div>
     <div id="smallRight">

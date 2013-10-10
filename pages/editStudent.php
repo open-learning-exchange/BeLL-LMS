@@ -75,18 +75,22 @@ if(isset($_POST['pass']))
 	$viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['prevLevel'])->getView('api', 'facilityLevel');
 	// search student list to group members array and remove id from previouse group
 	$arrayMembers = array();
-	$key = array_search($_POST['studentID'],$viewResults->rows[0]->doc->members);
-	if($key!=null) {
-		//echo $key;
-    	unset($viewResults->rows[0]->doc->members[$key]);
-		//echo "hello";
-		//print_r($viewResults->rows[0]->doc->members);
-		$groups->storeDoc($viewResults->rows[0]->doc);
+	///$key = array_search($_POST['studentID'],$viewResults->rows[0]->doc->members);
+	foreach($viewResults->rows as $groupView){
+		for($arc=0;$arc<sizeof($groupView->doc->members);$arc++){	
+			if($groupView->doc->members[$arc]!=$_POST['studentID']){
+				array_push($arrayMembers,$groupView->doc->members[$arc]);
+			}
+		}
+		$groupView->doc->members = $arrayMembers;
+		$groups->storeDoc($groupView->doc);
 	}
 	// add to new group members array
-	$viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['level'])->getView('api', 'facilityLevel');
-	array_push($viewResults->rows[0]->doc->members,$response->id);
-	$groups->storeDoc($viewResults->rows[0]->doc);
+	$newGroup_viewResults = $groups->include_docs(TRUE)->key($facilityId.$_POST['level'])->getView('api', 'facilityLevel');
+	foreach($newGroup_viewResults->rows as $newGroup){
+		array_push($newGroup->doc->members,$_POST['studentID']);
+		$groups->storeDoc($newGroup->doc);
+	}
 	
 recordActionObject($_SESSION['lmsUserID'],"modified (student) member details",$_POST['studentID']);
 echo '<script type="text/javascript">alert("Successfully Updated ||||  Student Name:'.$_POST['firstName'].' |||  Please save student code : '.$_POST['pass'].'");</script><br>';
@@ -107,7 +111,7 @@ if(isset($_GET['Edit']))
 			
 	}
 	//echo $arrayImage[0];
-	$image = $couchUrl."/members/".$_GET['Edit']."/".urlencode($arrayImage[0])."";
+	$image = "http://".$_SERVER['SERVER_NAME'].":5984/members/".$_GET['Edit']."/".urlencode($arrayImage[0])."";
 }
 
 ?>

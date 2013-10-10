@@ -1,10 +1,18 @@
 <?php
 global $studentIDs;
 global $MasterstudentIDs;
-global $resorcesArray;
+global $resourceArray;
+global $videoBookResArray;
 global $couchUrl;
-$resorcesArray = array();
+$resourceArray = array();
 $MasterstudentIDs =array();
+$videoBookResArray= array();
+
+
+if(isset($_POST['dateFrom']))
+{
+echo "<br /> *************************************************************** <br />
+Preparing System for Sync Process<br />";
 // Delet all files from the resorces folder
 $files = glob('../resources/*'); // get all file names
 foreach($files as $file){ 
@@ -21,15 +29,17 @@ foreach($files as $file){
   if(is_file($file))
     unlink($file); // delete file
 }
+$files = glob('../transferData/videoBook/*'); // get all file names
+foreach($files as $file){ 
+  if(is_file($file))
+    unlink($file); // delete file
+}
 
-
-
-if(isset($_POST['dateFrom']))
-{
 
 ///// begin function for compiling students ////start_key=["test","z"]&end_key=["test","a"]
 function compileClass($theClass)
 {	
+echo "Processing student details for ".$theClass." <br />";
 global $couchUrl;
 global $facilityId;
 global $config;
@@ -45,24 +55,38 @@ $dataBody ='<?xml version="1.0" encoding="UTF-8"?>
     Author     : Open Learning Exchange
 -->
 <allstudent>';
+$studentCode ="";
 foreach($viewResults->rows as $row) {
+	if(trim($row->doc->pass)==""){
+		$studentCode = "000";
+	} else {
+		$studentCode = $row->doc->pass;
+	}
 $dataBody = $dataBody.'
 <student>
 <name>'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</name>
-<bcode>'.$row->doc->pass.'</bcode>
+<bcode>'.$studentCode.'</bcode>
 <stuId>'.$row->doc->_id.'</stuId>
 </student>';
 array_push($studentIDs,$row->doc->_id);
+
 }
 
 if($theClass=="KG1"){
-$key = $facilityId.'KG2';
-$viewResults = $members->include_docs(TRUE)->key($key)->descending(TRUE)->getView('api', 'facilityLevelActive_allStudent');
+$studentCode ="";
+$start_key = array($facilityId,'KG2',"A");
+$end_key = array($facilityId,'KG2',"Z");
+$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 foreach($viewResults->rows as $row) {
+  if(trim($row->doc->pass)==""){
+	  $studentCode = "000";
+  } else {
+	  $studentCode = $row->doc->pass;
+  }
 $dataBody = $dataBody.'
 <student>
 <name>'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</name>
-<bcode>'.$row->doc->pass.'</bcode>
+<bcode>'.$studentCode.'</bcode>
 <stuId>'.$row->doc->_id.'</stuId>
 </student>';
 array_push($studentIDs,$row->doc->_id);
@@ -76,6 +100,7 @@ $fh = fopen($myFile, 'w') or die("can't open file");
 fwrite($fh,$dataBody);
 fclose($fh);
 chmod($fh,777);
+echo "Successfully processed data for  ".$theClass." <br />";
 return $studentIDs;
 
 }
@@ -102,30 +127,42 @@ $dataBody ='<?xml version="1.0" encoding="UTF-8"?>
 foreach($viewResults->rows as $row){
 //	echo "Here<br />";
 	if(count($row) > 0){
+		$sign="";
 		$start_key = array($facilityId,$row->id);
-		$assaign_viewResults = $assignments->key($start_key)->getView('api', 'facilityGroupID');
+		
+		$assaign_viewResults = $assignments->include_docs(TRUE)->key($start_key)->getView('api', 'facilityGroupID');
 		foreach($assaign_viewResults->rows as $assignRow){
-			$resDoc = $resources->getDoc($assignRow->value);
-			if($resDoc->type=="readable"){
+			if($assignRow->doc->context->use=="stories for the week"){
+				$sign="+ ";
+			}else{
+				$sign="";
+			}
+		//----//
+		///print($assignRow->doc->endDate."<br />");
+	
+		if(strtotime($_POST['dateFrom']) <= ($assignRow->doc->endDate) && ($assignRow->doc->endDate)<=strtotime($_POST['dateTo'])){
+		$resDoc = $resources->getDoc($assignRow->value);
+			if($resDoc->type!="video lesson"){
 $dataBody = $dataBody.'
 <resources>
 <id>'.$resDoc->_id.'</id>
-<title>'.$resDoc->title.'</title>
+<title>'.$sign.$resDoc->title.'</title>
 <type>'.$resDoc->legacy->type.'</type>
 </resources>';
 //Save Resources to Array for downloading
-				global $resorcesArray;
+				global $resourceArray;
 				$foundDuplicateInArray = false;
-				for($cnt=0;$cnt<sizeof($resorcesArray);$cnt++){
-					if($resorcesArray[$cnt]==$resDoc->_id){
+				for($cnt=0;$cnt<sizeof($resourceArray);$cnt++){
+					if($resourceArray[$cnt]==$resDoc->_id){
 						$foundDuplicateInArray =true;
 					}
 				}
 				if(!$foundDuplicateInArray){
-					array_push($resorcesArray,$resDoc->_id);
+					array_push($resourceArray,$resDoc->_id);
 				}
 			}
-//
+		}
+		//----//
 		}
 	}
 }
@@ -139,6 +176,110 @@ chmod($fh,777);
 }
 //////////// end function ////////////
 
+///// begin function for readable resources////
+function compileVideoBook($memberID)
+{	
+global $couchUrl;
+global $facilityId;
+global $config;
+$groups = new couchClient($couchUrl, "groups");
+$assignments = new couchClient($couchUrl, "assignments");
+$resources = new couchClient($couchUrl, "resources");
+$start_key = array($facilityId,$memberID);
+$viewResults = $groups->key($start_key)->getView('api', 'facilityWithMemberID');
+$dataBody ='<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : '.$memberID.'.xml
+    Author     : Open Learning Exchange
+-->
+<allresources>';
+foreach($viewResults->rows as $row){
+//	echo "Here<br />";
+	if(count($row) > 0){
+		$sign="";
+		$start_key = array($facilityId,$row->id);
+		
+		$assaign_viewResults = $assignments->include_docs(TRUE)->key($start_key)->getView('api', 'facilityGroupIdVideoBook');
+		foreach($assaign_viewResults->rows as $assignRow){
+		//----//
+		///print($assignRow->doc->endDate."<br />");
+	
+		if(strtotime($_POST['dateFrom']) <= ($assignRow->doc->endDate) && ($assignRow->doc->endDate)<=strtotime($_POST['dateTo'])){
+		$resDoc = $resources->getDoc($assignRow->value);
+			if($resDoc->type=="video lesson"){
+				/// count the number of questions
+				$counter=sizeof($assignRow->doc->context->questions);
+				/// finish counting
+				///echo "<br />".$counter."<br />";
+$allquestions = array();
+$questionHolder ="";
+$dataBody = $dataBody.'
+	<resources>
+		<id>'.$resDoc->_id.'</id>
+		<assignmentId>'.$assignRow->doc->_id.'</assignmentId>
+		<title>'.$resDoc->title.'</title>
+		<type>'.$resDoc->legacy->type.'</type>
+		<noOfQuestions>'.$counter.'</noOfQuestions>
+		<listquest>';
+$question="";
+$questionAnswer ="";
+$Quencnt=0;
+$questionHolder="";
+foreach($resDoc->questions as $questn){
+	$avalable =0;
+$questionHolder = $questionHolder.'
+			<question>
+				<text>'.key($questn).'</text>';
+	foreach($questn as $answer){
+$questionHolder = $questionHolder.'
+				<ans>'.key($answer).'</ans>';
+			foreach($answer as $possibles){
+				for($counter = 0; $counter<4;$counter++){
+				//	echo $possibles[$counter]." <br />";
+$questionHolder = $questionHolder.'
+				<pos'.($counter+1).'>'.$possibles[$counter].'</pos'.($counter+1).'>';
+			}
+		}
+$questionHolder = $questionHolder.'
+			</question>';
+	array_push($allquestions,$questionHolder);
+	$questionHolder="";
+	}
+}
+foreach($assignRow->doc->context->questions as $chosenValue){
+	//echo $chosenValue."<br />";
+	$dataBody = $dataBody.$allquestions[$chosenValue];
+}
+$dataBody = $dataBody.'
+		</listquest>
+	</resources>';
+//Save Resources to Array for downloading
+				global $videoBookResArray;
+				$foundDuplicateVideoBookInArray = false;
+				for($cnt=0;$cnt<sizeof($videoBookResArray);$cnt++){
+					if($videoBookResArray[$cnt]==$resDoc->_id){
+						$foundDuplicateVideoBookInArray =true;
+					}
+				}
+				if(!$foundDuplicateVideoBookInArray){
+					array_push($videoBookResArray,$resDoc->_id);
+				}
+			}
+		}
+		//----//
+		}
+	}
+}
+ $dataBody=$dataBody.'
+</allresources>';
+$Student_File = "../transferData/videoBook/vb_".$memberID.".xml";
+$fh = fopen($Student_File, 'w') or die("can't open file");
+fwrite($fh,$dataBody);
+fclose($fh);
+chmod($fh,777);
+}
+//////////// end function ////////////
+/////////////////////////////
 
 ///// begin function for Video Books////
 /*function compileVBResources($theClass)
@@ -264,7 +405,28 @@ fclose($fh);
 chmod($fh,777);
 }*/
 //// end function for Vedio Books////
-
+function pullResourceFromCouch($getResourceArray){
+	
+	global $couchUrl;
+	global $facilityId;
+	global $config;
+	echo "Pulling resources together for distrubution unto tablet <br /><br />";
+	$counter = 100/sizeof($getResourceArray);
+	$percentage=0;
+	foreach($getResourceArray as $link){
+		$percentage = $percentage + $counter;
+		$resources = new couchClient($couchUrl, "resources");
+		$docToDownload = $resources->getDoc($link);
+		$get_FileToDownload = $docToDownload->_attachments;
+		echo $percentage."% complete <br />";
+		foreach($get_FileToDownload as $key => $value){
+		  $url = $couchUrl."/resources/".$link."/".urlencode($key)."";
+		  $content = file_get_contents($url);
+		  file_put_contents('../resources/'.$link.'.'.end(explode(".",strtolower($key))), $content);
+			  ///array_push($arrayImage,$key);
+		}
+	}
+}
 
 /// Class Names and Code //////
 //////////////////////////////
@@ -278,42 +440,31 @@ $MasterstudentIDs = array_merge($MasterstudentIDs,compileClass("P6"));
 //print_r($MasterstudentIDs);
 
 ///////// Used Readable Resources /////
-///////////////////////////////////////
-
-
+echo "Gathering resource data assigned to students <br />";
 foreach($MasterstudentIDs as $stuID){
 	compileResources($stuID);
 }
+echo "Successfully processed resource data for all students <br />";
+pullResourceFromCouch($resourceArray);
+///////////////////////////////////////
 
 
-
-foreach($resorcesArray as $link){
-	$resources = new couchClient($couchUrl, "resources");
-	$docToDownload = $resources->getDoc($link);
-	$get_FileToDownload = $docToDownload->_attachments;
-	foreach($get_FileToDownload as $key => $value){
-	  $url = $couchUrl."/resources/".$link."/".urlencode($key)."";
-	  $content = file_get_contents($url);
-	  file_put_contents('../resources/'.$link.'.'.end(explode(".",$key)), $content);
-		  ///array_push($arrayImage,$key);
-	}
+echo "Gathering video book task <br />";
+//// Video Book Task in asignment /////
+foreach($MasterstudentIDs as $stuID){
+	compileVideoBook($stuID);
 }
+echo "Successfully processed video book data for all students <br />";
+pullResourceFromCouch($videoBookResArray);
+///////////////////////////////////////
+
+
+
+
+
 recordActionObject($_SESSION['lmsUserID'],"prepared system for syncing","");
 	
 
-
-
-
-///print_r($resorcesArray);
-//compileResources("KG");
-//compileResources("P1");
-//compileResources("P2");
-//compileResources("P3");
-//compileResources("P4");
-//compileResources("P5");
-//compileResources("P6");
-///////////////////////////////////////
-//////////////////////////////////////
 /////////////////////////////////////////
 //compileVBResources("KG");
 //compileVBResources("P1");
@@ -332,9 +483,7 @@ recordActionObject($_SESSION['lmsUserID'],"prepared system for syncing","");
 //compileVBQuestions("P5");
 //compileVBQuestions("P6");
 
-recordActionDate($_SESSION['name'],"Prepared system for syncing -: ".$_POST['dateFrom']." to ".$_POST['dateTo']."",$_POST['systemDateForm']);
-
 echo '<script type="text/javascript">alert("System ready for syncing \n Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'");</script>';
-echo 'System ready for syncing Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'<br><br>';
+die ('System ready for syncing Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'<br><br><br /> *************************************************************** <br />');
 }
 ?>

@@ -53,9 +53,13 @@ if(isset($_POST['totRes']))
 	global $facilityId;
 	$feedbacks = new couchClient($couchUrl, "feedback");
 	$resources = new couchClient($couchUrl, "resources");
-	$viewResults = $feedbacks->include_docs(TRUE)->key($facilityId.$_SESSION['lmsUserID'])->getView('api', 'facilityIdMemberID');
+	$key = array($facilityId,$_SESSION['lmsUserID']);
+	$viewResults = $feedbacks->include_docs(TRUE)->key($key)->getView('api', 'facilityIdMemberId');
+	
 	$docCounter=1;
 	foreach($viewResults->rows as $row) {
+		///print_r($row);
+		if($row->doc->resourceId!=""){
 		$doc = $resources->getDoc($row->doc->resourceId);
 		if($row->doc->rating<1){
 		echo '<tr>
@@ -73,6 +77,7 @@ if(isset($_POST['totRes']))
 			  </tr>';
 			  $docCounter++;
 		}
+	}
 	}
       ?>
       <tr>

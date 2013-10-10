@@ -82,10 +82,10 @@ if(isset($_POST['firstName']))
 		print ("No photo uploaded");
 	}
 	
-	// Save group assigned to member in group document
+	// Save group owner assigned to member in group document
 	foreach($_POST['classAssigned'] as $groupID){
-		$groupDoc = $groups->getDoc($groupID);
-		array_push($groupDoc->owners,$docId);
+      $groupDoc = $groups->getDoc($groupID);
+      array_push($groupDoc->owners,$docId->id);
 		$groups->storeDoc($groupDoc);
 	}
 	  recordActionObject($_SESSION['lmsUserID'],"added a new member (staff) ",$docId);
@@ -102,21 +102,22 @@ else if(isset($_GET['drop']))
 	$groups = new couchClient($couchUrl, "groups");
 	//get all groups from view into viewResults
 	$viewResults = $groups->include_docs(TRUE)->key($facilityId)->getView('api', 'facilityOwners');
+	$arrayGroupOwners = array();
 	// loop through all documents
 	foreach($viewResults->rows as $groupOwned){
 		// loop through owners array
-		if(sizeof($groupOwned->doc->owners)>-1){
+		if(sizeof($groupOwned->doc->owners)>0){
 			for($cnt=0; $cnt<sizeof($groupOwned->doc->owners);$cnt++){
 				// look for a match to current member id in owners array
 				///print_r($groupOwned->doc->owners);
-				if($groupOwned->doc->owners[$cnt] == $_GET['drop']){
-					 // delete current member id from array
-					unset($groupOwned->doc->owners[$cnt]);
+				if($groupOwned->doc->owners[$cnt] != $_GET['drop']){
+					 array_push($arrayGroupOwners,$groupOwned->doc->owners[$cnt]);
 					// save document changes
-					$groups->storeDoc($groupOwned->doc);
 				}
 			}
+		 $groups->storeDoc($groupOwned->doc);
 		}
+		
 	}
 	/// get current member document from members with member id
 	$docToDel= $members->getDoc($_GET['drop']);
@@ -178,60 +179,6 @@ else if(isset($_GET['drop']))
 			
 			
           ?>
-              
-<!--<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="KG2" id="classAssigned_1">
-                KG 2&nbsp;&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="P1" id="classAssigned_2">
-                P 1&nbsp;</label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label>&nbsp;&nbsp;</label>
-              <label>
-                <input type="checkbox" name="classAssigned[]" value="P2" id="classAssigned_3">
-                P 2&nbsp;&nbsp;&nbsp;<br>
-                <br>
-              </label>
-                <label>
-                <input type="checkbox" name="classAssigned[]" value="P3" id="classAssigned_4">
-                P 3</label>
-                &nbsp;&nbsp;&nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P4" id="classAssigned_5">
-                P 4</label>
-                &nbsp;&nbsp;&nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P5" id="classAssigned_6">
-                P 5</label>
-                &nbsp;
-                <label></label>
-&nbsp;&nbsp;
-<label></label>
-&nbsp;&nbsp;&nbsp;
-                <label>
-                  <input type="checkbox" name="classAssigned[]" value="P6" id="classAssigned_7">
-                P 6</label>-->
             </p></td>
           </tr>
           <tr>
@@ -258,7 +205,7 @@ else if(isset($_GET['drop']))
               <span id="sprytextfield3">
               <label for="middleNames2"></label>
               <input type="text" name="middleNames" id="middleNames2">
-            <span class="textfieldRequiredMsg">A value is required.</span></span></td>
+</span></td>
           </tr>
           <tr>
             <td><b>Date Of Birth</b></td>
@@ -616,7 +563,7 @@ else if(isset($_GET['drop']))
 <script type="text/javascript">
 var sprytextfield1 = new Spry.Widget.ValidationTextField("sprytextfield1");
 var sprytextfield2 = new Spry.Widget.ValidationTextField("sprytextfield2");
-var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3");
+var sprytextfield3 = new Spry.Widget.ValidationTextField("sprytextfield3", "none", {isRequired:false});
 var sprytextfield4 = new Spry.Widget.ValidationTextField("sprytextfield4");
 var sprytextfield5 = new Spry.Widget.ValidationTextField("sprytextfield5");
 var sprytextfield6 = new Spry.Widget.ValidationTextField("sprytextfield6");

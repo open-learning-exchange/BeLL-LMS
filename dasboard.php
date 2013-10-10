@@ -26,21 +26,26 @@ body {
 <?php
 $showProfStudies = false;
 $pageDisplay ="";
+$isUniversal =false;
 $roles = "<ul>";
 for($cnt=0;$cnt<= sizeof($_SESSION['role']); $cnt++){
 	switch(strtolower($_SESSION['role'][$cnt])){
 		case "teacher":
 			$roles = $roles.'<li><a href="dasboard.php">Teacher</a></li>';
 			$pageDisplay = "pages/registerStudent.php";
+			$isUniversal =true;
 			break;
 		case "leadteacher":
 			$roles = $roles.'<li><a href="leadteacher.php">Lead Teacher.</a></li>';
 			break;
 		case "headteacher":
 			$roles = $roles.'<li><a href="headteacher.php">Head Teacher</a></li>';
+			if(!$isUniversal){header("Location: headteacher.php");exit;}
+			
 			break;
 		case "coach":
 			$roles = $roles.'<li><a href="coach.php">Coach</a></li>';
+      		if(!$isUniversal){header("Location: coach.php");}
 			break;
 		default:
 			if(!$showProfStudies)
@@ -93,7 +98,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
       <div class="shortcutHome">
 	  <!--<a href="pages/Stories4week.php" target="DashScreen"><img src="images/photo.png"><br>
 		Assign Task (V-Book ect)</a>-->
-        <a href="pages/assign_task.php" target="DashScreen"><img src="images/photo.png" width="52" height="52"><br>
+        <a href="pages/assign_task.php?memberId=<?php echo $_SESSION['lmsUserID'];?>" target="DashScreen"><img src="images/photo.png" width="52" height="52"><br>
 		Assign Task (V-Book ect)</a>
       </div>
       <div class="shortcutHome"> <a href="pages/delstudent.php" target="DashScreen"><img src="images/manageStudent.png" width="52" height="52"><br>
@@ -103,8 +108,8 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 		New Lesson Plan</a>
 	  </div>
         <div class="shortcutHome">
-		<a href="pages/edit_lessonPlan.php" target="DashScreen"><img src="images/editLesson_plane.png" width="52" height="52"><br>
-		Edit Lesson Plan</a>
+		<a href="pages/listLessonPlans.php?memberId=<?php echo $_SESSION['lmsUserID'];?>" target="DashScreen"><img src="images/editLesson_plane.png" width="52" height="52"><br>
+		All Lesson Plans</a>
 	  </div>
        <div class="shortcutHome">
 		<a href="pages/rateResourses.php" target="DashScreen"><img src="images/editPlane.jpg" width="52" height="52"><br>

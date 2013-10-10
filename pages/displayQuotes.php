@@ -7,20 +7,6 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <link rel="stylesheet" type="text/css" media="all" href="../css/jsDatePick_ltr.min.css" />
 <script type="text/javascript" src="../js/jsDatePick.min.1.3.js"></script>
-<script type="text/javascript">
-	window.onload = function(){
-		new JsDatePick({
-			useMode:2,
-			target:"dateFrom",
-			dateFormat:"%Y-%m-%d"
-		});
-		new JsDatePick({
-			useMode:2,
-			target:"dateTo",
-			dateFormat:"%Y-%m-%d"
-		});
-	};
-</script>
 </head>
 <?php
 $quoteMessage = "";
@@ -44,10 +30,4 @@ $quoteMessage = $arrayQuotes[rand(0,sizeof($arrayQuotes)-1)];
 <div class="clear"></div>
 </div>
 </body>
-<script type="text/javascript">
-	var now = new Date()
-	///now = now.toGMTString();
-	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
-	document.getElementById('systemDateForm').value = fmat;
-</script>
 </html>

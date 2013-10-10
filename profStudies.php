@@ -82,7 +82,7 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
 	<h3>Professional Studies </h3>
 	<div class="shortcutHome"></div>
      <div class="shortcutHome">
-         <a href="pages/displayQuotes.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
+         <a href="pages/Teacher_resource.php" target="DashScreen"><img src="images/teacher.png" alt=""><br>
 Teacher Resources</a>
 		 </div>
      <div class="shortcutHome"> <a href="pages/all_resources.php"  target="DashScreen"><img src="images/listRes.png" alt=""><br>
@@ -93,7 +93,7 @@ Teacher Resources</a>
 		
 		<div id="smallRight">
 		  <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">
-			<tr><td height="981" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/Teacher_resource.php" name="DashScreen"></iframe>&nbsp;</td></tr>
+			<tr><td height="981" colspan="2" valign="top" style="border: none;padding: 4px;"><iframe height="970" frameborder="0" width="640" src="pages/displayQuotes.php" name="DashScreen"></iframe>&nbsp;</td></tr>
 		  </table>
 		</div>
 	</div>

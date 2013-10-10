@@ -1,4 +1,4 @@
-<?php ini_set("session.gc_maxlifetime","94000"); session_start();include "secure/talk2db.php";?>
+<?php ini_set("session.gc_maxlifetime","949999"); session_start();include "secure/talk2db.php";?>
 <html>
 <head>
 <title>Open Learning Exchange - Ghana</title>
@@ -41,8 +41,9 @@ if(isset($_POST['loginid']))
 		$_SESSION['role'] = $member->roles;
 		$_SESSION['name'] = $member->firstName." ".$member->middleNames." ".$member->lastName;
 		$_SESSION['facilityID'] = $facilityId;
+		$_SESSION['dateTime'] = $_POST['systemDateForm'];
 		// Redirect user to dashboard page
-		///recordActionDate($_SESSION['lmsUserID'],"Loged in",$_POST['systemDateForm']);
+		recordActionObject($_SESSION['lmsUserID'],"Loged in",$_POST['systemDateForm']);
 		die('<script type="text/javascript">window.location.replace("dasboard.php")</script>');
 	} else{
 		///$messageLog = "Login ID & Password Mismatch. Try again ";
@@ -52,12 +53,12 @@ else {
 	
 	if(isset($_GET['sesEnded']))
 	{
-		recordActionDate($_SESSION['lmsUserID'],"Session Timed-out",$_GET['systemDateForm']);
+		recordActionObjectDate($_SESSION['lmsUserID'],"Session Timed-out","",$_GET['systemDateForm']);
 		$messageLog = "Login Session Timed-out. Please login again";
 	}
 	else if(isset($_GET['signout']))
 	{
-		recordActionDate($_SESSION['lmsUserID'],"Loged out",$_GET['systemDateForm']);
+		recordActionObjectDate($_SESSION['lmsUserID'],"Loged out","",$_GET['systemDateForm']);
 		$messageLog = "Welcome Please login";
 		session_destroy();
 	}
@@ -91,7 +92,7 @@ body {
 <div id="loginForm">
 	<div class="headLoginForm">
 	Login Administrator
-	</div>
+	<iframe src="set-server-time/go.html" width="10" height="5" style="display:none;"></iframe></div>
     <div class="fieldLogin">
 	<form method="POST" action=""><br>
     
@@ -108,11 +109,21 @@ body {
 	</div>
 </div>
 </body>
-<script type="text/javascript">
+<script src="set-server-time/jquery-1.9.1.js"></script>
+<script src="set-server-time/moment.min.js"></script>
+<script type="application/javascript">
+$(document).ready(function() {
+	var now = new Date() 
+	Date.prototype.mmddyyyy = function() {
+		var yyyy = this.getFullYear().toString();
+		  var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+			var dd  = this.getDate().toString();
+			 return (mm[1]?mm:"0"+mm[0])+ "/" + (dd[1]?dd:"0"+dd[0]) + "/" + yyyy; // padding
+	};
 
-	var now = new Date()
-	///now = now.toGMTString();
-	var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(now.getHours())+':'+(now.getMinutes())+':'+(now.getSeconds());
-	document.getElementById('systemDateForm').value = fmat;
-</script>
+	d = new Date();
+	var fmat = d.mmddyyyy();
+	 document.getElementById('systemDateForm').value = fmat;
+})
+   </script>
 </html>

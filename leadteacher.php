@@ -88,7 +88,6 @@ var fmat= now.getFullYear()+'-'+ (now.getMonth()+1)+'-'+(now.getDay()+10)+' '+(n
       </a> </div>
   <div class="shortcutHome"> <a href="pages/ready2Sync.php" target="DashScreen" ><img src="images/sync.png" alt=""><br>Ready to Sync</a> </div>
        <div class="shortcutHome"> <a href="pages/saveFeedback2db.php"  target="DashScreen"><img src="images/makefeedback.png" alt=""><br>Save Feedback</a> </div>
-       <div class="shortcutHome"> <a href="pages/backup-SQL.php?dat=<?php echo $_GET['dat']?>"  target="DashScreen" onClick=""><img src="images/backup.png" alt=""><br>Backup Database</a> </div>
     <div class="clear"></div>
     <div id="smallRight">
       <table align="center" style="border: none;font-size: 12px;color: #5b5b5b;width: 100%;margin: 10px 0 10px 0;">

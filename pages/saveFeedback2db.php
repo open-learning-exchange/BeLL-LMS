@@ -5,84 +5,87 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Open Learning Exchange - Ghana</title>
 </head>
+<body>
 <?php
 $feedStatus ="Feedback already saved. Please ensure syncing of tablets are completed before 'Saving Feedback' ";
-$counter=0;
-if ($handle = opendir('../feedbacks/')) {
-    while (false !== ($Fileentry = readdir($handle))) {
-        if ($Fileentry != "." && $Fileentry != "..") {
-		/// WRITE feedback tags into xml files to make it a valid file for reading ///////
-			$fullpath ="../feedbacks/$Fileentry";
-			////////////////////////////////////////
-			////////////////////////////////////////
-			$file = $fullpath;
-			
-			// set up basic connection
-			$conn_id = ftp_connect("192.168.0.111") or die("Server error. Cant locate server");
-			
-			// login with username and password
-			$login_result = ftp_login($conn_id,"pi","oleole") or die("Login error");
-			
-			// try to chmod $file to 644
-			if (ftp_chmod($conn_id, 0777, $file) !== false) {
-			 //////////////////echo "$file chmoded successfully to 777\n";
-			} else {
-			 ////////////////echo "could not chmod $file\n";
-			}
-			
-			// close the connection
-			ftp_close($conn_id);
+$counter=1;
+global $facilityId;
+global $couchUrl;
+$todayDate = date("Y-m-d H:i:s"); 
+$actions = new couchClient($couchUrl, "actions");
+$exercises = new couchClient($couchUrl, "exercises");
 
-			////////////////////////////////////////
-			////////////////////////////////////////
-			
-			$old_lines = file($fullpath);
-			$new_content = join('',$old_lines);
-			$new_content="<feedback>\n".$new_content."\n</feedback>";
-			///echo $fullpath;
-			///echo $new_content;
-			$fp = fopen($fullpath,'w');
-	 		$write = fwrite($fp, $new_content);
- 	 		fclose($fp);
-			//////////// Read feedback into database ///////
-			$feed = file_get_contents("../feedbacks/$Fileentry");
-			$xml = new SimpleXmlElement($feed);
-			///echo "Starting";
-			
-			foreach ($xml->usage as $entry){
-			$instertQuery = mysql_query("INSERT INTO `feedback` (`colNum`, `fbdate`, `fbresourceTitle`, `fbresourceID`, `fbstudentID`, `fbstudentName`, `fbstudentClass`) VALUES (NULL, '".$entry->fbdate."', '".$entry->fbresourceTitle."', '".$entry->fbresourceID."', '".$entry->fbstudentID."', '".$entry->fbstudentName."', '".$entry->fbstudentClass."')") or die(mysql_error());
-			
-			$feedStatus ="Saving tablet feedback successfully completed.. ";
-		}
-		$counter++;
-		echo $counter.". Feedback saved for : ".preg_replace('/\.[^.]*$/', '', $Fileentry )."<br />";
-		
-     }
-    }
-    closedir($handle);
-	recordActionObject($_SESSION['lmsUserID'],"Saved tablet usage feedback into db","");
-} else
-{
-	 echo "System folder acces error";
+// @ save usage data from tablet into database and delete file from server
+if ($handle = opendir('../feedbacks/tabletUsage/')) {
+	$files = glob('../feedbacks/tabletUsage/*'); 
+	foreach($files as $file){ 
+	  if(is_file($file)){
+		  $feed = file_get_contents($file);
+		  $xml = new SimpleXmlElement($feed);
+		  foreach ($xml->usage as $entry){
+			  $memberId =$entry->fbstudentID."";
+			  $objectUsed = $entry->fbresourceID."";
+			  $dateUsed = $entry->fbdate."";
+			  $doc = new stdClass();
+			  $doc->kind ="Action";
+			  $doc->memberId = $memberId;
+			  $doc->memberRoles = array("student");
+			  $doc->facilityId = $facilityId;
+			  $doc->action = "used resource on tablet";
+			  $doc->objectId= $objectUsed;
+			  $doc->timestamp= strtotime($dateUsed);
+			  $doc->context= "tablet";
+			  $response = $actions->storeDoc($doc);
+		  }
+		  echo $counter.".  Saved usage data from tablet with serial ".basename($file,".xml")."<br />";
+		  $counter++;
+		  unlink($file);
+	 }
+ 	recordActionObject($_SESSION['lmsUserID'],"Saved tablet usage data into database","");
+   }
+} else {
+	 echo " System cant save tablet usage data ";
 }
 
-			  //echo $entry->fbdate;
-//			  echo $entry->fbresourceTitle;
-//			  echo $entry->fbresourceID;
-//			  echo $entry->fbstudentID;
-//			  echo $entry->fbstudentName;
-//			  echo $entry->fbstudentClass;
-//<usage>
-//<fbdate>02-20-1988</fbdate>
-//<fbresourceTitle>Ananse and Me</fbresourceTitle>
-//<fbresourceID>7238</fbresourceID>
-//<fbstudentID>889929</fbstudentID>
-//<fbstudentName>Leonad Mensah</fbstudentName>
-//<fbstudentClass>P1</fbstudentClass>
-//<usage>
+// @ save assignemt result from tablet into database and delete file from server
+$counter=1;
+if ($handle = opendir('../feedbacks/videoBook/')) {
+	$files = glob('../feedbacks/videoBook/*'); 
+	foreach($files as $file){ 
+	  if(is_file($file)){
+		  ///echo basename($file,".xml")."<br />";
+		  $feed = file_get_contents($file);
+		  $xml_vd = new SimpleXmlElement($feed);
+		  foreach ($xml_vd->exercise as $entry){
+			  $memberId = $entry->studId."";
+			  $resourceId = $entry->resourceId."";
+			  $assignmentId = $entry->assignmentId."";
+			  $score = $entry->score."";
+			  $numberOfQuestions = $entry->numberOfQuest."";
+			  $dateTaken = $entry->dateTaken."";
+			  
+			  $doc = new stdClass();
+			  $doc->kind ="Exercise";
+			  $doc->memberId = $memberId;
+			  $doc->memberRoles = array("student");
+			  $doc->facilityId = $facilityId;
+			  $doc->type = "video lesson";
+			  $doc->assignmentId= $assignmentId;
+			  $doc->timestamp= strtotime($dateTaken);
+			  $doc->context= array("resourceId"=>$resourceId,
+			  "score"=>$score,
+			  "numberOfQuestions"=>$numberOfQuestions);
+			  $response = $exercises->storeDoc($doc);
+		  }
+		  echo "Saved ".$counter." exercise result from tablet <br />";
+		  $counter++;
+		  unlink($file);
+	 }
+ 	recordActionObject($_SESSION['lmsUserID'],"Saved exercises result from tablet into database","");
+   }
+} else {
+	 echo " System cant save tablet usage data ";
+}
 ?>
-
-<body>
-<?php echo $feedStatus;?>
 </body>
 </html>

@@ -21,6 +21,7 @@ if(isset($_POST['startDate'])){
 			$doc->resourceId = $_POST['story'][$cnt];
 			$doc->startDate = strtotime($_POST['startDate']);
 			$doc->endDate = strtotime($_POST['endDate']);
+			$doc->memberId =$_SESSION['lmsUserID'];
 			$doc->context = array(
 			  "subject" => $resDoc->subject,
 			  "use" => "stories for the week",
@@ -54,8 +55,6 @@ if(isset($_POST['startDate'])){
 			$response = $feedbacks->storeDoc($doc);
 		}
 	}
-	
-
 	recordActionObject($_SESSION['lmsUserID'],"Prepared stories for the week",$_POST['level']);
   echo '<script type="text/javascript">alert("Stories saved successfully");</script>';
 }

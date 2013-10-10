@@ -1,6 +1,49 @@
 <?php
 include "../secure/talk2db.php";
-if(isset($_GET['lang'])){
+if(isset($_GET['lessonId'])){
+	$language = $_GET['lang'];
+	$level = $_GET['level'];
+	global $couchUrl;
+	global $facilityId;
+	$numberOfUsedRes=0;
+	$lesson_notes = new couchClient($couchUrl, "lesson_notes");
+	$lessonDoc = $lesson_notes->getDoc($_GET['lessonId']);
+	$resources = new couchClient($couchUrl, "resources");
+	$viewResults = $resources->include_docs(TRUE)->getView('api', 'allResources');
+	$numberOfUsedRes=count($lessonDoc->resources);
+	
+	echo '<table width="95%">';
+	for($dispCnt =1;$dispCnt<=4;$dispCnt++){
+		$key=-1;
+		$found = false;
+		echo ' <tr>
+          		<td colspan="4" align="left"><b>'.($dispCnt).'. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+				<select name="story[]" id="story'.($dispCnt).'">
+				<option value="none" >none</option>';
+				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
+					$doc = $viewResults->rows[$rcnt]->doc;
+					if($doc->language==$language && in_array($level,$doc->levels)){
+						if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'){
+							$key = array_search($doc->_id,$lessonDoc->resources);
+							if(!$found && $key > -1 && $numberOfUsedRes > 0){
+									echo '<option value="'.$doc->_id.'" selected >'.$doc->title.'</option>';
+									$found = true;
+									unset($lessonDoc->resources[$key]);
+									
+								} else {
+									echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
+							}
+						}
+					}
+				}
+		echo '</select>
+		</td>
+        </tr>';
+		$numberOfUsedRes--;
+	}
+	echo ' </table>';
+	
+} else if(isset($_GET['lang'])){
 	$language = $_GET['lang'];
 	$level = $_GET['level'];
 	global $couchUrl;
@@ -11,12 +54,14 @@ if(isset($_GET['lang'])){
 	for($dispCnt =1;$dispCnt<=4;$dispCnt++){
 		echo ' <tr>
           		<td colspan="4" align="left"><b>'.($dispCnt).'. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-				<select name="story[]" id="story'.($dispCnt).'. ">
+				<select name="story[]" id="story'.($dispCnt).'">
 				<option value="none" selected >none</option>';
 				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
 					$doc = $viewResults->rows[$rcnt]->doc;
 					if($doc->language==$language && in_array($level,$doc->levels)){
-						echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
+						if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'){
+								echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
+							}
 					}
 				}
 		echo '</select>
@@ -69,14 +114,14 @@ else if(isset($_GET['sLevel'])){
 				 echo '
 				  <tr>
 				<td width="457" height="24"><span style="color: #900;font-weight:bold;">'.($colorCnt+1).'.   '.$doc->title.'</span><br>
-					<span style="font-style:italic">'.$doc->discription.'</span>
+					<span style="font-style:italic">'.$doc->description.'</span>
 				</td>
 				<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes("'.$doc->_id.'")>'.$image.'</td>
 			  </tr>';
 			 }else{
 				 echo '<tr bgcolor="#F0F0F0">
 			<td width="457" height="24"><span style="color: #900;font-weight:bold;">'.($colorCnt+1).'.   '.$doc->title.'</span><br>
-				<span style="font-style:italic">'.$doc->discription.'</span>
+				<span style="font-style:italic">'.$doc->description.'</span>
 			</td>
 			<td width="98"><input type="submit" class="button" value="'.$button.'" onclick=openRes("'.$doc->_id.'")>'.$image.'</td>
 		  </tr>';

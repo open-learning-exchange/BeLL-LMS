@@ -79,8 +79,8 @@ if(sizeof($_SESSION['role'])<1)
     <div class="shortcutHome"></div>
     <div class="shortcutHome"> <a href="pages/uploadRes.php" target="DashScreen"><img src="images/upload.png" alt=""><br>
       Upload Resources</a> </div>
-    <div class="shortcutHome"> <a href="pages/view_LPlan.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
-      Lesson Plan</a></div>
+    <div class="shortcutHome"> <a href="pages/listAllLessonPlans.php"  target="DashScreen"><img src="images/assignTask.png" alt=""><br>
+      All Lesson Plans</a></div>
       <div class="shortcutHome"> <a href="pages/view_feedback.php"  target="DashScreen"><img src="images/feedback.png" alt=""><br>
       View Feedback
     </a> </div>

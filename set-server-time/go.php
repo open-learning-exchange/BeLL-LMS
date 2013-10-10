@@ -1,7 +1,5 @@
 <?php
-
 $time = $_GET['time'];
-exec("date $time");
-
-
-
+echo $time;
+exec("date -s '".$time."'");
+?>

@@ -5,9 +5,8 @@
 <title>Untitled Document</title>
 </head>
 <?php 
-$mystring = "../Teacher_resource.php";
+$mystring = "_/index.php";
 die('<META HTTP-EQUIV=Refresh CONTENT="0; URL='.$mystring.'">');
 ?>
 <body>
 </body>
-</html>

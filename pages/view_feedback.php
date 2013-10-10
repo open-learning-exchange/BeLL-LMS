@@ -10,78 +10,78 @@
 
 <body  style="background-color:#FFF">
 <div id="wrapper" style="background-color:#FFF; width:600px;">
-  <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:550px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Student usage feedback</span> - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="javascript:window.print()" style="color: #CC0000">|| Print Page ||</A><br>
-    <br>
-    <a href="view_feedback.php?cls=KG">KG only</a> || <a href="view_feedback.php?cls=P1">P1 only</a> || <a href="view_feedback.php?cls=P2">P2 only</a> || <a href="view_feedback.php?cls=P3">P3 only</a> || <a href="view_feedback.php?cls=P4">P4 only</a> || <a href="view_feedback.php?cls=P5">P5 only </a>|| <a href="view_feedback.php?cls=P6">P6 only</a><br><br>
-	<table width="105%">
-	  <tr>
-	    <td width="75" height="24"><b>Student ID</b></td>
-	    <td width="211"><b>Student name</b></td>
-	    <td width="56"><b>Class</b></td>
-	    <td width="68"><b>No. Used</b></td>
-	    <td width="133"><b>Last date used</b></td>
-      </tr>
-      <?php
-	if(isset($_GET['cls']))
-	{
-			 $query = mysql_query("SELECT colNum, Max(fbdate) as theDdate, fbstudentID, fbstudentName, fbstudentClass, count(fbresourceID) as NOTIME FROM `feedback` where fbstudentClass ='".$_GET['cls']."' Group By fbstudentID ") or die(mysql_error());
-			 $cnt = 0;
-			 while($data = mysql_fetch_array($query))
+  <div id="rightContent" style="float:none; margin-left:auto; margin-right:auto; width:550px; margin-left:auto; margin-right:auto;"><span style="color:#00C; font-weight: bold;">Student usage feedback</span> - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="javascript:window.print()" style="color: #CC0000">|| Print Page ||</A><br><br>
+<br>
+<br>
+<?php
+global $couchUrl;
+global $config;
+for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
+	echo '&nbsp;&nbsp;&nbsp;<a href="#'.$config->levels[$cnt].'">'.$config->levels[$cnt].' </a>&nbsp;||&nbsp;';
+}
+echo "<br>
+<br>";
+?>
+</h4>
+<?php
+global $couchUrl;
+global $facilityId;
+global $config;
+$members = new couchClient($couchUrl, "members");
+$actions = new couchClient($couchUrl, "actions");
+// Get members
+for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
+		$start_key = array($facilityId,$config->levels[$cnt],"A");
+		$end_key = array($facilityId,$config->levels[$cnt],"Z");
+		$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
+		$docCounter=1;
+		echo '<a name="'.$config->levels[$cnt].'"></a>
+			<b>'.$config->levels[$cnt].'</b>
+			<table class="data">
+				<tr class="data">
+						<th class="data" width="29">No</th>
+						<th width="201" class="data">Name</th>
+						<th width="50" class="data">Gender</th>
+						<th width="65" class="data">Total Usage</th>
+						<th class="data" width="89">Last Time Used</th>
+			  </tr>';
+		foreach($viewResults->rows as $row) {
+			$action_key = array($row->doc->_id,$facilityId,"used resource on tablet");
+			$actionViewResults = $actions->include_docs(TRUE)->key($action_key)->getView('api', 'memIdFacilityIdActionTime');
+			$totalNoUsed = 0;
+			$lastTimeUsed= 0;
+			foreach($actionViewResults->rows as $action_row) {
+				if($lastTimeUsed < $action_row->doc->timestamp){
+					$lastTimeUsed = $action_row->doc->timestamp;
+				}
+				$totalNoUsed++;
+			}
+			if(date('Y-m-d',$lastTimeUsed) < date('2000-09-10')){
+				$lastTimeUsed = " - ";
+			} else {$lastTimeUsed = date('Y-m-d',$lastTimeUsed); }
+			 if($docCounter%2==0)
 			 {
-				 if($cnt%2==0)
-				 {
-				 echo '<tr>
-						<td width="75" height="24">'.$data['fbstudentID'].'</td>
-						<td width="211">'.$data['fbstudentName'].'</td>
-						<td width="56">'.$data['fbstudentClass'].'</td>
-						<td width="68">'.$data['NOTIME'].'</td>
-						<td width="133">'.$data['theDdate'].'</td>
-					  </tr>';
-				 }
-				 else
-				 {
-					 echo '<tr bgcolor="#F0F0F0">
-						<td width="75" height="24">'.$data['fbstudentID'].'</td>
-						<td width="211">'.$data['fbstudentName'].'</td>
-						<td width="56">'.$data['fbstudentClass'].'</td>
-						<td width="68">'.$data['NOTIME'].'</td>
-						<td width="133">'.$data['theDdate'].'</td>
-					  </tr>';
-				 }
-				$cnt++;
+					echo '<tr class="data">
+					<td class="data" width="29">'.$docCounter.'</td>
+					<td class="data">'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</td>
+					<td class="data">'.$row->doc->gender.'</td>
+					<td class="data">'.$totalNoUsed.'</td>
+					<td class="data" width="89"><center>'.$lastTimeUsed.'</center></td>
+				</tr>';
+			 } else {
+					echo '<tr class="data" bgcolor="#EEEEEE">
+					<td class="data" width="29">'.$docCounter.'</td>
+					<td class="data">'.$row->doc->lastName.' '.$row->doc->middleNames.' '.$row->doc->firstName.'</td>
+					<td class="data">'.$row->doc->gender.'</td>
+					<td class="data">'.$totalNoUsed.'</td>
+					<td class="data" width="89"><center>'.$lastTimeUsed.'</center></td>
+				</tr>';
 			 }
-	}
-	else
-	{
-				 $query = mysql_query("SELECT colNum, Max(fbdate) as theDdate, fbstudentID, fbstudentName, fbstudentClass, count(fbresourceID) as NOTIME FROM `feedback` Group By fbstudentID ") or die(mysql_error());
-			 $cnt = 0;
-			 while($data = mysql_fetch_array($query))
-			 {
-				 if($cnt%2==0)
-				 {
-				 echo '<tr>
-						<td width="75" height="24">'.$data['fbstudentID'].'</td>
-						<td width="211">'.$data['fbstudentName'].'</td>
-						<td width="56">'.$data['fbstudentClass'].'</td>
-						<td width="68">'.$data['NOTIME'].'</td>
-						<td width="133">'.$data['theDdate'].'</td>
-					  </tr>';
-				 }
-				 else
-				 {
-					 echo '<tr bgcolor="#F0F0F0">
-						<td width="75" height="24">'.$data['fbstudentID'].'</td>
-						<td width="211">'.$data['fbstudentName'].'</td>
-						<td width="56">'.$data['fbstudentClass'].'</td>
-						<td width="68">'.$data['NOTIME'].'</td>
-						<td width="133">'.$data['theDdate'].'</td>
-					  </tr>';
-				 }
-				$cnt++;
-			 }
-	}
-      ?>
-	</table>
+			 $docCounter++;
+		}
+		echo '</table>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp<a href="#top"><span style="font-size: 12px; color: #900;"> ^ go to the top ^ </a> </span><br><br>';
+}
+?>
   </div>
 <div class="clear"></div>
 </div>
