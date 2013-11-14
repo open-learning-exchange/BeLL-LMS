@@ -272,18 +272,19 @@ Assisning Task to students
 ///////////////////////////////*/
 #videoBooks{
 	width:580px;
-	height:740px;
-	display:none;
+	min-height:250px;
 	background-color:#FFF;
 	/*border:dashed;
-	border-style:dashed;*/
+	border-style:dashed;
+	*/
+	display:none;
 	padding:5px;
 	color:#903;
 }
 #audioStory{
 	width:590px;
-	height:400px;
-	background-color:#090;
+	min-height:210px;
+	background-color:#FFF;
 	display:none;
 }
 #phonomics{

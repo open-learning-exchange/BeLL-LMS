@@ -304,10 +304,10 @@ $(document).ready(function(){
     </div>
     <div class="clear" style="font-size: 14px; color: #00C; text-align:center;"><span class="clear" style="font-size: 14px; color: #00C;"> <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;|| <span class="clear" style="font-size: 14px; color: #00C; text-align:center;"> &nbsp;&nbsp;&nbsp; </span></span></span>Video Book
       <input name="Vbook" type="checkbox" id="Vbook" value="Yes">
-      <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span>      || <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span><!--Audio Stories
-<input name="AStory" type="checkbox" id="AStory" value="Yes">
+      <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span>      || <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span>Audio Story
+      <input name="AStory" type="checkbox" id="AStory" value="Yes">
 <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span>
-      ||
+    ||<!--
 <label for="Vbook"></label>
     <span style="float:none; margin-left:auto; margin-right:auto; width:600px; margin-left:auto; margin-right:auto;">&nbsp;&nbsp;&nbsp;</span>Phonomics 
     <input name="Phons" type="checkbox" id="Phons" value="Yes">
@@ -334,13 +334,46 @@ $(document).ready(function(){
           <tr>
             <td valign="top" bgcolor="#FFFFFF">Select 10 Questions</td>
             <td align="right" valign="top" bgcolor="#FFFFFF"><p id="allQuestions"></p>
-              <input type="submit" class="button" value="Submit" style="width:90px; height:30px;"></td>
+              <input name="vidPost" type="submit" class="button" id="vidPost" style="width:90px; height:30px;" value="Submit"></td>
           </tr>
         </table>
       </div>
-      <div id="audioStory"></div>
+      <div id="audioStory">
+      <table width="95%" align="center">
+        <tr>
+          <td colspan="4" align="center" style="color: #2437C4;"><strong style="font-weight: bold; font-size: 18px;">Audio Story
+              
+            </strong></td>
+          </tr>
+        <tr>
+          <td colspan="4"><b>Selected Audio Stories</b></td>
+          </tr>
+        <tr>
+          <td colspan="4" align="right"><p id="res2"></p></td>
+        </tr>
+        <tr>
+          <td colspan="4"><b style="color:#666;">
+
+Note for discussion:
+    <br >
+    1. These stories could be used for listening and speaking
+             or vocabulary building etc
+    .</b></td>
+        </tr>
+        <tr>
+          <td width="73%"></td>
+          <td width="27%" colspan="3"><input type="hidden" name="grade" id="grade"></td>
+        </tr>
+      </table>
+      
+      </div>
     <div id="phonomics"></div>
     <div id="wordPower"></div>
+    <table width="593" border="1">
+        <tr>
+          <td width="583" align="center"><input name="audPost" type="submit" class="button" id="audPost" value="Submit All Assigned Task"></td>
+        </tr>
+      </table>
     </div>
   </div>
 </form>
@@ -375,6 +408,11 @@ function requestLoadLanguage(){
 	$.getJSON("../functions/getVBookByLangLevel.php?grade="+groupId+"",function (data){
 		$.each(data.gobackArr, function(i,gback){
 			$("#res1").load("../functions/getVBookByLangLevel.php?lang="+lang+"&level="+gback.level+"");
+		})
+	});
+	$.getJSON("../functions/getResByLangLevel.php?grade="+groupId+"",function (data){
+		$.each(data.gobackArr, function(i,gback){
+			$("#res2").load("../functions/getResByLangLevel.php?langAud="+lang+"&level="+gback.level+"");
 		})
 	});
 	

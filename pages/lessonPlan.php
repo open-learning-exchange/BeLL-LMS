@@ -743,7 +743,7 @@ function requestLoadLanguage(){
 	var lev;
 	$.getJSON("../functions/getResByLangLevel.php?grade="+groupId+"",function (data){
 		$.each(data.gobackArr, function(i,gback){
-			$("#res1").load("../functions/getResByLangLevel.php?lang="+lang+"&level="+gback.level+"");
+			$("#res1").load("../functions/getResByLangLevel.php?lang_v="+lang+"&level_v="+gback.level+"");
 		})
 	});
 	
