@@ -39,7 +39,7 @@ if ($handle = opendir('../feedbacks/tabletUsage/')) {
 		  }
 		  echo $counter.".  Saved usage data from tablet with serial ".basename($file,".xml")."<br />";
 		  $counter++;
-		  unlink($file);
+		  //unlink($file);
 	 }
  	recordActionObject($_SESSION['lmsUserID'],"Saved tablet usage data into database","");
    }
@@ -53,7 +53,7 @@ if ($handle = opendir('../feedbacks/videoBook/')) {
 	$files = glob('../feedbacks/videoBook/*'); 
 	foreach($files as $file){ 
 	  if(is_file($file)){
-		  ///echo basename($file,".xml")."<br />";
+		  echo basename($file,".xml")."<br />";
 		  $feed = file_get_contents($file);
 		  $xml_vd = new SimpleXmlElement($feed);
 		  foreach ($xml_vd->exercise as $entry){
@@ -79,7 +79,7 @@ if ($handle = opendir('../feedbacks/videoBook/')) {
 		  }
 		  echo "Saved ".$counter." exercise result from tablet <br />";
 		  $counter++;
-		  unlink($file);
+		  //unlink($file);
 	 }
  	recordActionObject($_SESSION['lmsUserID'],"Saved exercises result from tablet into database","");
    }

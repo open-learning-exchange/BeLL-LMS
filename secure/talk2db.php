@@ -1,8 +1,8 @@
 <?php
 $server ="localhost";
 $username ="root";
-//$password ="raspberry";
 $password ="";
+//$password ="";
 date_default_timezone_set('UTC');
 $dbhandle= mysql_connect($server,$username,$password) or die(mysql_error());
 $selected = mysql_select_db("schoolBell",$dbhandle) or die (mysql_error());

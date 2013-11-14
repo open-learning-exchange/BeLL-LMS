@@ -46,7 +46,7 @@ global $config;
 $studentIDs= array();
 $members = new couchClient($couchUrl, "members");
 $start_key = array($facilityId,$theClass,"A");
-$end_key = array($facilityId,$theClass,"Z");
+$end_key = array($facilityId,$theClass,"ZZ");
 $viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 $docCounter=1;
 $dataBody ='<?xml version="1.0" encoding="UTF-8"?>
@@ -75,7 +75,7 @@ array_push($studentIDs,$row->doc->_id);
 if($theClass=="KG1"){
 $studentCode ="";
 $start_key = array($facilityId,'KG2',"A");
-$end_key = array($facilityId,'KG2',"Z");
+$end_key = array($facilityId,'KG2',"ZZ");
 $viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 foreach($viewResults->rows as $row) {
   if(trim($row->doc->pass)==""){
@@ -483,7 +483,8 @@ recordActionObject($_SESSION['lmsUserID'],"prepared system for syncing","");
 //compileVBQuestions("P5");
 //compileVBQuestions("P6");
 
-echo '<script type="text/javascript">alert("System ready for syncing \n Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'");</script>';
+echo '<script type="text/javascript">
+alert("System ready for syncing \n Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'");</script>';
 die ('System ready for syncing Date: '.$_POST['dateFrom'].' to '.$_POST['dateTo'].'<br><br><br /> *************************************************************** <br />');
 }
 ?>

@@ -28,7 +28,7 @@ $members = new couchClient($couchUrl, "members");
 // Get members
 for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
 		$start_key = array($facilityId,$config->levels[$cnt],"A");
-		$end_key = array($facilityId,$config->levels[$cnt],"Z");
+		$end_key = array($facilityId,$config->levels[$cnt],"ZZ");
 		$viewResults = $members->include_docs(TRUE)->startkey($start_key)->endkey($end_key)->getView('api', 'facilityLevelActive_allStudent_sorted');
 		$docCounter=1;
 		echo '<a name="'.$config->levels[$cnt].'"></a>

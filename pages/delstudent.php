@@ -58,7 +58,7 @@ $members = new couchClient($couchUrl, "members");
 // Get members
 for($cnt=0;$cnt<sizeof($config->levels);$cnt++){
 	$start_key = array($facilityId,$config->levels[$cnt],"A");
-	$end_key = array($facilityId,$config->levels[$cnt],"Z");
+	$end_key = array($facilityId,$config->levels[$cnt],"ZZ");
 	if(isset($_GET['inactive']))
 	{
 		

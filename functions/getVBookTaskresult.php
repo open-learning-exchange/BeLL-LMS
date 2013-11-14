@@ -27,7 +27,7 @@ if(isset($_GET['id'])){
 		  </tr>';
 		}else{
 			echo '<tr>
-			<td>'.$memberDoc->lastName.' '.$memberDoc->middleNames.' '.$memberDoc->firstName.'</td>
+			<td >'.$memberDoc->lastName.' '.$memberDoc->middleNames.' '.$memberDoc->firstName.'</td>
 			<td align="center">'.$row->doc->context->score.' / '.$row->doc->context->numberOfQuestions.'</td>
 			<td  align="center">'.date("Y-m-d",$row->doc->timestamp).'</td>
 		  </tr>';

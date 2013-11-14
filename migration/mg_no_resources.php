@@ -13,8 +13,8 @@ echo "\033[0m";
 
 // MySQL
 global $mysqli;
-////$mysqli = new mysqli("localhost", "root", "raspberry", "schoolBell");
-$mysqli = new mysqli("localhost", "root", "", "schoolBell");
+$mysqli = new mysqli("localhost", "root", "raspberry", "schoolBell");
+
 // CouchDB
 require_once 'PHP-on-Couch-master/lib/couch.php';
 require_once 'PHP-on-Couch-master/lib/couchClient.php';
@@ -26,7 +26,7 @@ $couchClient = new couchClient($couchUrl, "dummy");
 
 // Tables to migrate
 // $tables = ["teacherClass", "students", "resources", "usedResources",  "LessonPlan", "feedback", "action_log" ];
-$tables = ["teacherClass", "students","usedResources", "LessonPlan"];
+$tables = ["teacherClass", "students","usedResources",  "LessonPlan"];
 
 // Version of this code will place in seperate databases for testing
 $dbNames = array( 

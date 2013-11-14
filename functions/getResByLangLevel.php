@@ -23,7 +23,7 @@ if(isset($_GET['lessonId'])){
 				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
 					$doc = $viewResults->rows[$rcnt]->doc;
 					if($doc->language==$language && in_array($level,$doc->levels)){
-						///if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'){
+						if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'){
 							$key = array_search($doc->_id,$lessonDoc->resources);
 							if(!$found && $key > -1 && $numberOfUsedRes > 0){
 									echo '<option value="'.$doc->_id.'" selected >'.$doc->title.'</option>';
@@ -33,7 +33,7 @@ if(isset($_GET['lessonId'])){
 								} else {
 									echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
 							}
-						///}
+						}
 					}
 				}
 		echo '</select>
@@ -44,7 +44,6 @@ if(isset($_GET['lessonId'])){
 	echo ' </table>';
 	
 } else if(isset($_GET['lang'])){
-	/// All resources without Audio resources
 	$language = $_GET['lang'];
 	$level = $_GET['level'];
 	global $couchUrl;
@@ -60,59 +59,9 @@ if(isset($_GET['lessonId'])){
 				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
 					$doc = $viewResults->rows[$rcnt]->doc;
 					if($doc->language==$language && in_array($level,$doc->levels)){
-						if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'||$doc->legacy->type!='mp3'||$doc->legacy->type!='wav'){
+						if($doc->legacy->type!='mp4'||$doc->legacy->type!='avi'||$doc->legacy->type!='flv'){
 								echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
 							}
-					}
-				}
-		echo '</select>
-		</td>
-        </tr>';
-	}
-	echo ' </table>';
-} else if(isset($_GET['langAud'])){
-	$language = $_GET['langAud'];
-	$level = $_GET['level'];
-	global $couchUrl;
-	global $facilityId;
-	$resources = new couchClient($couchUrl, "resources");
-	$viewResults = $resources->include_docs(TRUE)->getView('api', 'allResources');
-	echo '<table width="95%">';
-	for($dispCnt =1;$dispCnt<=4;$dispCnt++){
-		echo ' <tr>
-          		<td colspan="4" align="left"><b>'.($dispCnt).'. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-				<select name="audio[]" id="audio'.($dispCnt).'">
-				<option value="none" selected >none</option>';
-				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
-					$doc = $viewResults->rows[$rcnt]->doc;
-					if($doc->language==$language && in_array($level,$doc->levels)){
-					if($doc->legacy->type=='mp3'||$doc->legacy->type=='wav'){
-								echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
-							}
-					}
-				}
-		echo '</select>
-		</td>
-        </tr>';
-	}
-	echo ' </table>';
-} else if(isset($_GET['lang_v'])){
-	$language = $_GET['lang_v'];
-	$level = $_GET['level_v'];
-	global $couchUrl;
-	global $facilityId;
-	$resources = new couchClient($couchUrl, "resources");
-	$viewResults = $resources->include_docs(TRUE)->getView('api', 'allResources');
-	echo '<table width="95%">';
-	for($dispCnt =1;$dispCnt<=4;$dispCnt++){
-		echo ' <tr>
-          		<td colspan="4" align="left"><b>'.($dispCnt).'. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-				<select name="story[]" id="story'.($dispCnt).'">
-				<option value="none" selected >none</option>';
-				for($rcnt=0;$rcnt<sizeof($viewResults->rows);$rcnt++){
-					$doc = $viewResults->rows[$rcnt]->doc;
-					if($doc->language==$language && in_array($level,$doc->levels)){
-								echo '<option value="'.$doc->_id.'">'.$doc->title.'</option>';
 					}
 				}
 		echo '</select>
